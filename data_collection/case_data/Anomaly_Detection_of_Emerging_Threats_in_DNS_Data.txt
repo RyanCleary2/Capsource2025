@@ -1,0 +1,20 @@
+
+Title: Anomaly Detection of Emerging Threats in DNS Data
+
+Topics: Data Management, Research & Development
+
+### Background and Objective:
+Section Not Found
+
+### Key Action Items:
+Develop an anomaly detection algorithm to detect similar events where requests for a domain name suddenly rise in popularity over a short period across multiple sensors to identify similar events. (Machine Learning)
+Catalog the top N occurrences and develop a visualization of these events. (Data Visualization)
+Develop an algorithm to compute statistically unique co-occurrences. That is, what other domains are frequently requested? (Machine Learning)
+Attempt to research select examples from the dataset to determine the nature of the popularity spike. Are these legitimate sites? Are there reports of malware? Are these newly registered domains? What countries are the domains hosted in? (Data Analysis/Cybersecurity)
+What can be learned from the analysis that can improve the accuracy of the machine learning model and reduce false positives? (Data Science)
+
+### Ways to Measure Success:
+Section Not Found
+
+### Milestones:
+
