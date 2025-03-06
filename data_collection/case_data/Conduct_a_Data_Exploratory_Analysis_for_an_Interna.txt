@@ -1,0 +1,21 @@
+
+Title: Conduct a Data Exploratory Analysis for an International Weather Trends Company
+
+Topics: Corporate Social Responsibility, Data Management, Growth Strategy
+
+### Background and Objective:
+Section Not Found
+
+### Key Action Items:
+We want to see how weather conditions and events negatively impact health in the context of climate change; in addition, we want to know which countries and humanitarian sectors would benefit most from our forecast. For instance, how do heat or drought conditions lead to certain illnesses? Choose different weather conditions that have been shown to increase certain diseases (e.g., asthma, heat stroke), and answer the questions:
+What use cases exist for understanding the impact of [your chosen weather condition] and illness?
+What markets and audiences need/value the understandings and insights that can be gained through data analysis on [your chosen weather condition] and illness?
+How would data and information for understanding the relationship between [your chosen weather condition] and illnesses help them to reach their goals?
+What questions do they have?
+How would they use the information? How might they use the information to inform decision-making?
+
+### Ways to Measure Success:
+Section Not Found
+
+### Milestones:
+

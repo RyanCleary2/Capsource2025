@@ -1,0 +1,20 @@
+
+Title: AI-Driven Financial Model and Marketing Automation for MFI Commercial
+
+Topics: Data Management, Market Research, Operations, Product Design & Development, Research, Analysis, Evaluation, Software Design & Development
+
+### Background and Objective:
+Section Not Found
+
+### Key Action Items:
+Develop an AI-driven financial underwriting model that automates the processing and standardization of income and expense data.
+Integrate AI to streamline the generation of proformas, disposition summaries, and key financial metrics (e.g., cap rate, IRR, cash-on-cash return).
+Automate the creation of offering memorandums and marketing materials by pulling data from existing CRM and listing management tools.
+Ensure compatibility of the system with existing tools like monday.com to facilitate marketing content generation.
+Design templates for marketing materials that automatically include key property information, investment summaries, and other essential data points.
+
+### Ways to Measure Success:
+Section Not Found
+
+### Milestones:
+
