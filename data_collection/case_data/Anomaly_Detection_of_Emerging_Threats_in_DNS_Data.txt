@@ -4,7 +4,20 @@ Title: Anomaly Detection of Emerging Threats in DNS Data
 Topics: Data Management, Research & Development
 
 ### Background and Objective:
-Section Not Found
+Intrusion collects telemetry of DNS data from an array of global sensors. This data is rich with information and supports forensic investigations and debugging. We want to explore better ways to leverage the data proactively to alert to potential emerging threats by applying statistical models to the dataset daily.
+The pattern we are looking for is when a domain name suddenly spikes in popularity across multiple sensors. This could be caused by a variety of reasons, including:
+A new malware campaign results in new call homes to command and control servers
+A new phishing campaign results in victims clicking links in email
+Existing widespread website changes hosting provider or dependencies
+A company onboards new software or technology
+Legitimate links going viral via social media
+Take, for instance, the domain “beside.media”. This domain was first observed in DNS requests in the dataset on 2023-01-02. On 2023-01-02, it was first seen at one site originating from one client IP; on 2023-01-04, it was seen at ten sites originating from 40 client IPs. After this, popularity waned over the next few days.
+The occurrence was seen at relatively the same time across multiple sensors.
+Additionally, when these occur, other DNS co-occurrences may correlate to the event, such as another server related to the activity. This can shed insight into correlated events, such as:
+Additional malware-related hosts are being beaconed out to at the same time
+Malware landing page/exploit kit redirects
+Webpage requisites include either site that refers to the domain in question as a dependency or other sites which the domain in question pulls in as dependencies.
+Develop an anomaly algorithm to detect similar events and another to compute statistically unique co-occurrences. The challenge is that the DNS dataset size is very large, but individual circumstances may be sparse. Millions of hostnames appear in the dataset, but each hostname may only appear on a sparse number of days by a sparse number of sensors.
 
 ### Key Action Items:
 Develop an anomaly detection algorithm to detect similar events where requests for a domain name suddenly rise in popularity over a short period across multiple sensors to identify similar events. (Machine Learning)
@@ -14,7 +27,20 @@ Attempt to research select examples from the dataset to determine the nature of 
 What can be learned from the analysis that can improve the accuracy of the machine learning model and reduce false positives? (Data Science)
 
 ### Ways to Measure Success:
-Section Not Found
+Intrusion collects telemetry of DNS data from an array of global sensors. This data is rich with information and supports forensic investigations and debugging. We want to explore better ways to leverage the data proactively to alert to potential emerging threats by applying statistical models to the dataset daily.
+The pattern we are looking for is when a domain name suddenly spikes in popularity across multiple sensors. This could be caused by a variety of reasons, including:
+A new malware campaign results in new call homes to command and control servers
+A new phishing campaign results in victims clicking links in email
+Existing widespread website changes hosting provider or dependencies
+A company onboards new software or technology
+Legitimate links going viral via social media
+Take, for instance, the domain “beside.media”. This domain was first observed in DNS requests in the dataset on 2023-01-02. On 2023-01-02, it was first seen at one site originating from one client IP; on 2023-01-04, it was seen at ten sites originating from 40 client IPs. After this, popularity waned over the next few days.
+The occurrence was seen at relatively the same time across multiple sensors.
+Additionally, when these occur, other DNS co-occurrences may correlate to the event, such as another server related to the activity. This can shed insight into correlated events, such as:
+Additional malware-related hosts are being beaconed out to at the same time
+Malware landing page/exploit kit redirects
+Webpage requisites include either site that refers to the domain in question as a dependency or other sites which the domain in question pulls in as dependencies.
+Develop an anomaly algorithm to detect similar events and another to compute statistically unique co-occurrences. The challenge is that the DNS dataset size is very large, but individual circumstances may be sparse. Millions of hostnames appear in the dataset, but each hostname may only appear on a sparse number of days by a sparse number of sensors.
 
 ### Milestones:
 

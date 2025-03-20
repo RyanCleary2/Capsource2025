@@ -4,13 +4,15 @@ Title: Design an Information Architecture to Improve UX
 Topics: Marketing, Software Design & Development, Software Design & Development
 
 ### Background and Objective:
-Section Not Found
+GLANCE is a led ticker designed to show you your data how you want it. The company asks you to help create a better UX design for its web application. The final goal is to increase the usability of their app by simplifying and tailoring its design. Propose strategies and ideas for the most effective methods to achieve that goal.
+About GLANCE: “Our team first met in undergrad and has since worked together as engineers and consultants in the tech space. We have worked with several Fortune 100 companies in the deep tech space as well. Overall our team has over 60 years of engineering experience. Designed by Investors, for Investors: We are active investors always checking Stock, REITS, Mutual Funds, Crypto, and NFT prices. We were constantly watching the apps and the market, determining when to buy or sell. And it was so draining. We decided to design GLANCE and eliminate the need for constantly opening the apps while still staying up-to-date on the current market prices. Now we have the world of finance at a GLANCE.”
 
 ### Key Action Items:
 After you become familiar with the company, we ask you to conduct user research and understand the users’ needs and preferences. Simplify the interface by removing unnecessary elements and minimizing visual clutter. Make recommendations for the app’s language, and consider headings, labels, and instructions. Tailor the design to the users’ needs by personalizing the experience based on their preferences, location, or other relevant information. This can include customizing the user interface or providing relevant content based on their browsing history. Use responsive design to ensure the web application is accessible and easy to use on all devices, including desktops, tablets, and smartphones. Finally, please test the design with users and use their feedback to iterate and improve it continuously. This can help identify areas where the design can be further simplified or tailored to meet users’ needs better.
 
 ### Ways to Measure Success:
-Section Not Found
+GLANCE is a led ticker designed to show you your data how you want it. The company asks you to help create a better UX design for its web application. The final goal is to increase the usability of their app by simplifying and tailoring its design. Propose strategies and ideas for the most effective methods to achieve that goal.
+About GLANCE: “Our team first met in undergrad and has since worked together as engineers and consultants in the tech space. We have worked with several Fortune 100 companies in the deep tech space as well. Overall our team has over 60 years of engineering experience. Designed by Investors, for Investors: We are active investors always checking Stock, REITS, Mutual Funds, Crypto, and NFT prices. We were constantly watching the apps and the market, determining when to buy or sell. And it was so draining. We decided to design GLANCE and eliminate the need for constantly opening the apps while still staying up-to-date on the current market prices. Now we have the world of finance at a GLANCE.”
 
 ### Milestones:
 

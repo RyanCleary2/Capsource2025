@@ -18,3 +18,4 @@ source myenv/bin/activate
 
 Terminal should look like 
 (myenv) [the rest of your path name]
+to stop the environment type deactivate 

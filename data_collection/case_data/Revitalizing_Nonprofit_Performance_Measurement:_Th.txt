@@ -4,7 +4,7 @@ Title: Revitalizing Nonprofit Performance Measurement: The Arc of Howard County'
 Topics: Growth Strategy, Marketing
 
 ### Background and Objective:
-Section Not Found
+Our organization is trying to enhance the effectiveness of its performance evaluation and decision-making process. Specifically, we want to create a more robust and visually engaging Key Performance Indicators (KPI) Dashboard. The current dashboard is inadequate and lacks visual appeal. We aim to track essential metrics more effectively and identify patterns or trends over time, which can help us make informed decisions. Help us develop a dynamic and interactive KPI Dashboard integrated into our website, which will provide a more comprehensive and user-friendly tool for evaluating the success of our organization.
 
 ### Key Action Items:
 KPI Dashboard Redesign:
@@ -22,7 +22,7 @@ Encourage the collection of user feedback and contributions to continuous improv
 This condensed list will help the organization focus on the key activities and action items to achieve the desired results efficiently.
 
 ### Ways to Measure Success:
-Section Not Found
+Our organization is trying to enhance the effectiveness of its performance evaluation and decision-making process. Specifically, we want to create a more robust and visually engaging Key Performance Indicators (KPI) Dashboard. The current dashboard is inadequate and lacks visual appeal. We aim to track essential metrics more effectively and identify patterns or trends over time, which can help us make informed decisions. Help us develop a dynamic and interactive KPI Dashboard integrated into our website, which will provide a more comprehensive and user-friendly tool for evaluating the success of our organization.
 
 ### Milestones:
 

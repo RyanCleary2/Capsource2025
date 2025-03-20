@@ -4,7 +4,74 @@ Title: The direction of technological innovation: 3DWooW case study
 Topics: Growth Strategy, Sales & Business Development
 
 ### Background and Objective:
-Section Not Found
+ABSTRACT
+3DWooW Technology Co., Ltd (3DWooW) is a professional 3D image content supplier founded in 2015 by Li Gangyue. The company is based in Shanghai, China, at the National  Public Pilot Base for Entrepreneurs, one of the country’s most prominent incubators. 3DWooW  focuses on one-stop solutions for film and television series, medical images, commercials, and corporate image displays. The company boasts a patent in the self-developed Pixel and Depth  Auto-Retrieval Technology (PADART), which is able to convert the video signals shot by the common single camera into vivid 3D equivalents. The company is establishing itself as the thought leader in virtual reality, augmented reality, 3D content production, and technological innovation. 3DWooW flourished in the National Public Pilot Base for Entrepreneurs (the incubator). The incubator boosts a 50.5% success rate, and 618 of the 1,224 startups grew to become full-fledged enterprises. Due to a $ 1 billion investment from the government, 3DWooW was able to take advantage of human resources and social public space. 3DWoow was able to successfully soft launch its business by focusing on the movie and film industry. However, given the expected growth of other segments and future market challenges, Mr. Li Gangyue and his executive team are interested in identifying its most lucrative direction to scale the company for rapid growth and first-mover advantage.
+Keywords: 3D Technology, Virtual Reality, Augmented Reality, Incubator, Technological  Change
+The direction of technological innovation, Page 1. 193001 – Journal of Business Cases and Applications
+INTRODUCTION
+3DWooW is a professional 3D image content supplier that focuses on one-stop solutions for films and television series, medical images, commercials, and corporate image displays. It is one of the few companies equipped with the most vanguard graphic processing workstations and a non-linear editing system (NLE) with patented technology. The Pixel and Depth Auto-Retrieval  Technology (PADART) can be seen as a milestone in relieving the pressure caused by inadequate video sources, high production costs, and long working periods. The company developed a disruptive technology based on intellectual graphic algorithms and created the 3D  element natural alignment that has been proven an effective replacement for manual frame-by-frame retouching. The new technology allows for a zero-step delamination transition from 2D to  3D signals, applicable to any films or telefilms available now.
+The company has expanded over the last few years. The team grew from two founders to sixteen employees. In addition, they have attracted experts with more than 30 years of experience in a variety of fields, including film and television special effects, animation CG integration,  Ph.D. experts in the field, and talented marketers. The company has substantially benefited from these experts due to their familiarity with both domestic and international experience. The company structure today has grown into five major departments; R&D, HR, Marketing, Sales,  and Finance.
+3DWooW has been acknowledged as one of the market leaders with potential applications in a variety of segments:
+✔ Visual tracking, virtual interaction, real-time 3D modeling, multi-thread rendering,  psychology of vision, overcoming motion sickness, and 360° immersive image syntheses.
+✔ Technical support for online interactions such as content transmission, displaying, and 3D  bullet screens (words, cartoons, or images).
+✔ Comprehensive support for 3D displaying and broadcasting, including 3D cartoons, 3D  screen production and syntheses.
+✔ 3D contents produced/transited by 3D element natural alignment compatible with almost  any 3D-embedded displayers.
+✔ With the application of self-developed mathematics modules and exclusive algorithms,  pixels of the original images are enhanced simultaneously during the process of being transited from 2D to 3D, thus bringing spectacular visual effects.
+In 2017, Li Gangyue and the management team evaluated the possibility of expanding the business and using its state-of-the-art technology to enter the medical market, specifically in minimally invasive operation display. 3DWooW teamed up with International Consulting Group  (“ICON”) to analyze the probable path to success in entering this market.
+The direction of technological innovation, Page 2. 193001 – Journal of Business Cases and Applications
+3D IMAGING SEGMENT
+The global 3D medical imaging segment is growing exponentially, as indicated in figure 1  (Appendix). The segment includes applications in movies, design, healthcare, entertainment,  defense, manufacturing, and construction. In 2014, The global 3D medical imaging segment was valued at $3.5 billion. By 2021, the market is expected to reach $18 billion. 3D Imaging in healthcare has a compound annual growth rate of 26.8%. When examining the 3D imaging by region, North America has the highest current market share of 49%. This dominates the other regions, Asia Pacific at 20%, Europe at 26%, and ROW (rest of the world) at 5%. Asia Pacific is the fastest-growing market consisting of electronics, healthcare equipment, and industrial equipment,  with a compound annual growth rate of 28%.
+3D TECHNOLOGY APPLICATIONS BY SEGMENT
+3D Movie Segment
+The 3D movie segment is mature and highly concentrated. The major players in this segment are NBC Universal, Sony, Time Warner, Walt Disney, and FOX. The 3D movie segment revenue was $6.2 billion in 2016. Although the industry’s current decline experienced in recent years is -0.9%, the future projection turns positive with a +2.2% annual growth rate by  2020. The disruption is being caused by players such as Netflix and Hulu’s consumers opting to stream video from home versus going to theaters or facing the lack of 3D capabilities in most televisions.
+Television Segment
+The global television segment has a fragmented market of new and old players. The projection of the television segment has growth leading to $16 billion in revenue by 2020. More specifically, the movie segment currently has $6.2B in revenue, with revenue expected to increase, as indicated in figure 2 (Appendix). At-home streaming boosts home viewing, making this segment a growth market with emerging players. Projections find that younger generations prefer cord-cutters, defined as getting rid of landline phones. The penetration stands at 76% of households now have streaming technology. Of these subscribers, 57 million are in the United  States. As the popularity of Netflix's streaming service has increased, the company has seen its DVD segment decline. Having reached 5 million subscribers in the 3-month period ending in  June 2018, Netflix has reached 130 million streaming subscribers worldwide.
+3D Gaming Segment
+The global 3D gaming segment has grown +7.8%, with $108.9 billion in revenue as of  2016. Gaming revenues today are up across the world, and future projections estimate that this segment will grow to $128.5 billion by 2020. This industry is fragmented and may sustain a  disruption from casual games to mobile. This means games are being played across multiple different technologies.
+The direction of technological innovation, Page 3. 193001 – Journal of Business Cases and Applications
+The 3D Gaming Industry is expected to grow from its current revenue of $108.9B to  $128.5B, as indicated in figure 3 (Appendix).
+3D Medical Imaging Segment
+The global medical imaging segment was valued at $28 billion in 2015. The 3D  Healthcare device segment is a niche yet to be further developed. There are a number of new players in the segment bringing disruptive technologies to the industries, but there is no dominant established player within the 3D technology when compared to the movie and gaming segments.
+The Medical Imaging Technology Segment is extremely attractive, with signs of potential applications for 3D Technology even though most of the imaging systems still use traditional 2D  technology, as indicated in figure 4 (Appendix). From an equipment/device perspective, the segment can be divided between diagnostic imaging and image-assisted surgery. Potential applications for 3D technology in diagnostic imaging include nuclear imaging equipment,  magnetic resonance equipment, computer tomography scanners, and ultrasound systems.  Although X-ray devices are a part of this segment, X-ray is the only imaging technique that still works with single images, while CT (computed tomography) makes use of several x-ray image slices. Consequently, 3D applications could be integrated with CT rather than X-ray.
+In image-assisted surgery, there is a potential for further development in the segment by applying technology to convert 2D images in real time to 3D images. This technology would allow the traditional endoscopic providers to launch new equipment that will significantly increase the image precision of minimum invasive surgeries and, as a result, dramatically increase the procedure success rates. 3DWoow has this technology fully developed.
+Endoscopy Devices
+The global endoscopy device market was valued at $30 billion in 2015 and is projected to be valued at $41.8 billion in 2020 at a 6% compound annual growth rate. China’s endoscopy device segment is showing rapid growth of $640 million within five years, with a compound annual growth rate of 6% from 2014 to 2019. The rapid growth of the Chinese endoscopy segment makes it attractive for new companies and technologies. Factors driving the market for endoscopy devices include the increase in the aging population, reduced healthcare costs, improved patient quality of life, technological advances, and the use of minimally invasive procedures, as indicated in figure 5 (Appendix).
+The increase in the aging population is one of the major drivers for the Chinese endoscopy device segment. Population data shows that from 2000-2030, the 65+ population will grow exponentially, while the younger 20-24-year-old population will increase only slightly. According to Statista, in 2016, China’s 15-64 years old age group consisted of 72.5% of the population, and the 65+ age group stood at only 10.8% of the population. These statistics show that since the current 65+ age group percentage is quite low, there is room for growth in the upcoming years.
+THE PROBLEM
+3DWoow was able to successfully soft launch its business by focusing on the movie and film industry. However, given the expected minimal growth of this segment, +2.2% by 2020, and future market challenges, top management is discussing if other segments will better provide rapid growth and first mover advantage.
+The direction of technological innovation, Page 4. 193001 – Journal of Business Cases and Applications
+Footnotes
+1. ICON is a student-run, global consultancy that bridges interdisciplinary college students to real-life projects with companies in various industries and countries. ICON has operations in the United States, China, Sweden, Israel, Mexico, South Korea,  Switzerland, and Brazil. This consultancy was based on Long Island University POST  led by Professor Graziela Fusaro.
+2. Jonathan Lieberz and Samantha Piccolo, business majors at LIU, served as ICON  consultants throughout this project. We thank them for their contributions to this paper.
+The direction of technological innovation, Page 5. 193001 – Journal of Business Cases and Applications
+REFERENCES
+(2016) 3D Imaging Market – Global Industry Analysis, Size, Share, Growth, Trends and  Forecast 2015-2021. Received from https://www.transparencymarketresearch.com/3d-imaging market.html
+(2017) 3shape. Retrieved from https://www.3shape.com/products/trios/intraoral scanners#myModal
+(2015) 3DWoow. Retrieved from http://3dwoow.com/en/about.aspx
+(2017) 3DWoow executive interview
+(2017)
+Endoscopy Equipment Market by Product (Endoscope (Flexible, Rigid, Capsule)  Visualization Systems, Endoscopic Ultrasound, Insufflator)), Application (GI Endoscopy,  Laparoscopy, Cystoscopy, Bronchoscopy, Colonoscopy, Arthroscopy) - Global Forecast to 2022
+.  Received from https://www.marketsandmarkets.com/Market-Reports/endoscopy-devices market-689.html
+(2017) Frost and Sullivan. Retrieved from https://ww2.frost.com
+(2016) IBISWorld. Retrieved from
+http://clients1.ibisworld.com.proxy2.library.illinois.edu/reports/us/industry/ataglance.aspx?entid =5488
+(2017) Med Device Online. Retrieved from https://www.medeviceonline.com/doc/the-role-d displays-in-medical-imaging-applications-0001
+(2016) Mordor Intelligence. Retrieved from https://www.mordorintelligence.com/industry reports?search=global%20endoscopy%20device%20market%20growth%20to%20$41.8B
+(2017)
+Newzoo Q2 2017 Update
+. Retrieved from https://newzoo.com/insights/articles/newzoo cuts-global-games-forecast-for-2018-to-134-9-billion/
+(2018)
+Number of Netflix Streaming Subscribes Worldwide from the 3rd Quarter of 2011 to the 1st Quarter of 2018 (in millions)
+. Retrieved from https://www.statista.com/statistics/250934/quarterly-number of-Netflix-streaming-subscribers-worldwide/
+Richter. F (2018, October 18.)
+Netflix Reaches 130 Million Subscribers
+. Retrieved from  https://www.statista.com/chart/10311/netflix-subscriptions-usa-international/
+(2016)
+Age distribution in China from 2006 to 2016.
+Retrieved from
+https://www.statista.com/statistics/270163/age-distribution-in-china/
+(2018) World Health Organization – Medical Device – Full Definition. Received from  http://www.who.int/medical_devices/full_deffinition/en
+The direction of technological innovation, Page 6. 193001 – Journal of Business Cases and Applications
 
 ### Key Action Items:
 We suggest starting with identifying the key questions that need to be answered in the case. Brainstorm all the different aspects from an industry and technology standpoint to a company core competencies analysis. Define the overall market: What is the growth opportunity? What do you know about the competitive environment? Prepare a competitor analysis, and highlight the strengths and weaknesses of 3DWooW Technology Co.
@@ -12,7 +79,74 @@ After all the ideas from the brainstorming section have been collected, it is ti
 Develop a sustainable scale-up plan for 3DWoow growth potential or first mover advantage. Prepare a map about industry stakeholders: What partnerships are needed to launch this initiative? Create a launch plan by defining target industries. Which products and/or services should 3DWooW consider developing in the short and long term? Is 3DWooW producing software, hardware, or both? What types of new partnerships and commercial leads need to be developed to leverage the business? Produce a road map and outline the steps 3DWooW needs to take to enter the selected industry.
 
 ### Ways to Measure Success:
-Section Not Found
+ABSTRACT
+3DWooW Technology Co., Ltd (3DWooW) is a professional 3D image content supplier founded in 2015 by Li Gangyue. The company is based in Shanghai, China, at the National  Public Pilot Base for Entrepreneurs, one of the country’s most prominent incubators. 3DWooW  focuses on one-stop solutions for film and television series, medical images, commercials, and corporate image displays. The company boasts a patent in the self-developed Pixel and Depth  Auto-Retrieval Technology (PADART), which is able to convert the video signals shot by the common single camera into vivid 3D equivalents. The company is establishing itself as the thought leader in virtual reality, augmented reality, 3D content production, and technological innovation. 3DWooW flourished in the National Public Pilot Base for Entrepreneurs (the incubator). The incubator boosts a 50.5% success rate, and 618 of the 1,224 startups grew to become full-fledged enterprises. Due to a $ 1 billion investment from the government, 3DWooW was able to take advantage of human resources and social public space. 3DWoow was able to successfully soft launch its business by focusing on the movie and film industry. However, given the expected growth of other segments and future market challenges, Mr. Li Gangyue and his executive team are interested in identifying its most lucrative direction to scale the company for rapid growth and first-mover advantage.
+Keywords: 3D Technology, Virtual Reality, Augmented Reality, Incubator, Technological  Change
+The direction of technological innovation, Page 1. 193001 – Journal of Business Cases and Applications
+INTRODUCTION
+3DWooW is a professional 3D image content supplier that focuses on one-stop solutions for films and television series, medical images, commercials, and corporate image displays. It is one of the few companies equipped with the most vanguard graphic processing workstations and a non-linear editing system (NLE) with patented technology. The Pixel and Depth Auto-Retrieval  Technology (PADART) can be seen as a milestone in relieving the pressure caused by inadequate video sources, high production costs, and long working periods. The company developed a disruptive technology based on intellectual graphic algorithms and created the 3D  element natural alignment that has been proven an effective replacement for manual frame-by-frame retouching. The new technology allows for a zero-step delamination transition from 2D to  3D signals, applicable to any films or telefilms available now.
+The company has expanded over the last few years. The team grew from two founders to sixteen employees. In addition, they have attracted experts with more than 30 years of experience in a variety of fields, including film and television special effects, animation CG integration,  Ph.D. experts in the field, and talented marketers. The company has substantially benefited from these experts due to their familiarity with both domestic and international experience. The company structure today has grown into five major departments; R&D, HR, Marketing, Sales,  and Finance.
+3DWooW has been acknowledged as one of the market leaders with potential applications in a variety of segments:
+✔ Visual tracking, virtual interaction, real-time 3D modeling, multi-thread rendering,  psychology of vision, overcoming motion sickness, and 360° immersive image syntheses.
+✔ Technical support for online interactions such as content transmission, displaying, and 3D  bullet screens (words, cartoons, or images).
+✔ Comprehensive support for 3D displaying and broadcasting, including 3D cartoons, 3D  screen production and syntheses.
+✔ 3D contents produced/transited by 3D element natural alignment compatible with almost  any 3D-embedded displayers.
+✔ With the application of self-developed mathematics modules and exclusive algorithms,  pixels of the original images are enhanced simultaneously during the process of being transited from 2D to 3D, thus bringing spectacular visual effects.
+In 2017, Li Gangyue and the management team evaluated the possibility of expanding the business and using its state-of-the-art technology to enter the medical market, specifically in minimally invasive operation display. 3DWooW teamed up with International Consulting Group  (“ICON”) to analyze the probable path to success in entering this market.
+The direction of technological innovation, Page 2. 193001 – Journal of Business Cases and Applications
+3D IMAGING SEGMENT
+The global 3D medical imaging segment is growing exponentially, as indicated in figure 1  (Appendix). The segment includes applications in movies, design, healthcare, entertainment,  defense, manufacturing, and construction. In 2014, The global 3D medical imaging segment was valued at $3.5 billion. By 2021, the market is expected to reach $18 billion. 3D Imaging in healthcare has a compound annual growth rate of 26.8%. When examining the 3D imaging by region, North America has the highest current market share of 49%. This dominates the other regions, Asia Pacific at 20%, Europe at 26%, and ROW (rest of the world) at 5%. Asia Pacific is the fastest-growing market consisting of electronics, healthcare equipment, and industrial equipment,  with a compound annual growth rate of 28%.
+3D TECHNOLOGY APPLICATIONS BY SEGMENT
+3D Movie Segment
+The 3D movie segment is mature and highly concentrated. The major players in this segment are NBC Universal, Sony, Time Warner, Walt Disney, and FOX. The 3D movie segment revenue was $6.2 billion in 2016. Although the industry’s current decline experienced in recent years is -0.9%, the future projection turns positive with a +2.2% annual growth rate by  2020. The disruption is being caused by players such as Netflix and Hulu’s consumers opting to stream video from home versus going to theaters or facing the lack of 3D capabilities in most televisions.
+Television Segment
+The global television segment has a fragmented market of new and old players. The projection of the television segment has growth leading to $16 billion in revenue by 2020. More specifically, the movie segment currently has $6.2B in revenue, with revenue expected to increase, as indicated in figure 2 (Appendix). At-home streaming boosts home viewing, making this segment a growth market with emerging players. Projections find that younger generations prefer cord-cutters, defined as getting rid of landline phones. The penetration stands at 76% of households now have streaming technology. Of these subscribers, 57 million are in the United  States. As the popularity of Netflix's streaming service has increased, the company has seen its DVD segment decline. Having reached 5 million subscribers in the 3-month period ending in  June 2018, Netflix has reached 130 million streaming subscribers worldwide.
+3D Gaming Segment
+The global 3D gaming segment has grown +7.8%, with $108.9 billion in revenue as of  2016. Gaming revenues today are up across the world, and future projections estimate that this segment will grow to $128.5 billion by 2020. This industry is fragmented and may sustain a  disruption from casual games to mobile. This means games are being played across multiple different technologies.
+The direction of technological innovation, Page 3. 193001 – Journal of Business Cases and Applications
+The 3D Gaming Industry is expected to grow from its current revenue of $108.9B to  $128.5B, as indicated in figure 3 (Appendix).
+3D Medical Imaging Segment
+The global medical imaging segment was valued at $28 billion in 2015. The 3D  Healthcare device segment is a niche yet to be further developed. There are a number of new players in the segment bringing disruptive technologies to the industries, but there is no dominant established player within the 3D technology when compared to the movie and gaming segments.
+The Medical Imaging Technology Segment is extremely attractive, with signs of potential applications for 3D Technology even though most of the imaging systems still use traditional 2D  technology, as indicated in figure 4 (Appendix). From an equipment/device perspective, the segment can be divided between diagnostic imaging and image-assisted surgery. Potential applications for 3D technology in diagnostic imaging include nuclear imaging equipment,  magnetic resonance equipment, computer tomography scanners, and ultrasound systems.  Although X-ray devices are a part of this segment, X-ray is the only imaging technique that still works with single images, while CT (computed tomography) makes use of several x-ray image slices. Consequently, 3D applications could be integrated with CT rather than X-ray.
+In image-assisted surgery, there is a potential for further development in the segment by applying technology to convert 2D images in real time to 3D images. This technology would allow the traditional endoscopic providers to launch new equipment that will significantly increase the image precision of minimum invasive surgeries and, as a result, dramatically increase the procedure success rates. 3DWoow has this technology fully developed.
+Endoscopy Devices
+The global endoscopy device market was valued at $30 billion in 2015 and is projected to be valued at $41.8 billion in 2020 at a 6% compound annual growth rate. China’s endoscopy device segment is showing rapid growth of $640 million within five years, with a compound annual growth rate of 6% from 2014 to 2019. The rapid growth of the Chinese endoscopy segment makes it attractive for new companies and technologies. Factors driving the market for endoscopy devices include the increase in the aging population, reduced healthcare costs, improved patient quality of life, technological advances, and the use of minimally invasive procedures, as indicated in figure 5 (Appendix).
+The increase in the aging population is one of the major drivers for the Chinese endoscopy device segment. Population data shows that from 2000-2030, the 65+ population will grow exponentially, while the younger 20-24-year-old population will increase only slightly. According to Statista, in 2016, China’s 15-64 years old age group consisted of 72.5% of the population, and the 65+ age group stood at only 10.8% of the population. These statistics show that since the current 65+ age group percentage is quite low, there is room for growth in the upcoming years.
+THE PROBLEM
+3DWoow was able to successfully soft launch its business by focusing on the movie and film industry. However, given the expected minimal growth of this segment, +2.2% by 2020, and future market challenges, top management is discussing if other segments will better provide rapid growth and first mover advantage.
+The direction of technological innovation, Page 4. 193001 – Journal of Business Cases and Applications
+Footnotes
+1. ICON is a student-run, global consultancy that bridges interdisciplinary college students to real-life projects with companies in various industries and countries. ICON has operations in the United States, China, Sweden, Israel, Mexico, South Korea,  Switzerland, and Brazil. This consultancy was based on Long Island University POST  led by Professor Graziela Fusaro.
+2. Jonathan Lieberz and Samantha Piccolo, business majors at LIU, served as ICON  consultants throughout this project. We thank them for their contributions to this paper.
+The direction of technological innovation, Page 5. 193001 – Journal of Business Cases and Applications
+REFERENCES
+(2016) 3D Imaging Market – Global Industry Analysis, Size, Share, Growth, Trends and  Forecast 2015-2021. Received from https://www.transparencymarketresearch.com/3d-imaging market.html
+(2017) 3shape. Retrieved from https://www.3shape.com/products/trios/intraoral scanners#myModal
+(2015) 3DWoow. Retrieved from http://3dwoow.com/en/about.aspx
+(2017) 3DWoow executive interview
+(2017)
+Endoscopy Equipment Market by Product (Endoscope (Flexible, Rigid, Capsule)  Visualization Systems, Endoscopic Ultrasound, Insufflator)), Application (GI Endoscopy,  Laparoscopy, Cystoscopy, Bronchoscopy, Colonoscopy, Arthroscopy) - Global Forecast to 2022
+.  Received from https://www.marketsandmarkets.com/Market-Reports/endoscopy-devices market-689.html
+(2017) Frost and Sullivan. Retrieved from https://ww2.frost.com
+(2016) IBISWorld. Retrieved from
+http://clients1.ibisworld.com.proxy2.library.illinois.edu/reports/us/industry/ataglance.aspx?entid =5488
+(2017) Med Device Online. Retrieved from https://www.medeviceonline.com/doc/the-role-d displays-in-medical-imaging-applications-0001
+(2016) Mordor Intelligence. Retrieved from https://www.mordorintelligence.com/industry reports?search=global%20endoscopy%20device%20market%20growth%20to%20$41.8B
+(2017)
+Newzoo Q2 2017 Update
+. Retrieved from https://newzoo.com/insights/articles/newzoo cuts-global-games-forecast-for-2018-to-134-9-billion/
+(2018)
+Number of Netflix Streaming Subscribes Worldwide from the 3rd Quarter of 2011 to the 1st Quarter of 2018 (in millions)
+. Retrieved from https://www.statista.com/statistics/250934/quarterly-number of-Netflix-streaming-subscribers-worldwide/
+Richter. F (2018, October 18.)
+Netflix Reaches 130 Million Subscribers
+. Retrieved from  https://www.statista.com/chart/10311/netflix-subscriptions-usa-international/
+(2016)
+Age distribution in China from 2006 to 2016.
+Retrieved from
+https://www.statista.com/statistics/270163/age-distribution-in-china/
+(2018) World Health Organization – Medical Device – Full Definition. Received from  http://www.who.int/medical_devices/full_deffinition/en
+The direction of technological innovation, Page 6. 193001 – Journal of Business Cases and Applications
 
 ### Milestones:
 
