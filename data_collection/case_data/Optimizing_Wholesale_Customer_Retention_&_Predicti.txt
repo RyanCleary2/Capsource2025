@@ -4,7 +4,27 @@ Title: Optimizing Wholesale Customer Retention & Predictive Analytics in the Spe
 Topics: Customer Service & Account Management, Data Management, Growth Strategy, Market Research, Reporting, Financial Planning & Analysis, Sales & Business Development
 
 ### Background and Objective:
-Section Not Found
+For small and mid-sized
+specialty food brands
+, the ability to manage
+wholesale customer relationships
+is a crucial component of long-term business success. Retaining high-value wholesale clients, forecasting demand, and optimizing sales strategies are
+key drivers of growth
+in this competitive industry.
+While Bread SRSLY has
+internal data and predictive analytics efforts
+underway, this case study challenges students to
+develop a framework for evaluating wholesale customer health
+,
+assessing revenue forecasting methodologies
+, and
+creating retention strategies
+that can be applied to the broader industry.
+By examining
+real-world industry best practices
+, students will explore
+how specialty food companies can structure their wholesale analytics efforts
+without direct access to proprietary data.
 
 ### Key Action Items:
 Students will develop a
@@ -29,7 +49,27 @@ scalable methodology
 that specialty food businesses can use to track and improve wholesale customer relationships.
 
 ### Ways to Measure Success:
-Section Not Found
+For small and mid-sized
+specialty food brands
+, the ability to manage
+wholesale customer relationships
+is a crucial component of long-term business success. Retaining high-value wholesale clients, forecasting demand, and optimizing sales strategies are
+key drivers of growth
+in this competitive industry.
+While Bread SRSLY has
+internal data and predictive analytics efforts
+underway, this case study challenges students to
+develop a framework for evaluating wholesale customer health
+,
+assessing revenue forecasting methodologies
+, and
+creating retention strategies
+that can be applied to the broader industry.
+By examining
+real-world industry best practices
+, students will explore
+how specialty food companies can structure their wholesale analytics efforts
+without direct access to proprietary data.
 
 ### Milestones:
 
