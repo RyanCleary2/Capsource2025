@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapSource AI Project Generator</title>
+    <style>
+        :root {
+            --primary-color: #e27d60;
+            --primary-gradient: linear-gradient(135deg, #e27d60 0%, #e8a87c 100%);
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --dark-accent: #41444b;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #d06c50;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: var(--white);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .dot-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: 1;
+        }
+
+        /* Project Generator Section */
+        .project-generator {
+            padding: 60px 0;
+            background-color: var(--white);
+        }
+
+        .generator-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+        }
+
+        .generator-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .generator-heading h2 {
+            font-size: 30px;
+            color: var(--dark-accent);
+            margin-bottom: 10px;
+        }
+
+        .generator-heading p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .optional-label {
+            font-weight: normal;
+            color: #666;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-accent);
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .generate-btn {
+            padding: 12px 40px;
+            font-size: 18px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .generate-btn:hover {
+            background-color: #d06c50;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+            background-color: var(--light-bg);
+        }
+
+        .features-heading {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .features-heading h2 {
+            font-size: 32px;
+            color: var(--dark-accent);
+            margin-bottom: 15px;
+        }
+
+        .features-heading p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(226, 125, 96, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon i {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-accent);
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: var(--white);
+            padding: 40px 0;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            margin-top: 40px;
+            text-align: center;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+            color: #ccc;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="/api/placeholder/40/40" alt="CapSource Logo" />
+                <h1>CapSource</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">EDUCATORS</a></li>
+                    <li><a href="#">STUDENTS</a></li>
+                    <li><a href="#">ORGANIZATIONS</a></li>
+                    <li><a href="#">OPPORTUNITIES</a></li>
+                    <li><a href="#">LEARN MORE</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline">LOGIN</a>
+                <a href="#" class="btn btn-primary">REGISTER</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="dot-pattern"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>AI-Powered Project Generator</h1>
+                <p>Create industry-relevant projects for students with AI assistance. Streamline project creation and enhance experiential learning opportunities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Generator Section -->
+    <section id="generator" class="project-generator">
+        <div class="container">
+            <div class="generator-container">
+                <div class="generator-heading">
+                    <h2>Project Generator</h2>
+                    <p>Fill in the details below to create a customized project with AI assistance</p>
+                </div>
+                
+                <form id="project-form">
+                    <div class="form-section">
+                        <h3>Basic Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="website-url">Website URL</label>
+                                <input type="url" id="website-url" name="website-url" placeholder="Enter your company website URL">
+                            </div>
+                            <div class="form-group">
+                                <label for="project-owner">Project Owner <span class="optional-label">(optional)</span></label>
+                                <input type="text" id="project-owner" name="project-owner" placeholder="Enter project owner's name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Project Details</h3>
+                        <div class="form-group">
+                            <label for="background">Background & Objectives</label>
+                            <textarea id="background" name="background" placeholder="Describe the project background and objectives"></textarea>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="industry">Industry <span class="optional-label">(optional but recommended)</span></label>
+                                <select id="industry" name="industry">
+                                    <option value="">Select an industry</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="education">Education</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="non-profit">Non-profit</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-type">Project Type <span class="optional-label">(optional but recommended)</span></label>
+                                <select id="project-type" name="project-type">
+                                    <option value="">Select project type</option>
+                                    <option value="case-study">Case Study</option>
+                                    <option value="live-project">Live Project</option>
+                                    <option value="research">Research Project</option>
+                                    <option value="internship">Internship</option>
+                                    <option value="competition">Competition</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Target Audience <span class="optional-label">(optional but recommended)</span></h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="education-level">Education Level</label>
+                                <select id="education-level" name="education-level">
+                                    <option value="">Select education level</option>
+                                    <option value="undergraduate">Undergraduate</option>
+                                    <option value="graduate">Graduate</option>
+                                    <option value="high-school">High School</option>
+                                    <option value="all">All Levels</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="discipline">Discipline</label>
+                                <select id="discipline" name="discipline">
+                                    <option value="">Select discipline</option>
+                                    <option value="business">Business</option>
+                                    <option value="engineering">Engineering</option>
+                                    <option value="computer-science">Computer Science</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="arts">Arts & Humanities</option>
+                                    <option value="multidisciplinary">Multidisciplinary</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Project Parameters <span class="optional-label">(optional but recommended)</span></h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="duration">Project Duration</label>
+                                <select id="duration" name="duration">
+                                    <option value="">Select duration</option>
+                                    <option value="1-2-weeks">1-2 Weeks</option>
+                                    <option value="3-4-weeks">3-4 Weeks</option>
+                                    <option value="5-8-weeks">5-8 Weeks</option>
+                                    <option value="semester">Full Semester</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="team-size">Team Size</label>
+                                <select id="team-size" name="team-size">
+                                    <option value="">Select team size</option>
+                                    <option value="individual">Individual</option>
+                                    <option value="2-3">2-3 Students</option>
+                                    <option value="4-6">4-6 Students</option>
+                                    <option value="7+">7+ Students</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="submit" class="generate-btn">Generate Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-heading">
+                <h2>Why Use Our AI Project Generator?</h2>
+                <p>Our AI-powered platform helps create meaningful experiential learning opportunities that connect students with real-world business challenges.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🧠</span>
+                    </div>
+                    <h3>AI-Powered Templates</h3>
+                    <p>Generate customized project briefs with detailed requirements, deliverables, and timelines based on your specific needs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🔄</span>
+                    </div>
+                    <h3>Industry Alignment</h3>
+                    <p>Ensure projects are relevant to current industry challenges and provide students with real-world experience.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>⏱️</span>
+                    </div>
+                    <h3>Time-Saving</h3>
+                    <p>Create comprehensive project plans in minutes instead of hours, allowing you to focus on student engagement.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>📊</span>
+                    </div>
+                    <h3>Learning Outcomes</h3>
+                    <p>Automatically map projects to specific learning outcomes and skill development goals.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🤝</span>
+                    </div>
+                    <h3>Collaboration Ready</h3>
+                    <p>Export projects in formats that facilitate seamless collaboration between educators, students, and industry partners.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>📈</span>
+                    </div>
+                    <h3>Assessment Tools</h3>
+                    <p>Includes built-in assessment criteria and rubrics to evaluate student performance and project success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>CapSource</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>For Educators</h3>
+                    <ul>
+                        <li><a href="#">Project Library</a></li>
+                        <li><a href="#">Teaching Resources</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                        <li><a href="#">Partner with Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>For Students</h3>
+                    <ul>
+                        <li><a href="#">Find Projects</a></li>
+                        <li><a href="#">Skill Development</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Career Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>For Organizations</h3>
+                    <ul>
+                        <li><a href="#">Talent Pipeline</a></li>
+                        <li><a href="#">Recruitment</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Partnerships</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 CapSource. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('project-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Here you would typically send the form data to your backend
+            // For this demo, we'll just show an alert
+            alert('Form submitted! In a real implementation, this would generate a project using AI.');
+            
+            // You could also redirect to a results page
+            // window.location.href = '/results.html';
+        });
+    </script>
+</body>
+</html>
