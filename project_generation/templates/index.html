@@ -5,30 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CapSource AI Project Generator</title>
     <style>
+        /* Define CSS custom properties (variables) for consistent styling */
         :root {
-            --primary-color: #e27d60;
-            --primary-gradient: linear-gradient(135deg, #e27d60 0%, #e8a87c 100%);
-            --text-color: #333;
-            --light-bg: #f8f9fa;
-            --white: #ffffff;
-            --dark-accent: #41444b;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --primary-color: #e27d60;  /* Primary brand color */
+            --primary-gradient: linear-gradient(135deg, #e27d60 0%, #e8a87c 100%);  /* Gradient for hero section */
+            --text-color: #333;  /* Default text color */
+            --light-bg: #f8f9fa;  /* Light background color */
+            --white: #ffffff;  /* White color */
+            --dark-accent: #41444b;  /* Dark accent color for headings */
+            --border-radius: 8px;  /* Consistent border radius */
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow effect */
         }
 
+        /* Reset default margins, padding, and set box-sizing */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Default font stack */
         }
 
+        /* Style the body with background and text settings */
         body {
             background-color: var(--light-bg);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.6;  /* Improve readability */
         }
 
+        /* Center content with max width and padding */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -36,14 +40,16 @@
             padding: 0 20px;
         }
 
+        /* Style the header with shadow and sticky positioning */
         header {
             background-color: var(--white);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 1000;  /* Ensure header stays above other content */
         }
 
+        /* Flexbox layout for header content */
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -51,13 +57,14 @@
             padding: 15px 0;
         }
 
+        /* Style the logo section */
         .logo {
             display: flex;
             align-items: center;
         }
 
         .logo img {
-            height: 40px;
+            height: 40px;  /* Fixed logo height */
             margin-right: 10px;
         }
 
@@ -67,38 +74,42 @@
             font-weight: 600;
         }
 
+        /* Navigation menu styling */
         nav ul {
             display: flex;
             list-style: none;
-            gap: 20px;
+            gap: 20px;  /* Space between nav items */
         }
 
         nav ul li a {
             text-decoration: none;
             color: var(--text-color);
             font-weight: 500;
-            transition: color 0.3s;
+            transition: color 0.3s;  /* Smooth color transition on hover */
         }
 
         nav ul li a:hover {
-            color: var(--primary-color);
+            color: var(--primary-color);  /* Change color on hover */
         }
 
+        /* Style authentication buttons */
         .auth-buttons {
             display: flex;
-            gap: 10px;
+            gap: 10px;  /* Space between buttons */
         }
 
+        /* Base button styles */
         .btn {
             padding: 8px 20px;
             border-radius: var(--border-radius);
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s;  /* Smooth transition for all changes */
             text-decoration: none;
             text-align: center;
         }
 
+        /* Outline button variant */
         .btn-outline {
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
@@ -110,6 +121,7 @@
             color: var(--white);
         }
 
+        /* Primary button variant */
         .btn-primary {
             background-color: var(--primary-color);
             color: var(--white);
@@ -117,9 +129,10 @@
         }
 
         .btn-primary:hover {
-            background-color: #d06c50;
+            background-color: #d06c50;  /* Darker shade on hover */
         }
 
+        /* Hero section with gradient background */
         .hero {
             background: var(--primary-gradient);
             color: var(--white);
@@ -129,10 +142,11 @@
             text-align: center;
         }
 
+        /* Center hero content */
         .hero-content {
             max-width: 800px;
             position: relative;
-            z-index: 2;
+            z-index: 2;  /* Ensure content is above background pattern */
             margin: 0 auto;
         }
 
@@ -150,6 +164,7 @@
             margin-right: auto;
         }
 
+        /* Decorative dot pattern in hero section */
         .dot-pattern {
             position: absolute;
             top: 0;
@@ -158,14 +173,16 @@
             height: 100%;
             background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
             background-size: 30px 30px;
-            z-index: 1;
+            z-index: 1;  /* Place behind content */
         }
 
+        /* Project generator section styling */
         .project-generator {
             padding: 60px 0;
             background-color: var(--white);
         }
 
+        /* Container for the generator form */
         .generator-container {
             max-width: 800px;
             margin: 0 auto;
@@ -175,6 +192,7 @@
             padding: 30px;
         }
 
+        /* Heading for the generator section */
         .generator-heading {
             text-align: center;
             margin-bottom: 30px;
@@ -187,10 +205,11 @@
         }
 
         .generator-heading p {
-            color: #666;
+            color: #666;  /* Lighter text for description */
             font-size: 16px;
         }
 
+        /* Form group styling */
         .form-group {
             margin-bottom: 20px;
         }
@@ -201,6 +220,7 @@
             font-weight: 500;
         }
 
+        /* Style for optional field labels */
         .optional-label {
             font-weight: normal;
             color: #666;
@@ -208,6 +228,7 @@
             margin-left: 5px;
         }
 
+        /* Input, textarea, and select styling */
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -219,16 +240,18 @@
         }
 
         .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
+            min-height: 120px;  /* Minimum height for textarea */
+            resize: vertical;  /* Allow vertical resizing only */
         }
 
+        /* Center the form submission button */
         .form-footer {
             display: flex;
             justify-content: center;
             margin-top: 30px;
         }
 
+        /* Style the generate button */
         .generate-btn {
             padding: 12px 40px;
             font-size: 18px;
@@ -241,23 +264,27 @@
         }
 
         .generate-btn:hover {
-            background-color: #d06c50;
+            background-color: #d06c50;  /* Darker shade on hover */
         }
 
+        /* Responsive design for smaller screens */
         @media (max-width: 768px) {
             .form-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr;  /* Single column layout */
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header section with navigation and authentication buttons -->
     <header>
         <div class="container header-container">
             <div class="logo">
+                <!-- Logo image and title -->
                 <img src="{{ url_for('static', filename='logo.png') }}" alt="CapSource Logo" />
                 <h1>CapSource</h1>
             </div>
+            <!-- Navigation menu -->
             <nav>
                 <ul>
                     <li><a href="#">EDUCATORS</a></li>
@@ -267,6 +294,7 @@
                     <li><a href="#">LEARN MORE</a></li>
                 </ul>
             </nav>
+            <!-- Login and Register buttons -->
             <div class="auth-buttons">
                 <a href="#" class="btn btn-outline">LOGIN</a>
                 <a href="#" class="btn btn-primary">REGISTER</a>
@@ -274,6 +302,7 @@
         </div>
     </header>
 
+    <!-- Hero section with promotional content -->
     <section class="hero">
         <div class="dot-pattern"></div>
         <div class="container">
@@ -284,6 +313,7 @@
         </div>
     </section>
 
+    <!-- Project generator form section -->
     <section id="generator" class="project-generator">
         <div class="container">
             <div class="generator-container">
@@ -292,14 +322,17 @@
                     <p>Fill in the details below to create a customized project with AI assistance</p>
                 </div>
                 
+                <!-- Form to submit project details -->
                 <form id="project-form" action="/generate_project" method="POST">
                     <div class="form-section">
                         <h3>Basic Information</h3>
                         <div class="form-grid">
+                            <!-- Website URL input -->
                             <div class="form-group">
                                 <label for="website-url">Website URL</label>
                                 <input type="url" id="website-url" name="website-url" placeholder="Enter your company website URL" required>
                             </div>
+                            <!-- Project owner input (optional) -->
                             <div class="form-group">
                                 <label for="project-owner">Project Owner <span class="optional-label">(optional)</span></label>
                                 <input type="text" id="project-owner" name="project-owner" placeholder="Enter project owner's name">
@@ -309,12 +342,14 @@
 
                     <div class="form-section">
                         <h3>Project Details</h3>
+                        <!-- Background and objectives textarea -->
                         <div class="form-group">
                             <label for="background">Background & Objectives</label>
                             <textarea id="background" name="background" placeholder="Describe the project background and objectives" required></textarea>
                         </div>
 
                         <div class="form-grid">
+                            <!-- Industry selection (optional) -->
                             <div class="form-group">
                                 <label for="industry">Industry <span class="optional-label">(optional but recommended)</span></label>
                                 <select id="industry" name="industry">
@@ -328,6 +363,7 @@
                                     <option value="non-profit">Non-profit</option>
                                 </select>
                             </div>
+                            <!-- Project type selection (optional) -->
                             <div class="form-group">
                                 <label for="project-type">Project Type <span class="optional-label">(optional but recommended)</span></label>
                                 <select id="project-type" name="project-type">
@@ -342,6 +378,7 @@
                         </div>
                     </div>
 
+                    <!-- Submit button -->
                     <div class="form-footer">
                         <button type="submit" class="generate-btn">Generate Project</button>
                     </div>
