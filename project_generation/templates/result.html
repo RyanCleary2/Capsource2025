@@ -5,33 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CapSource Project Results</title>
     <style>
+        /* Define CSS custom properties for consistent theming */
         :root {
-            --primary-color: #e27d60;
-            --primary-light: #e8a87c;
-            --secondary-color: #85cdca;
-            --accent-color: #c38d9e;
-            --text-color: #41444b;
-            --light-bg: #f8f9fa;
-            --white: #ffffff;
-            --dark-accent: #41444b;
-            --border-radius: 8px;
-            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            --content-shadow: 0 6px 12px rgba(226, 125, 96, 0.1);
+            --primary-color: #e27d60;  /* Primary brand color */
+            --primary-light: #e8a87c;  /* Lighter shade of primary color */
+            --secondary-color: #85cdca;  /* Secondary color (unused here but defined) */
+            --accent-color: #c38d9e;  /* Accent color (unused here but defined) */
+            --text-color: #41444b;  /* Default text color */
+            --light-bg: #f8f9fa;  /* Light background color */
+            --white: #ffffff;  /* White color */
+            --dark-accent: #41444b;  /* Dark accent for headings and footer */
+            --border-radius: 8px;  /* Consistent border radius */
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);  /* Shadow for containers */
+            --content-shadow: 0 6px 12px rgba(226, 125, 96, 0.1);  /* Shadow for content box */
         }
 
+        /* Reset default margins, padding, and set box-sizing */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Default font stack */
         }
 
+        /* Set body background and text styling */
         body {
             background-color: var(--light-bg);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.6;  /* Improve readability */
         }
 
+        /* Center content with max width and padding */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -39,14 +43,16 @@
             padding: 0 20px;
         }
 
+        /* Style header with shadow and sticky positioning */
         header {
             background-color: var(--white);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);  /* Subtle shadow */
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 1000;  /* Ensure header stays above other content */
         }
 
+        /* Flexbox layout for header content */
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -54,13 +60,14 @@
             padding: 15px 0;
         }
 
+        /* Style logo section */
         .logo {
             display: flex;
             align-items: center;
         }
 
         .logo img {
-            height: 40px;
+            height: 40px;  /* Fixed logo height */
             margin-right: 10px;
         }
 
@@ -70,51 +77,57 @@
             font-weight: 600;
         }
 
+        /* Hide navigation by default (shown on larger screens) */
         nav {
             display: none;
             margin-left: 40px;
         }
 
+        /* Show navigation on screens wider than 768px */
         @media (min-width: 768px) {
             nav {
                 display: flex;
             }
         }
 
+        /* Style navigation links */
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 25px;
+            gap: 25px;  /* Space between links */
         }
 
         .nav-links a {
             color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: color 0.3s;  /* Smooth color transition on hover */
             font-size: 15px;
         }
 
         .nav-links a:hover {
-            color: var(--primary-color);
+            color: var(--primary-color);  /* Change color on hover */
         }
 
+        /* Style authentication buttons */
         .auth-buttons {
             display: flex;
-            gap: 10px;
+            gap: 10px;  /* Space between buttons */
         }
 
+        /* Base button styles */
         .btn {
             padding: 10px 22px;
             border-radius: var(--border-radius);
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s;  /* Smooth transition for all changes */
             text-decoration: none;
             text-align: center;
             font-size: 14px;
         }
 
+        /* Outline button variant */
         .btn-outline {
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
@@ -124,21 +137,23 @@
         .btn-outline:hover {
             background-color: var(--primary-color);
             color: var(--white);
-            transform: translateY(-2px);
+            transform: translateY(-2px);  /* Slight lift on hover */
         }
 
+        /* Primary button variant with gradient */
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
             color: var(--white);
             border: none;
-            box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+            box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);  /* Subtle shadow */
         }
 
         .btn-primary:hover {
-            box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
-            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);  /* Enhanced shadow on hover */
+            transform: translateY(-2px);  /* Slight lift on hover */
         }
 
+        /* Hero section with gradient background */
         .hero {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
             padding: 30px 0;
@@ -148,6 +163,7 @@
             overflow: hidden;
         }
 
+        /* Decorative radial gradient background pattern */
         .hero::before {
             content: "";
             position: absolute;
@@ -159,6 +175,7 @@
                               radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
         }
 
+        /* Ensure hero content is above background pattern */
         .hero-container {
             position: relative;
             z-index: 1;
@@ -170,12 +187,14 @@
             font-weight: 700;
         }
 
+        /* Results section styling */
         .results {
             padding: 60px 0;
             background-color: var(--light-bg);
             position: relative;
         }
 
+        /* Curved transition effect above results section */
         .results::before {
             content: "";
             position: absolute;
@@ -184,10 +203,11 @@
             width: 100%;
             height: 100px;
             background-color: var(--light-bg);
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;  /* Curved top edge */
             z-index: 1;
         }
 
+        /* Container for results content */
         .results-container {
             max-width: 800px;
             margin: 0 auto;
@@ -196,9 +216,10 @@
             box-shadow: var(--box-shadow);
             padding: 40px;
             position: relative;
-            z-index: 2;
+            z-index: 2;  /* Ensure container is above curved background */
         }
 
+        /* Heading for results section */
         .results-heading {
             text-align: center;
             margin-bottom: 40px;
@@ -212,27 +233,30 @@
         }
 
         .results-heading p {
-            color: #666;
+            color: #666;  /* Lighter text for description */
             font-size: 16px;
         }
 
+        /* Style the AI-generated project scope content */
         .results-content {
-            white-space: pre-wrap;
-            line-height: 1.8;
-            background-color: #f9f9f9;
+            white-space: pre-wrap;  /* Preserve formatting from AI output */
+            line-height: 1.8;  /* Improve readability */
+            background-color: #f9f9f9;  /* Light gray background */
             padding: 30px;
             border-radius: var(--border-radius);
-            border-left: 4px solid var(--primary-color);
+            border-left: 4px solid var(--primary-color);  /* Highlight border */
             font-size: 15px;
-            box-shadow: var(--content-shadow);
+            box-shadow: var(--content-shadow);  /* Subtle shadow */
         }
 
+        /* Flexbox layout for action buttons */
         .action-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
 
+        /* Style the back button */
         .back-btn {
             display: block;
             padding: 12px 24px;
@@ -247,14 +271,15 @@
             width: fit-content;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 8px;  /* Space between icon and text */
         }
 
         .back-btn:hover {
-            background-color: #333;
-            transform: translateY(-2px);
+            background-color: #333;  /* Darker shade on hover */
+            transform: translateY(-2px);  /* Slight lift on hover */
         }
 
+        /* Style the download button with gradient */
         .download-btn {
             display: block;
             padding: 12px 24px;
@@ -269,15 +294,16 @@
             width: fit-content;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+            gap: 8px;  /* Space between icon and text */
+            box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);  /* Subtle shadow */
         }
 
         .download-btn:hover {
-            box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
-            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);  /* Enhanced shadow on hover */
+            transform: translateY(-2px);  /* Slight lift on hover */
         }
 
+        /* Footer styling */
         footer {
             background-color: var(--dark-accent);
             color: var(--white);
@@ -285,55 +311,61 @@
             font-size: 14px;
         }
 
+        /* Flexbox layout for footer content */
         .footer-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        /* Style footer links */
         .footer-links {
             display: flex;
-            gap: 20px;
+            gap: 20px;  /* Space between links */
         }
 
         .footer-links a {
             color: var(--white);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.3s;  /* Smooth color transition on hover */
         }
 
         .footer-links a:hover {
-            color: var(--primary-light);
+            color: var(--primary-light);  /* Lighter shade on hover */
         }
 
+        /* Responsive design adjustments */
         @media (max-width: 768px) {
             .footer-container {
-                flex-direction: column;
+                flex-direction: column;  /* Stack footer items vertically */
                 gap: 20px;
                 text-align: center;
             }
             
             .action-buttons {
-                flex-direction: column;
+                flex-direction: column;  /* Stack buttons vertically */
                 gap: 15px;
                 align-items: center;
             }
             
             .back-btn, .download-btn {
-                width: 100%;
+                width: 100%;  /* Full width on smaller screens */
                 justify-content: center;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header section with logo, navigation, and authentication buttons -->
     <header>
         <div class="container header-container">
             <div style="display: flex; align-items: center;">
                 <div class="logo">
+                    <!-- Logo image and title -->
                     <img src="{{ url_for('static', filename='logo.png') }}" alt="CapSource Logo" />
                     <h1>CapSource</h1>
                 </div>
+                <!-- Navigation menu (hidden on small screens) -->
                 <nav>
                     <ul class="nav-links">
                         <li><a href="#">EDUCATORS</a></li>
@@ -344,6 +376,7 @@
                     </ul>
                 </nav>
             </div>
+            <!-- Login and Register buttons -->
             <div class="auth-buttons">
                 <a href="#" class="btn btn-outline">LOGIN</a>
                 <a href="#" class="btn btn-primary">REGISTER</a>
@@ -351,6 +384,7 @@
         </div>
     </header>
 
+    <!-- Hero section announcing project results -->
     <section class="hero">
         <div class="container hero-container">
             <h2>Project Generation Results</h2>
@@ -358,6 +392,7 @@
         </div>
     </section>
 
+    <!-- Results section displaying the generated project scope -->
     <section class="results">
         <div class="container">
             <div class="results-container">
@@ -365,19 +400,23 @@
                     <h2>Project Scope</h2>
                     <p>Here's your AI-generated project based on your specifications</p>
                 </div>
+                <!-- Display the AI-generated project scope (injected by Flask) -->
                 <div class="results-content">
-                    {{ project_scope | safe }}
+                    {{ project_scope | safe }}  <!-- 'safe' filter renders HTML without escaping -->
                 </div>
+                <!-- Action buttons for navigation and download -->
                 <div class="action-buttons">
+                    <!-- Back to generator link with icon -->
                     <a href="/" class="back-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>  <!-- Arrow left icon -->
                         </svg>
                         Back to Generator
                     </a>
+                    <!-- Download PDF link with icon (functionality not implemented) -->
                     <a href="#" class="download-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>  <!-- Download icon -->
                         </svg>
                         Download PDF
                     </a>
@@ -386,6 +425,7 @@
         </div>
     </section>
 
+    <!-- Footer with copyright and links -->
     <footer>
         <div class="container footer-container">
             <div>© 2025 CapSource. All rights reserved.</div>
