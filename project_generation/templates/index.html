@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapSource AI Project Generator</title>
+    <style>
+        :root {
+            --primary-color: #e27d60;
+            --primary-gradient: linear-gradient(135deg, #e27d60 0%, #e8a87c 100%);
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --dark-accent: #41444b;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #d06c50;
+        }
+
+        .hero {
+            background: var(--primary-gradient);
+            color: var(--white);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .dot-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: 1;
+        }
+
+        .project-generator {
+            padding: 60px 0;
+            background-color: var(--white);
+        }
+
+        .generator-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+        }
+
+        .generator-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .generator-heading h2 {
+            font-size: 30px;
+            color: var(--dark-accent);
+            margin-bottom: 10px;
+        }
+
+        .generator-heading p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .optional-label {
+            font-weight: normal;
+            color: #666;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .generate-btn {
+            padding: 12px 40px;
+            font-size: 18px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .generate-btn:hover {
+            background-color: #d06c50;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="CapSource Logo" />
+                <h1>CapSource</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">EDUCATORS</a></li>
+                    <li><a href="#">STUDENTS</a></li>
+                    <li><a href="#">ORGANIZATIONS</a></li>
+                    <li><a href="#">OPPORTUNITIES</a></li>
+                    <li><a href="#">LEARN MORE</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline">LOGIN</a>
+                <a href="#" class="btn btn-primary">REGISTER</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="dot-pattern"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>AI-Powered Project Generator</h1>
+                <p>Create industry-relevant projects for students with AI assistance. Streamline project creation and enhance experiential learning opportunities.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="generator" class="project-generator">
+        <div class="container">
+            <div class="generator-container">
+                <div class="generator-heading">
+                    <h2>Project Generator</h2>
+                    <p>Fill in the details below to create a customized project with AI assistance</p>
+                </div>
+                
+                <form id="project-form" action="/generate_project" method="POST">
+                    <div class="form-section">
+                        <h3>Basic Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="website-url">Website URL</label>
+                                <input type="url" id="website-url" name="website-url" placeholder="Enter your company website URL" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-owner">Project Owner <span class="optional-label">(optional)</span></label>
+                                <input type="text" id="project-owner" name="project-owner" placeholder="Enter project owner's name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Project Details</h3>
+                        <div class="form-group">
+                            <label for="background">Background & Objectives</label>
+                            <textarea id="background" name="background" placeholder="Describe the project background and objectives" required></textarea>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="industry">Industry <span class="optional-label">(optional but recommended)</span></label>
+                                <select id="industry" name="industry">
+                                    <option value="">Select an industry</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="education">Education</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="non-profit">Non-profit</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-type">Project Type <span class="optional-label">(optional but recommended)</span></label>
+                                <select id="project-type" name="project-type">
+                                    <option value="">Select project type</option>
+                                    <option value="case-study">Case Study</option>
+                                    <option value="live-project">Live Project</option>
+                                    <option value="research">Research Project</option>
+                                    <option value="internship">Internship</option>
+                                    <option value="competition">Competition</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="submit" class="generate-btn">Generate Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
