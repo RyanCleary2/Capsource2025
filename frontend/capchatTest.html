@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CapChat</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <img src="capWitHat.jpg" alt="CapSource Logo" class="logo" />
+    <h3>CapChat</h3>
+    <button id="resetBtn" class="reset-button">⟲ Start Over</button>
+  </div>
+
+  <div class="chat-body">
+    <div class="messages-container" id="messages">
+      <div class="message bot">
+        Tell us more about yourself. Which option best describes you?
+        <select class="dropdown" id="roleSelect">
+          <option value="" selected disabled>Select</option>
+          <option value="student">Student/Grad</option>
+          <option value="industry">Industry</option>
+          <option value="academic">Academic</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-footer">
+    <input type="text" class="chat-input" placeholder="Type your message here..." id="chatInput"/>
+    <button class="send-button" id="sendButton">▶</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
