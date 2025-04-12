@@ -5,34 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CapSource AI Project Generator</title>
     <style>
-        /* Define CSS custom properties (variables) for consistent styling */
         :root {
-            --primary-color: #e27d60;  /* Primary brand color */
-            --primary-gradient: linear-gradient(135deg, #e27d60 0%, #e8a87c 100%);  /* Gradient for hero section */
-            --text-color: #333;  /* Default text color */
-            --light-bg: #f8f9fa;  /* Light background color */
-            --white: #ffffff;  /* White color */
-            --dark-accent: #41444b;  /* Dark accent color for headings */
-            --border-radius: 8px;  /* Consistent border radius */
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow effect */
+            --primary-color: #e27d60;
+            --primary-gradient: linear-gradient(135deg, #e27d60 0%, #e8a87c 100%);
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --dark-accent: #41444b;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Reset default margins, padding, and set box-sizing */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Default font stack */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Style the body with background and text settings */
         body {
             background-color: var(--light-bg);
             color: var(--text-color);
-            line-height: 1.6;  /* Improve readability */
+            line-height: 1.6;
         }
 
-        /* Center content with max width and padding */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -40,76 +36,56 @@
             padding: 0 20px;
         }
 
-        /* Style the header with shadow and sticky positioning */
         header {
             background-color: var(--white);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
-            z-index: 1000;  /* Ensure header stays above other content */
+            z-index: 1000;
         }
 
-        /* Flexbox layout for header content */
+        /* New Header Navigation: one centered row with all items in sequence */
         .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 15px 0;
         }
 
-        /* Style the logo section */
-        .logo {
+        .header-nav {
             display: flex;
             align-items: center;
-        }
-
-        .logo img {
-            height: 40px;  /* Fixed logo height */
-            margin-right: 10px;
-        }
-
-        .logo h1 {
-            color: var(--primary-color);
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        /* Navigation menu styling */
-        nav ul {
-            display: flex;
+            justify-content: center;
+            gap: 20px;
             list-style: none;
-            gap: 20px;  /* Space between nav items */
         }
 
-        nav ul li a {
+        /* Style for logo item in header-nav */
+        .header-nav .logo img {
+            height: 40px;
+        }
+        
+        /* General link styling for header navigation items */
+        .header-nav li a {
             text-decoration: none;
             color: var(--text-color);
-            font-weight: 500;
-            transition: color 0.3s;  /* Smooth color transition on hover */
+            font-weight: normal;
+            font-size: 16px;
+            transition: color 0.3s;
         }
 
-        nav ul li a:hover {
-            color: var(--primary-color);  /* Change color on hover */
+        .header-nav li a:hover {
+            color: var(--primary-color);
         }
 
-        /* Style authentication buttons */
-        .auth-buttons {
-            display: flex;
-            gap: 10px;  /* Space between buttons */
-        }
-
-        /* Base button styles */
+        /* Button styles remain the same */
         .btn {
             padding: 8px 20px;
             border-radius: var(--border-radius);
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;  /* Smooth transition for all changes */
+            transition: all 0.3s;
             text-decoration: none;
             text-align: center;
         }
 
-        /* Outline button variant */
         .btn-outline {
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
@@ -121,7 +97,6 @@
             color: var(--white);
         }
 
-        /* Primary button variant */
         .btn-primary {
             background-color: var(--primary-color);
             color: var(--white);
@@ -129,10 +104,9 @@
         }
 
         .btn-primary:hover {
-            background-color: #d06c50;  /* Darker shade on hover */
+            background-color: #d06c50;
         }
 
-        /* Hero section with gradient background */
         .hero {
             background: var(--primary-gradient);
             color: var(--white);
@@ -142,11 +116,10 @@
             text-align: center;
         }
 
-        /* Center hero content */
         .hero-content {
             max-width: 800px;
             position: relative;
-            z-index: 2;  /* Ensure content is above background pattern */
+            z-index: 2;
             margin: 0 auto;
         }
 
@@ -162,9 +135,9 @@
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
-        /* Decorative dot pattern in hero section */
         .dot-pattern {
             position: absolute;
             top: 0;
@@ -173,16 +146,14 @@
             height: 100%;
             background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
             background-size: 30px 30px;
-            z-index: 1;  /* Place behind content */
+            z-index: 1;
         }
 
-        /* Project generator section styling */
         .project-generator {
             padding: 60px 0;
             background-color: var(--white);
         }
 
-        /* Container for the generator form */
         .generator-container {
             max-width: 800px;
             margin: 0 auto;
@@ -192,7 +163,6 @@
             padding: 30px;
         }
 
-        /* Heading for the generator section */
         .generator-heading {
             text-align: center;
             margin-bottom: 30px;
@@ -205,11 +175,21 @@
         }
 
         .generator-heading p {
-            color: #666;  /* Lighter text for description */
+            color: #666;
             font-size: 16px;
         }
 
-        /* Form group styling */
+        .form-section h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -220,15 +200,13 @@
             font-weight: 500;
         }
 
-        /* Style for optional field labels */
         .optional-label {
             font-weight: normal;
-            color: #666;
+            color: #999;
             font-size: 14px;
             margin-left: 5px;
         }
 
-        /* Input, textarea, and select styling */
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -240,18 +218,16 @@
         }
 
         .form-group textarea {
-            min-height: 120px;  /* Minimum height for textarea */
-            resize: vertical;  /* Allow vertical resizing only */
+            min-height: 120px;
+            resize: vertical;
         }
 
-        /* Center the form submission button */
         .form-footer {
             display: flex;
             justify-content: center;
             margin-top: 30px;
         }
 
-        /* Style the generate button */
         .generate-btn {
             padding: 12px 40px;
             font-size: 18px;
@@ -264,75 +240,145 @@
         }
 
         .generate-btn:hover {
-            background-color: #d06c50;  /* Darker shade on hover */
+            background-color: #d06c50;
         }
 
-        /* Responsive design for smaller screens */
+        /* Updated Topics Checkboxes to 3x16 grid */
+        .topics-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .topics-checkboxes label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            padding: 6px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            text-align: left; /* Ensure left alignment */
+        }
+
+        .topics-checkboxes input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* Improved Generation Mode Styling */
+        .generation-mode {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .generation-mode label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .generation-mode input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .generation-mode p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
         @media (max-width: 768px) {
             .form-grid {
-                grid-template-columns: 1fr;  /* Single column layout */
+                grid-template-columns: 1fr;
+            }
+            
+            .topics-checkboxes {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        @media (max-width: 480px) {
+            .topics-checkboxes {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
+    <script>
+        function toggleFields() {
+            const modeCheckbox = document.getElementById('generate-ideas');
+            const backgroundGroup = document.getElementById('background-group');
+            const topicsGroup = document.getElementById('topics-group');
+            const submitButton = document.querySelector('.generate-btn');
+            const backgroundTextarea = document.getElementById('background');
+
+            if (modeCheckbox.checked) {
+                backgroundGroup.classList.add('hidden');
+                topicsGroup.classList.remove('hidden');
+                submitButton.textContent = 'Generate Project Ideas';
+                backgroundTextarea.removeAttribute('required');
+            } else {
+                backgroundGroup.classList.remove('hidden');
+                topicsGroup.classList.add('hidden');
+                submitButton.textContent = 'Generate Project Scope';
+                backgroundTextarea.setAttribute('required', '');
+            }
+        }
+
+        window.onload = toggleFields;
+    </script>
 </head>
 <body>
-    <!-- Header section with navigation and authentication buttons -->
     <header>
         <div class="container header-container">
-            <div class="logo">
-                <!-- Logo image and title -->
-                <img src="{{ url_for('static', filename='logo.png') }}" alt="CapSource Logo" />
-                <h1>CapSource</h1>
-            </div>
-            <!-- Navigation menu -->
-            <nav>
-                <ul>
-                    <li><a href="#">EDUCATORS</a></li>
-                    <li><a href="#">STUDENTS</a></li>
-                    <li><a href="#">ORGANIZATIONS</a></li>
-                    <li><a href="#">OPPORTUNITIES</a></li>
-                    <li><a href="#">LEARN MORE</a></li>
-                </ul>
-            </nav>
-            <!-- Login and Register buttons -->
-            <div class="auth-buttons">
-                <a href="#" class="btn btn-outline">LOGIN</a>
-                <a href="#" class="btn btn-primary">REGISTER</a>
-            </div>
+            <ul class="header-nav">
+                <li class="logo">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="CapSource Logo" />
+                </li>
+                <li><a href="#">EDUCATORS</a></li>
+                <li><a href="#">STUDENTS</a></li>
+                <li><a href="#">ORGANIZATIONS</a></li>
+                <li><a href="#">OPPORTUNITIES</a></li>
+                <li><a href="#">LEARN MORE</a></li>
+                <li><a href="#" class="btn btn-outline">LOGIN</a></li>
+                <li><a href="#" class="btn btn-primary">REGISTER</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- Hero section with promotional content -->
     <section class="hero">
         <div class="dot-pattern"></div>
         <div class="container">
             <div class="hero-content">
                 <h1>AI-Powered Project Generator</h1>
-                <p>Create industry-relevant projects for students with AI assistance. Streamline project creation and enhance experiential learning opportunities.</p>
+                <p>Create industry-relevant projects for students with AI assistance. Choose to generate a full project scope or explore project ideas based on topics.</p>
             </div>
         </div>
     </section>
 
-    <!-- Project generator form section -->
     <section id="generator" class="project-generator">
         <div class="container">
             <div class="generator-container">
                 <div class="generator-heading">
                     <h2>Project Generator</h2>
-                    <p>Fill in the details below to create a customized project with AI assistance</p>
+                    <p>Fill in the details below to create a customized project or explore project ideas with AI assistance</p>
                 </div>
                 
-                <!-- Form to submit project details -->
                 <form id="project-form" action="/generate_project" method="POST">
                     <div class="form-section">
                         <h3>Basic Information</h3>
                         <div class="form-grid">
-                            <!-- Website URL input -->
                             <div class="form-group">
                                 <label for="website-url">Website URL</label>
                                 <input type="url" id="website-url" name="website-url" placeholder="Enter your company website URL" required>
                             </div>
-                            <!-- Project owner input (optional) -->
                             <div class="form-group">
                                 <label for="project-owner">Project Owner <span class="optional-label">(optional)</span></label>
                                 <input type="text" id="project-owner" name="project-owner" placeholder="Enter project owner's name">
@@ -341,15 +387,24 @@
                     </div>
 
                     <div class="form-section">
+                        <h3>Generation Mode</h3>
+                        <div class="generation-mode">
+                            <label>
+                                <input type="checkbox" id="generate-ideas" name="mode" value="ideas" onchange="toggleFields()">
+                                Generate Project Ideas (instead of full scope)
+                            </label>
+                            <p>Generate a list of project ideas based on selected topics, or create a detailed project scope with milestones and deliverables.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="background-group">
                         <h3>Project Details</h3>
-                        <!-- Background and objectives textarea -->
                         <div class="form-group">
                             <label for="background">Background & Objectives</label>
                             <textarea id="background" name="background" placeholder="Describe the project background and objectives" required></textarea>
                         </div>
 
                         <div class="form-grid">
-                            <!-- Industry selection (optional) -->
                             <div class="form-group">
                                 <label for="industry">Industry <span class="optional-label">(optional but recommended)</span></label>
                                 <select id="industry" name="industry">
@@ -363,7 +418,6 @@
                                     <option value="non-profit">Non-profit</option>
                                 </select>
                             </div>
-                            <!-- Project type selection (optional) -->
                             <div class="form-group">
                                 <label for="project-type">Project Type <span class="optional-label">(optional but recommended)</span></label>
                                 <select id="project-type" name="project-type">
@@ -378,9 +432,63 @@
                         </div>
                     </div>
 
-                    <!-- Submit button -->
+                    <div class="form-section hidden" id="topics-group">
+                        <h3>Project Topics</h3>
+                        <div class="form-group">
+                            <label>Select Topics <span class="optional-label">(select at least one)</span></label>
+                            <div class="topics-checkboxes">
+                                <label><input type="checkbox" name="topics" value="technology-commercialization"> Technology Commercialization</label>
+                                <label><input type="checkbox" name="topics" value="innovation"> Innovation</label>
+                                <label><input type="checkbox" name="topics" value="training-development"> Training & Development</label>
+                                <label><input type="checkbox" name="topics" value="inventory-management"> Inventory Management</label>
+                                <label><input type="checkbox" name="topics" value="electrical-engineering"> Electrical Engineering</label>
+                                <label><input type="checkbox" name="topics" value="mechanical-engineering"> Mechanical Engineering</label>
+                                <label><input type="checkbox" name="topics" value="market-research"> Market Research</label>
+                                <label><input type="checkbox" name="topics" value="digital-marketing"> Digital Marketing</label>
+                                <label><input type="checkbox" name="topics" value="information-technology"> Information Technology (IT)</label>
+                                <label><input type="checkbox" name="topics" value="pr-communications"> PR & Communications</label>
+                                <label><input type="checkbox" name="topics" value="employee-labor-management"> Employee and Labor Management</label>
+                                <label><input type="checkbox" name="topics" value="entrepreneurship"> Entrepreneurship</label>
+                                <label><input type="checkbox" name="topics" value="child-online-safety"> Child Online Safety</label>
+                                <label><input type="checkbox" name="topics" value="cybersecurity"> Cybersecurity</label>
+                                <label><input type="checkbox" name="topics" value="civil-engineering"> Civil Engineering</label>
+                                <label><input type="checkbox" name="topics" value="child-welfare"> Child Welfare</label>
+                                <label><input type="checkbox" name="topics" value="urban-planning"> Urban Planning</label>
+                                <label><input type="checkbox" name="topics" value="research-analysis-evaluation"> Research, Analysis, Evaluation</label>
+                                <label><input type="checkbox" name="topics" value="public-administration"> Public Administration</label>
+                                <label><input type="checkbox" name="topics" value="political-organization"> Political Organization, Policy Change, and Advocacy</label>
+                                <label><input type="checkbox" name="topics" value="individual-family-advocacy"> Individual and Family Advocacy</label>
+                                <label><input type="checkbox" name="topics" value="facilitation-mediation"> Facilitation, Mediation, Conflict Resolution</label>
+                                <label><input type="checkbox" name="topics" value="economic-development"> Economic Development, Work and Occupations</label>
+                                <label><input type="checkbox" name="topics" value="crisis-disaster-management"> Crisis and Disaster Management</label>
+                                <label><input type="checkbox" name="topics" value="courts-corrections"> Courts, Corrections, and Law Enforcement</label>
+                                <label><input type="checkbox" name="topics" value="community-organization"> Community Organization and Social Action</label>
+                                <label><input type="checkbox" name="topics" value="case-management"> Case Management</label>
+                                <label><input type="checkbox" name="topics" value="substance-use"> Substance Use, Addiction, and Recovery</label>
+                                <label><input type="checkbox" name="topics" value="international-affairs"> International Affairs</label>
+                                <label><input type="checkbox" name="topics" value="reporting-financial-planning"> Reporting, Financial Planning & Analysis</label>
+                                <label><input type="checkbox" name="topics" value="talent-management"> Talent Management</label>
+                                <label><input type="checkbox" name="topics" value="software-design-development"> Software Design & Development</label>
+                                <label><input type="checkbox" name="topics" value="sales-business-development"> Sales & Business Development</label>
+                                <label><input type="checkbox" name="topics" value="research-development"> Research & Development</label>
+                                <label><input type="checkbox" name="topics" value="quality-control"> Quality Control</label>
+                                <label><input type="checkbox" name="topics" value="purchasing-logistics"> Purchasing, Logistics, Supply Chain</label>
+                                <label><input type="checkbox" name="topics" value="product-design-development"> Product Design & Development</label>
+                                <label><input type="checkbox" name="topics" value="organizational-culture"> Organizational Culture</label>
+                                <label><input type="checkbox" name="topics" value="operations"> Operations</label>
+                                <label><input type="checkbox" name="topics" value="mergers-acquisitions"> Mergers & Acquisitions</label>
+                                <label><input type="checkbox" name="topics" value="marketing"> Marketing</label>
+                                <label><input type="checkbox" name="topics" value="legal-regulatory"> Legal, Regulatory, Compliance</label>
+                                <label><input type="checkbox" name="topics" value="growth-strategy"> Growth Strategy</label>
+                                <label><input type="checkbox" name="topics" value="data-management"> Data Management</label>
+                                <label><input type="checkbox" name="topics" value="customer-service"> Customer Service & Account Management</label>
+                                <label><input type="checkbox" name="topics" value="corporate-social-responsibility"> Corporate Social Responsibility</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-footer">
-                        <button type="submit" class="generate-btn">Generate Project</button>
+                        <button type="submit" class="generate-btn">Generate Project Scope</button>
                     </div>
                 </form>
             </div>
