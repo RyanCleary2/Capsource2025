@@ -16,16 +16,45 @@ load_dotenv()
 # Retrieve OpenAI API key from environment variables
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
-    # Raise an error if the API key is not found
     raise ValueError("API key is missing. Please set the OPENAI_API_KEY in your .env file.")
 
 # Initialize OpenAI client with the API key
 client = openai.OpenAI(api_key=api_key)
 
+def generate_project_ideas(url, topics):
+    """Generate a list of project ideas based on company website and selected topics."""
+    try:
+        prompt = f"""
+        Given the company website: {url}, and the selected topics: {', '.join(topics)},
+        generate 3-5 concise project ideas (50-100 words each) that align with the company's context
+        and the selected topics. Each idea should include:
+        - A title
+        - A brief description
+        Format the response as a numbered list.
+        """
+        print(f"Sending prompt to OpenAI for ideas: {prompt}")
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=500,
+            temperature=0.8,
+        )
+        message = response.choices[0].message.content.strip()
+        if not message:
+            print("Empty response content from OpenAI for ideas.")
+            return None
+        print(f"Received response from OpenAI for ideas: {message}")
+        return message
+    except openai.OpenAIError as e:
+        print(f"OpenAI API error in generate_project_ideas: {str(e)}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error in generate_project_ideas: {str(e)}")
+        return None
+
 def generate_project_scope(url, goal):
     """Generate a full CapSource project scope using OpenAI API."""
     try:
-        # Define the prompt structure for OpenAI to generate a project scope
         prompt = f"""
         Given the company website: {url}, and their goal: "{goal}", generate a full CapSource project scope with the following structure:
         Project Title
@@ -36,64 +65,91 @@ def generate_project_scope(url, goal):
         Milestones 1–5 (title, guiding questions, suggested deliverables)
         Helpful Public Resources (links + 1-line description)
         """
-        print(f"Sending prompt to OpenAI: {prompt}")  # Log the prompt for debugging
-        # Send request to OpenAI API to generate the project scope
+        print(f"Sending prompt to OpenAI for scope: {prompt}")
         response = client.chat.completions.create(
-            model="gpt-4o-mini",  # Specify the model to use
-            messages=[{"role": "user", "content": prompt}],  # User message with prompt
-            max_tokens=1000,  # Limit the response length
-            temperature=0.7,  # Control creativity of the response
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1000,
+            temperature=0.7,
         )
-        # Extract the generated content from the response
         message = response.choices[0].message.content.strip()
         if not message:
-            print("Empty response content from OpenAI.")  # Log if response is empty
+            print("Empty response content from OpenAI for scope.")
             return None
-        print(f"Received response from OpenAI: {message}")  # Log the response for debugging
+        print(f"Received response from OpenAI for scope: {message}")
         return message
     except openai.OpenAIError as e:
-        # Handle specific OpenAI API errors
-        print(f"OpenAI API error: {str(e)}")  # Log the error
+        print(f"OpenAI API error in generate_project_scope: {str(e)}")
         return None
     except Exception as e:
-        # Handle any other unexpected errors
-        print(f"Unexpected error in generate_project_scope: {str(e)}")  # Log the error
+        print(f"Unexpected error in generate_project_scope: {str(e)}")
         return None
 
-# Define route for the homepage
 @app.route('/')
 def home():
     """Render the index.html template as the homepage."""
-    print("Rendering index.html")  # Log for debugging
+    print("Rendering index.html")
     return render_template('index.html')
 
-# Define route to handle project generation via POST request
 @app.route('/generate_project', methods=['POST'])
 def generate_project():
     """Handle project generation based on form input and render results."""
-    print("Received POST request to /generate_project")  # Log for debugging
-    # Extract form data
+    print("Received POST request to /generate_project")
     website_url = request.form.get('website-url')
-    goal_statement = request.form.get('background')
+    mode = request.form.get('mode', 'scope')  # Default to 'scope' if not provided
 
-    # Validate that required fields are provided
-    if not website_url or not goal_statement:
-        print("Missing website URL or goal statement")  # Log missing input
-        return render_template('index.html', error="Missing website URL or goal statement")
+    print(f"Mode received: {mode}")
+    print(f"Form data: {request.form}")
 
-    # Generate project scope using the provided inputs
-    project_scope = generate_project_scope(website_url, goal_statement)
-    
-    if project_scope:
-        # If successful, render the result page with the generated scope
-        print("Project scope generated successfully")  # Log success
-        return render_template('result.html', project_scope=project_scope)
+    if not website_url:
+        print("Missing website URL")
+        return render_template('index.html', error="Missing website URL")
+
+    if mode == 'ideas':
+        topics = request.form.getlist('topics')  # Get list of selected topics from checkboxes
+        print(f"Topics selected: {topics}")
+        if not topics:
+            print("Missing topics for ideas mode")
+            return render_template('index.html', error="Please select at least one topic for project ideas")
+        project_ideas = generate_project_ideas(website_url, topics)
+        if project_ideas:
+            print("Project ideas generated successfully")
+            return render_template('result.html', project_ideas=project_ideas, website_url=website_url, mode='ideas')
+        else:
+            print("Failed to generate project ideas")
+            return render_template('index.html', error="Failed to generate project ideas. Check server logs for details.")
     else:
-        # If generation fails, return to index with an error message
-        print("Failed to generate project scope")  # Log failure
-        return render_template('index.html', error="Failed to generate project scope. Check server logs for details.")
+        goal_statement = request.form.get('background')
+        if not goal_statement:
+            print("Missing goal statement for scope mode")
+            return render_template('index.html', error="Missing goal statement")
+        project_scope = generate_project_scope(website_url, goal_statement)
+        if project_scope:
+            print("Project scope generated successfully")
+            return render_template('result.html', project_scope=project_scope, mode='scope')
+        else:
+            print("Failed to generate project scope")
+            return render_template('index.html', error="Failed to generate project scope. Check server logs for details.")
+
+@app.route('/generate_scope_from_idea', methods=['POST'])
+def generate_scope_from_idea():
+    """Generate a full project scope from a selected project idea."""
+    print("Received POST request to /generate_scope_from_idea")
+    website_url = request.form.get('website_url')
+    project_idea = request.form.get('project_idea')
+
+    if not website_url or not project_idea:
+        print("Missing website URL or project idea")
+        return render_template('index.html', error="Missing website URL or project idea")
+
+    project_scope = generate_project_scope(website_url, project_idea)
+    if project_scope:
+        print("Full scope generated successfully from idea")
+        return render_template('result.html', project_scope=project_scope, mode='scope')
+    else:
+        print("Failed to generate full scope from idea")
+        return render_template('index.html', error="Failed to generate full scope. Check server logs for details.")
 
 if __name__ == '__main__':
-    # Start the Flask development server if this file is run directly
-    print("Starting Flask app on port 5000")  # Log server start
-    app.run(debug=True)  # Run in debug mode on default port 5000
+    print("Starting Flask app on port 5000")
+    app.run(debug=True)
