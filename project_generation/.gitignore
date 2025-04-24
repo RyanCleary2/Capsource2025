@@ -5,3 +5,10 @@
 /log/*.log
 
 /.env
+
+# 1. Ignore logs
+echo "/log/*.log" >> .gitignore
+
+# 2. Un-stage any logs you may have committed
+git rm --cached -r log
+git commit -m "Stop tracking log files"
