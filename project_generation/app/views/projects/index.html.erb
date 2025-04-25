@@ -1,4 +1,3 @@
-<!-- app/views/projects/index.html.erb -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -227,10 +226,13 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
+      align-items: start; /* This ensures top alignment of form groups */
     }
 
     .form-group {
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
     }
 
     .form-group label {
