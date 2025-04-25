@@ -3,14 +3,9 @@
 /config/master.key
 .env
 /log/*.log
+development.log
 
 /.env
-
-development.log
-.DS_Store
-
-project_generation/log/development.log
-project_generation/tmp/cache/bootsnap/compile-cache-iseq/f5/5fb7563d99aa2b
 
 # 1. Ignore logs
 echo "/log/*.log" >> .gitignore

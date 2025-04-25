@@ -10,12 +10,13 @@ class ProjectsController < ApplicationController
     url  = params[:website_url]
     mode = params[:mode] || "scope"
 
+    @website_url = url
+
     if url.blank?
       flash.now[:alert] = "Missing website URL"
       return render :index
     end
 
-    # Instantiate OpenAI client directly
     client = OpenAI::Client.new(api_key: ENV.fetch("OPENAI_API_KEY"))
 
     if mode == "ideas"
@@ -24,22 +25,22 @@ class ProjectsController < ApplicationController
         flash.now[:alert] = "Please select at least one topic for project ideas"
         return render :index
       end
-      @result = generate_project_ideas(client, url, topics)
-      @mode   = "ideas"
+      @project_ideas = generate_project_ideas(client, url, topics)
+      @mode          = "ideas"
     else
       goal = params[:background]
       if goal.blank?
         flash.now[:alert] = "Missing goal statement"
         return render :index
       end
-      @result = generate_project_scope(client, url, goal)
-      @mode   = "scope"
+      @project_scope = generate_project_scope(client, url, goal)
+      @mode           = "scope"
     end
 
-    if @result
+    if (@mode == "ideas" && @project_ideas.present?) || (@mode == "scope" && @project_scope.present?)
       render :result
     else
-      flash.now[:alert] = "OpenAI request failed. Check your logs."
+      flash.now[:alert] = "OpenAI request failed or returned empty content. Check your logs."
       render :index
     end
   end
@@ -49,19 +50,21 @@ class ProjectsController < ApplicationController
     url  = params[:website_url]
     idea = params[:project_idea]
 
+    @website_url = url
+    @mode        = "scope"
+
     if url.blank? || idea.blank?
       flash.now[:alert] = "Missing website URL or project idea"
       return render :index
     end
 
     client = OpenAI::Client.new(api_key: ENV.fetch("OPENAI_API_KEY"))
-    @result = generate_project_scope(client, url, idea)
-    @mode   = "scope"
+    @project_scope = generate_project_scope(client, url, idea)
 
-    if @result
+    if @project_scope.present?
       render :result
     else
-      flash.now[:alert] = "OpenAI request failed. Check your logs."
+      flash.now[:alert] = "OpenAI request failed or returned empty content. Check your logs."
       render :index
     end
   end
@@ -71,7 +74,7 @@ class ProjectsController < ApplicationController
   def generate_project_ideas(client, url, topics)
     prompt = <<~PROMPT
       Given the company website: #{url}, and the selected topics: #{topics.join(', ')},
-      generate 3-5 concise project ideas (50-100 words each) that align with the company's context
+      generate 3–5 concise project ideas (50–100 words each) that align with the company's context
       and the selected topics. Each idea should include:
       - A title
       - A brief description
