@@ -995,3 +995,25 @@ Processing by ProjectsController#index as HTML
 Completed 200 OK in 37ms (Views: 3.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
 
 
+[dotenv] Set [36mOPENAI_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/" for 127.0.0.1 at 2025-04-29 16:20:46 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='ProjectGeneration'*/[0m
+Processing by ProjectsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering projects/index.html.erb within layouts/application
+  Rendered projects/index.html.erb within layouts/application (Duration: 13.2ms | GC: 0.9ms)
+  Rendered layout layouts/application.html.erb (Duration: 14.0ms | GC: 0.9ms)
+Completed 200 OK in 81ms (Views: 16.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 1.8ms)
+
+
+Started POST "/generate_project" for 127.0.0.1 at 2025-04-29 16:20:53 -0400
+Processing by ProjectsController#generate_project as HTML
+  Parameters: {"authenticity_token"=>"[FILTERED]", "website_url"=>"https://www.apple.com/", "project_owner"=>"", "mode"=>"true", "background"=>"", "industry"=>"", "project_type"=>"", "topics"=>["innovation"], "commit"=>"Generate Project Ideas"}
+  Rendering layout layouts/application.html.erb
+  Rendering projects/result.html.erb within layouts/application
+  Rendered projects/result.html.erb within layouts/application (Duration: 6.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.7ms | GC: 0.0ms)
+Completed 200 OK in 6115ms (Views: 10.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
