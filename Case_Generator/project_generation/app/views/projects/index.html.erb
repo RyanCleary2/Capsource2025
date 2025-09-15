@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CapSource AI Project Generator</title>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_importmap_tags %>
+  <style>
+    :root {
+      --primary-color: #e27d60;
+      --primary-light: #e8a87c;
+      --primary-dark: #c7654e;
+      --secondary-color: #85cdca;
+      --accent-color: #c38d9e;
+      --text-color: #41444b;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --dark-accent: #41444b;
+      --light-accent: #f2f3f4;
+      --border-radius: 8px;
+      --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      --content-shadow: 0 6px 12px rgba(226, 125, 96, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background-color: var(--white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .logo h1 {
+      color: var(--primary-color);
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    nav {
+      display: flex;
+      margin-left: 40px;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 22px;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .btn-outline {
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary-color);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      border: none;
+      box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      padding: 60px 0;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .project-generator {
+      padding: 60px 0;
+    }
+
+    .generator-container {
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 40px;
+      margin-top: -80px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .generator-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .generator-heading h2 {
+      font-size: 30px;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .generator-heading p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .form-section:last-child {
+      border-bottom: none;
+    }
+
+    .form-section h3 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: var(--primary-dark);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start; /* This ensures top alignment of form groups */
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .optional-label {
+      color: #999;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="url"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="url"]:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(226, 125, 96, 0.1);
+      outline: none;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .generation-mode {
+      background-color: var(--light-accent);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin-bottom: 20px;
+    }
+
+    .generation-mode label {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .generation-mode input[type="checkbox"] {
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .generation-mode p {
+      color: #666;
+      font-size: 14px;
+      margin-left: 28px;
+    }
+
+    .topics-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: var(--light-accent);
+      border-radius: var(--border-radius);
+    }
+
+    .topics-checkboxes label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+      font-size: 14px;
+    }
+
+    .topics-checkboxes input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .form-footer {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .generate-btn {
+      padding: 15px 40px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+    }
+
+    .generate-btn:hover {
+      box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topics-checkboxes {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .generator-container {
+        padding: 30px 20px;
+      }
+
+      .hero {
+        padding: 40px 0;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .topics-checkboxes {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    footer {
+      background-color: var(--dark-accent);
+      color: var(--white);
+      padding: 30px 0;
+      font-size: 14px;
+      margin-top: 60px;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <div style="display: flex; align-items: center;">
+        <div class="logo">
+          <%= image_tag 'logo.png', alt: 'CapSource Logo', height: '40' %>
+          <h1>CapSource</h1>
+        </div>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#">EDUCATORS</a></li>
+            <li><a href="#">STUDENTS</a></li>
+            <li><a href="#">ORGANIZATIONS</a></li>
+            <li><a href="#">OPPORTUNITIES</a></li>
+            <li><a href="#">LEARN MORE</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="auth-buttons">
+        <a href="#" class="btn btn-outline">LOGIN</a>
+        <a href="#" class="btn btn-primary">REGISTER</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>AI-Powered Project Generator</h1>
+      <p>Create industry-relevant projects for students with AI assistance. Choose to generate a full project scope or explore project ideas based on topics.</p>
+    </div>
+  </section>
+
+  <section id="generator" class="project-generator">
+    <div class="container">
+      <div class="generator-container">
+        <div class="generator-heading">
+          <h2>Project Generator</h2>
+          <p>Fill in the details below to create a customized project or explore project ideas with AI assistance</p>
+        </div>
+
+        <%= form_with url: generate_project_path, local: true, id: 'project-form' do |f| %>
+          <% if flash.now[:alert] %>
+            <div style="color: #e74c3c; background-color: #f9eae9; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px;">
+              <%= flash.now[:alert] %>
+            </div>
+          <% end %>
+
+          <div class="form-section">
+            <h3>Basic Information</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <%= f.label :website_url, 'Website URL' %>
+                <%= f.url_field :website_url, placeholder: 'Enter your company website URL', required: true %>
+              </div>
+              <div class="form-group">
+                <%= f.label :project_owner, 'Project Owner' %> <span class="optional-label">(optional)</span>
+                <%= f.text_field :project_owner, placeholder: 'Enter project owner\'s name' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Generation Mode</h3>
+            <div class="generation-mode">
+              <label>
+                <%= f.check_box :mode, { checked: false, id: 'mode-checkbox' }, 'true', 'false' %>
+                Generate Project Ideas (instead of full scope)
+              </label>
+              <p>Generate a list of project ideas based on selected topics, or create a detailed project scope with milestones and deliverables.</p>
+            </div>
+          </div>
+
+          <div class="form-section" id="background-group">
+            <h3>Project Details</h3>
+            <div class="form-group">
+              <%= f.label :background, 'Goal Statement' %>
+              <%= f.text_area :background, placeholder: 'Describe the goal of the project (e.g., "Develop a marketing strategy for a new product launch")', required: true %>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <%= f.label :industry, 'Industry' %> <span class="optional-label">(optional but recommended)</span>
+                <%= f.select :industry, [['Select an industry', ''], 'Technology', 'Healthcare', 'Finance', 'Education', 'Retail', 'Manufacturing', 'Non-profit'] %>
+              </div>
+              <div class="form-group">
+                <%= f.label :project_type, 'Project Type' %> <span class="optional-label">(optional but recommended)</span>
+                <%= f.select :project_type, [['Select project type', ''], 'Case Study', 'Live Project', 'Research Project', 'Internship', 'Competition'] %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section hidden" id="topics-group">
+            <h3>Project Topics</h3>
+            <div class="form-group">
+              <%= f.label :topics, 'Select Topics' %> <span class="optional-label">(select at least one)</span>
+              <div class="topics-checkboxes">
+                <label><input type="checkbox" name="topics[]" value="technology-commercialization"> Technology Commercialization</label>
+                <label><input type="checkbox" name="topics[]" value="innovation"> Innovation</label>
+                <label><input type="checkbox" name="topics[]" value="training-development"> Training & Development</label>
+                <label><input type="checkbox" name="topics[]" value="inventory-management"> Inventory Management</label>
+                <label><input type="checkbox" name="topics[]" value="electrical-engineering"> Electrical Engineering</label>
+                <label><input type="checkbox" name="topics[]" value="mechanical-engineering"> Mechanical Engineering</label>
+                <label><input type="checkbox" name="topics[]" value="market-research"> Market Research</label>
+                <label><input type="checkbox" name="topics[]" value="digital-marketing"> Digital Marketing</label>
+                <label><input type="checkbox" name="topics[]" value="information-technology"> Information Technology (IT)</label>
+                <label><input type="checkbox" name="topics[]" value="pr-communications"> PR & Communications</label>
+                <label><input type="checkbox" name="topics[]" value="employee-labor-management"> Employee and Labor Management</label>
+                <label><input type="checkbox" name="topics[]" value="entrepreneurship"> Entrepreneurship</label>
+                <label><input type="checkbox" name="topics[]" value="child-online-safety"> Child Online Safety</label>
+                <label><input type="checkbox" name="topics[]" value="cybersecurity"> Cybersecurity</label>
+                <label><input type="checkbox" name="topics[]" value="civil-engineering"> Civil Engineering</label>
+                <label><input type="checkbox" name="topics[]" value="child-welfare"> Child Welfare</label>
+                <label><input type="checkbox" name="topics[]" value="urban-planning"> Urban Planning</label>
+                <label><input type="checkbox" name="topics[]" value="research-analysis-evaluation"> Research, Analysis, Evaluation</label>
+                <label><input type="checkbox" name="topics[]" value="public-administration"> Public Administration</label>
+                <label><input type="checkbox" name="topics[]" value="political-organization"> Political Organization, Policy Change, and Advocacy</label>
+                <label><input type="checkbox" name="topics[]" value="individual-family-advocacy"> Individual and Family Advocacy</label>
+                <label><input type="checkbox" name="topics[]" value="facilitation-mediation"> Facilitation, Mediation, Conflict Resolution</label>
+                <label><input type="checkbox" name="topics[]" value="economic-development"> Economic Development, Work and Occupations</label>
+                <label><input type="checkbox" name="topics[]" value="crisis-disaster-management"> Crisis and Disaster Management</label>
+                <label><input type="checkbox" name="topics[]" value="courts-corrections"> Courts, Corrections, and Law Enforcement</label>
+                <label><input type="checkbox" name="topics[]" value="community-organization"> Community Organization and Social Action</label>
+                <label><input type="checkbox" name="topics[]" value="case-management"> Case Management</label>
+                <label><input type="checkbox" name="topics[]" value="substance-use"> Substance Use, Addiction, and Recovery</label>
+                <label><input type="checkbox" name="topics[]" value="international-affairs"> International Affairs</label>
+                <label><input type="checkbox" name="topics[]" value="reporting-financial-planning"> Reporting, Financial Planning & Analysis</label>
+                <label><input type="checkbox" name="topics[]" value="talent-management"> Talent Management</label>
+                <label><input type="checkbox" name="topics[]" value="software-design-development"> Software Design & Development</label>
+                <label><input type="checkbox" name="topics[]" value="sales-business-development"> Sales & Business Development</label>
+                <label><input type="checkbox" name="topics[]" value="research-development"> Research & Development</label>
+                <label><input type="checkbox" name="topics[]" value="quality-control"> Quality Control</label>
+                <label><input type="checkbox" name="topics[]" value="purchasing-logistics"> Purchasing, Logistics, Supply Chain</label>
+                <label><input type="checkbox" name="topics[]" value="product-design-development"> Product Design & Development</label>
+                <label><input type="checkbox" name="topics[]" value="organizational-culture"> Organizational Culture</label>
+                <label><input type="checkbox" name="topics[]" value="operations"> Operations</label>
+                <label><input type="checkbox" name="topics[]" value="mergers-acquisitions"> Mergers & Acquisitions</label>
+                <label><input type="checkbox" name="topics[]" value="marketing"> Marketing</label>
+                <label><input type="checkbox" name="topics[]" value="legal-regulatory"> Legal, Regulatory, Compliance</label>
+                <label><input type="checkbox" name="topics[]" value="growth-strategy"> Growth Strategy</label>
+                <label><input type="checkbox" name="topics[]" value="data-management"> Data Management</label>
+                <label><input type="checkbox" name="topics[]" value="customer-service"> Customer Service & Account Management</label>
+                <label><input type="checkbox" name="topics[]" value="corporate-social-responsibility"> Corporate Social Responsibility</label>
+              </div>
+              <div class="error-message" id="topics-error">Please select at least one topic for project ideas</div>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <%= f.submit 'Generate Project Scope', class: 'generate-btn', id: 'generate-btn' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-container">
+      <div>© 2025 CapSource. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const modeCheckbox = document.getElementById('mode-checkbox');
+      const backgroundGroup = document.getElementById('background-group');
+      const topicsGroup = document.getElementById('topics-group');
+      const generateButton = document.getElementById('generate-btn');
+      const form = document.getElementById('project-form');
+      const topicsError = document.getElementById('topics-error');
+
+      // Debugging: Check if elements are found
+      console.log('Mode Checkbox:', modeCheckbox);
+      console.log('Background Group:', backgroundGroup);
+      console.log('Topics Group:', topicsGroup);
+      console.log('Generate Button:', generateButton);
+      console.log('Form:', form);
+
+      // Ensure all elements exist
+      if (!modeCheckbox || !backgroundGroup || !topicsGroup || !generateButton || !form || !topicsError) {
+        console.error('One or more DOM elements not found.');
+        return;
+      }
+
+      // Function to toggle visibility of sections
+      function toggleFormSections() {
+        const isIdeasMode = modeCheckbox.checked;
+        console.log('Ideas Mode:', isIdeasMode);
+
+        if (isIdeasMode) {
+          backgroundGroup.classList.add('hidden');
+          topicsGroup.classList.remove('hidden');
+          generateButton.value = 'Generate Project Ideas';
+          // Remove required attribute from goal statement field in ideas mode
+          const goalField = document.querySelector('textarea[name="background"]');
+          if (goalField) goalField.removeAttribute('required');
+        } else {
+          backgroundGroup.classList.remove('hidden');
+          topicsGroup.classList.add('hidden');
+          generateButton.value = 'Generate Project Scope';
+          // Restore required attribute for goal statement field in scope mode
+          const goalField = document.querySelector('textarea[name="background"]');
+          if (goalField) goalField.setAttribute('required', '');
+        }
+      }
+
+      // Set initial state
+      toggleFormSections();
+
+      // Add event listener for checkbox changes
+      modeCheckbox.addEventListener('change', toggleFormSections);
+
+      // Form submission validation for topics
+      form.addEventListener('submit', function(event) {
+        if (modeCheckbox.checked) {
+          const selectedTopics = document.querySelectorAll('input[name="topics[]"]:checked');
+          if (selectedTopics.length === 0) {
+            event.preventDefault();
+            topicsError.style.display = 'block';
+            topicsGroup.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            topicsError.style.display = 'none';
+          }
+        } else {
+          topicsError.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
