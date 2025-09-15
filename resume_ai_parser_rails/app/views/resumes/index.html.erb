@@ -1,0 +1,180 @@
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Header Section with CapSource styling -->
+  <div class="text-center mb-12">
+    <h1 class="text-5xl font-bold text-capsource-dark mb-4">
+      AI Resume to Profile Converter
+    </h1>
+    <p class="text-xl text-capsource-mauve max-w-3xl mx-auto">
+      Transform your resume into structured profile data using advanced AI technology.
+      Upload your PDF and let our system extract and organize your professional information.
+    </p>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="capsource-card rounded-lg p-8 mb-8">
+    <h2 class="text-2xl font-semibold mb-6 text-capsource-dark flex items-center">
+      <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+      </svg>
+      Upload Your Resume
+    </h2>
+
+    <%= form_with url: "/resumes/process", method: :post, multipart: true, local: true, class: "space-y-6", id: "resume-form" do |form| %>
+      <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-capsource-orange transition-colors">
+        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        </svg>
+        <%= form.file_field :file, accept: "application/pdf", class: "hidden", id: "resume-upload" %>
+        <label for="resume-upload" class="cursor-pointer">
+          <span class="text-lg font-medium text-capsource-dark">Click to upload your resume</span>
+          <p class="text-sm text-gray-500 mt-2">PDF format only • Maximum file size: 10MB</p>
+        </label>
+      </div>
+
+      <div class="text-center">
+        <%= form.submit "Extract Profile Data", class: "capsource-button rounded-lg px-8 py-4 text-lg", id: "submit-btn" %>
+      </div>
+    <% end %>
+
+    <!-- Loading Animation -->
+    <div id="loading-container" class="hidden capsource-card rounded-lg p-8 text-center">
+      <div class="mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-capsource-orange rounded-full mb-4">
+          <svg class="animate-spin w-8 h-8 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-capsource-dark mb-2">AI-Powered Resume Processing</h3>
+        <p class="text-capsource-mauve mb-6">GPT-4o-mini is analyzing your resume and creating an enhanced professional profile...</p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="max-w-md mx-auto">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm text-capsource-dark font-medium">Progress</span>
+          <span class="text-sm text-capsource-dark font-medium" id="progress-percent">0%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div id="progress-bar" class="bg-gradient-to-r from-capsource-orange to-capsource-purple h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+        <p class="text-sm text-capsource-mauve mt-2" id="progress-text">Initializing...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+    <div class="text-center">
+      <div class="w-16 h-16 bg-capsource-orange rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-capsource-dark mb-2">AI-Powered Extraction</h3>
+      <p class="text-capsource-mauve">Advanced machine learning algorithms parse and structure your resume data with high accuracy.</p>
+    </div>
+
+    <div class="text-center">
+      <div class="w-16 h-16 bg-capsource-purple rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-capsource-dark mb-2">Structured Output</h3>
+      <p class="text-capsource-mauve">Get your information organized in a clean, structured format ready for any application.</p>
+    </div>
+
+    <div class="text-center">
+      <div class="w-16 h-16 bg-capsource-blue rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-capsource-dark mb-2">Secure & Private</h3>
+      <p class="text-capsource-mauve">Your data is processed securely and never stored permanently on our servers.</p>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="capsource-card rounded-lg p-8 text-center">
+    <h3 class="text-2xl font-semibold text-capsource-dark mb-4">How It Works</h3>
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-capsource-orange text-white rounded-full flex items-center justify-center font-bold">1</div>
+          <span class="ml-3 text-capsource-dark">Upload PDF</span>
+        </div>
+        <div class="text-capsource-mauve">→</div>
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-capsource-orange text-white rounded-full flex items-center justify-center font-bold">2</div>
+          <span class="ml-3 text-capsource-dark">AI Processing</span>
+        </div>
+        <div class="text-capsource-mauve">→</div>
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-capsource-orange text-white rounded-full flex items-center justify-center font-bold">3</div>
+          <span class="ml-3 text-capsource-dark">Structured Data</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('resume-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const loadingContainer = document.getElementById('loading-container');
+  const progressBar = document.getElementById('progress-bar');
+  const progressPercent = document.getElementById('progress-percent');
+  const progressText = document.getElementById('progress-text');
+
+  const progressSteps = [
+    { percent: 10, text: 'Reading PDF document...' },
+    { percent: 25, text: 'Extracting text content...' },
+    { percent: 40, text: 'AI analyzing personal information...' },
+    { percent: 55, text: 'AI enhancing work experience...' },
+    { percent: 70, text: 'AI categorizing skills and education...' },
+    { percent: 85, text: 'AI generating professional summary...' },
+    { percent: 95, text: 'Finalizing enhanced profile...' },
+    { percent: 100, text: 'Complete! Redirecting...' }
+  ];
+
+  function updateProgress(step) {
+    const { percent, text } = progressSteps[step];
+    progressBar.style.width = percent + '%';
+    progressPercent.textContent = percent + '%';
+    progressText.textContent = text;
+  }
+
+  function simulateProgress() {
+    let currentStep = 0;
+    updateProgress(currentStep);
+
+    const interval = setInterval(() => {
+      currentStep++;
+      if (currentStep < progressSteps.length) {
+        updateProgress(currentStep);
+      } else {
+        clearInterval(interval);
+      }
+    }, 2000); // Update every 2 seconds for more realistic AI processing feel
+  }
+
+  form.addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('resume-upload');
+    if (!fileInput.files.length) {
+      alert('Please select a file to upload.');
+      e.preventDefault();
+      return;
+    }
+
+    // Hide form and show loading animation
+    form.style.display = 'none';
+    loadingContainer.classList.remove('hidden');
+
+    // Start progress simulation
+    simulateProgress();
+  });
+});
+</script>
