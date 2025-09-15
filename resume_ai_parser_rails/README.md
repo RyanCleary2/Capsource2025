@@ -1,21 +1,21 @@
-# 🤖 AI-Powered Resume Parser - Rails Edition
+# AI-Powered Resume Parser - Rails Edition
 
 An intelligent resume parsing application that extracts and enhances professional profile data from PDF resumes using OpenAI's GPT-4o-mini model, styled with CapSource.io's professional design system.
 
-## 🚀 Overview
+## Overview
 
 This application uses advanced AI technology to parse PDF resumes and create enhanced professional profiles. Built with Ruby on Rails and powered by OpenAI's GPT-4o-mini, it combines traditional PDF parsing with AI enhancement to deliver accurate, professionally formatted profile data.
 
-## ✨ Features
+## Features
 
-### 🤖 AI-Powered Processing
+### AI-Powered Processing
 - **PDF Resume Upload**: Upload PDF resumes for intelligent processing
 - **GPT-4o-mini Enhancement**: Uses OpenAI's latest model for data enhancement
 - **Smart Parsing**: Combines traditional parsing with AI analysis
 - **Fallback System**: Works with or without OpenAI API key
 - **Editable Results**: Edit and save parsed profile information
 
-### 📊 Extracted & Enhanced Data
+### Extracted & Enhanced Data
 - **Personal Information**: Name, email, phone, location, LinkedIn, website
 - **Professional Summary**: AI-generated compelling summary highlighting key strengths
 - **Work Experience**: Enhanced job descriptions with quantified achievements
@@ -24,7 +24,7 @@ This application uses advanced AI technology to parse PDF resumes and create enh
 - **Projects**: Key projects with technologies used
 - **Certifications**: Professional certifications and awards
 
-### 🎨 Professional Interface
+### Professional Interface
 - **Loading Animation**: Progress indicators with percentage completion
 - **Real-time Processing**: Watch AI analyze your resume step-by-step
 - **Responsive Design**: Works on desktop and mobile devices
@@ -36,7 +36,7 @@ This application uses advanced AI technology to parse PDF resumes and create enh
 - **UI Components**: Custom buttons, cards, and form elements
 - **Professional Styling**: Clean, minimal design with strategic white space
 
-## 🛠 Technology Stack
+## Technology Stack
 
 - **Backend**: Ruby on Rails 8.0.2
 - **AI**: OpenAI GPT-4o-mini model
@@ -45,13 +45,13 @@ This application uses advanced AI technology to parse PDF resumes and create enh
 - **Server**: Puma web server
 - **Environment**: dotenv-rails for configuration
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Ruby 3.2.2+
 - Rails 8.0.2+
 - OpenAI API key (required for AI enhancement)
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1. Clone the Repository
 ```bash
@@ -158,7 +158,7 @@ When you click "View Sample Profile", the system:
 └─────────────────────────────────────────────┘
 ```
 
-## 🎨 CapSource.io Design Implementation
+## CapSource.io Design Implementation
 
 ### Color System
 ```css
@@ -181,7 +181,7 @@ Blue: #3353ea
 - **Form Elements**: Consistent styling with CapSource palette
 - **Skills Tags**: Color-coded by category (technical/soft/languages)
 
-## 🔧 Configuration
+## Configuration
 
 ### Styling Customization
 CapSource colors are configured in the layout:
@@ -199,7 +199,7 @@ tailwind.config = {
 }
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 resume_ai_parser_rails/
@@ -222,7 +222,7 @@ resume_ai_parser_rails/
 └── README.md                                  # This file
 ```
 
-## 💰 API Costs
+## API Costs
 
 The application uses OpenAI's GPT-4o-mini model, which is cost-effective:
 - **Typical resume processing**: ~$0.01-0.02 per resume
@@ -230,7 +230,7 @@ The application uses OpenAI's GPT-4o-mini model, which is cost-effective:
 - **Token limits**: 2000 max tokens to control costs
 - **Monitor usage**: [OpenAI Usage Dashboard](https://platform.openai.com/usage)
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -265,19 +265,19 @@ Look for messages like:
 - "Profile data enhanced with AI" (success)
 - "AI enhancement failed" (error with details)
 
-## 🔐 Security Features
+## Security Features
 
 - CSRF protection enabled
 - File type validation (PDF only)
 - No permanent file storage
 
-## 🚨 Error Handling
+## Error Handling
 
 The application includes basic error handling:
 - **Invalid Files**: Redirects with error message
 - **Missing Files**: Graceful redirect to upload page
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -285,17 +285,17 @@ The application includes basic error handling:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **CapSource.io** for design inspiration and color palette
 - **Ruby on Rails** community for the excellent framework
 - **TailwindCSS** for utility-first styling approach
 
-## 📞 Support
+## Support
 
 For questions or support, please open an issue in the repository or contact the development team.
 
