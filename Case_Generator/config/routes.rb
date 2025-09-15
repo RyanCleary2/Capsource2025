@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root "projects#index"
+  root "cases#index"
 
-  post "/generate_project",         to: "projects#generate_project"
-  post "/generate_scope_from_idea", to: "projects#generate_scope_from_idea"
+  post "/generate_case",           to: "cases#generate_case"
+  post "/generate_scope_from_idea", to: "cases#generate_scope_from_idea"
 end
