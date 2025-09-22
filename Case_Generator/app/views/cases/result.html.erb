@@ -533,13 +533,7 @@
             <% @case_ideas.split("\n\n").each do |idea| %>
               <% if idea.strip.present? %>
                 <div class="case-idea">
-                  <!-- Extract title if possible -->
-                  <% if idea.split("\n")[0].include?(':') %>
-                    <h4><%= idea.split("\n")[0].split(':')[0] %></h4>
-                    <p><%= idea.split("\n")[0].split(':')[1] %><%= raw("\n".html_safe + idea.split("\n")[1..-1].join("\n")) %></p>
-                  <% else %>
-                    <p><%= raw(idea) %></p>
-                  <% end %>
+                  <%= format_case_text(idea) %>
                   <%= form_with url: generate_scope_from_idea_path, method: :post, local: true do |f| %>
                     <%= f.hidden_field :website_url, value: @website_url %>
                     <%= f.hidden_field :case_idea, value: idea %>
@@ -555,7 +549,7 @@
             <% end %>
           <% elsif @mode == 'scope' && @case_scope.present? %>
             <div class="case-scope">
-              <%= raw(@case_scope) %>
+              <%= format_case_text(@case_scope) %>
             </div>
 
             <script>
