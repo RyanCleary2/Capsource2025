@@ -1,3 +1,4 @@
+<%= form_with url: update_profile_path, method: :patch, local: true, multipart: true, class: "space-y-6", id: "profile-form" do |form| %>
 <div class="max-w-6xl mx-auto p-6">
   <!-- Flash Messages -->
   <% if notice %>
@@ -12,260 +13,481 @@
     </div>
   <% end %>
 
-  <!-- Header -->
-  <div class="mb-8">
-    <div class="flex justify-between items-start">
-      <div>
-        <h1 class="text-4xl font-bold text-capsource-dark mb-2">Extracted Profile Data</h1>
-        <p class="text-capsource-mauve">Review and verify your extracted professional information</p>
-        <%= link_to "← Upload Another Resume", root_path, class: "inline-block mt-4 text-capsource-orange hover:text-capsource-dark transition-colors" %>
+  <!-- Breadcrumb Navigation -->
+  <div class="flex items-center space-x-2 text-sm text-gray-600 mb-8">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+    <span class="text-capsource-orange">Mentorships</span>
+    <span>></span>
+    <span>Profile</span>
+  </div>
+
+  <!-- Profile Header Section -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-8">
+    <div class="flex items-start justify-between mb-6">
+      <div class="flex items-start space-x-6">
+        <!-- Profile Picture -->
+        <div class="flex-shrink-0 relative">
+          <div class="w-32 h-32 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
+            <% if @profile_data["profileImageUrl"].present? %>
+              <img src="<%= @profile_data["profileImageUrl"] %>" alt="Profile Picture" class="w-full h-full object-cover">
+            <% else %>
+              <svg class="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            <% end %>
+          </div>
+
+          <!-- LinkedIn Button (shows when LinkedIn URL is present) -->
+          <%
+            linkedin_url = @profile_data["personalInfo"]["linkedin"]
+            has_linkedin = linkedin_url.present? &&
+                          linkedin_url.strip != "" &&
+                          linkedin_url.strip.downcase != "n/a" &&
+                          linkedin_url.strip.downcase != "none" &&
+                          (linkedin_url.include?("linkedin.com") || linkedin_url.include?("/in/"))
+          %>
+          <% if has_linkedin %>
+            <%
+              # Ensure the URL starts with http:// or https://
+              unless linkedin_url.start_with?('http://', 'https://')
+                linkedin_url = linkedin_url.start_with?('www.') ? "https://#{linkedin_url}" : "https://www.#{linkedin_url}"
+              end
+            %>
+            <a href="<%= linkedin_url %>"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="absolute -bottom-2 -right-2 w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center shadow-lg transition-colors group">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                View LinkedIn
+              </div>
+            </a>
+          <% end %>
+
+          <!-- Image Upload Form (hidden by default, shown in edit mode) -->
+          <div class="edit-field hidden mt-3">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+            <%= form.file_field "profile_image", accept: "image/*", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+          </div>
+        </div>
+
+        <!-- Name and Basic Info -->
+        <div class="flex-grow">
+          <!-- Display Mode -->
+          <div class="display-field">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @profile_data["personalInfo"]["fullName"] %></h1>
+          </div>
+
+          <!-- Edit Mode -->
+          <div class="edit-field hidden mb-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <%= form.text_field "personalInfo[fullName]", value: @profile_data["personalInfo"]["fullName"], class: "text-3xl font-bold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-capsource-orange focus:ring-0 p-1 w-full" %>
+          </div>
+
+          <div class="flex items-center text-sm text-gray-600 mb-4">
+            <% if @profile_data["personalInfo"]["linkedin"].present? && @profile_data["personalInfo"]["linkedin"] != "" %>
+              <span class="bg-capsource-orange text-white px-2 py-1 rounded text-xs font-medium">LinkedIn</span>
+            <% end %>
+          </div>
+
+          <!-- Edit Controls (hidden by default) -->
+          <div class="flex space-x-3 mt-4">
+            <button id="edit-btn" class="bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-2 text-sm">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              Edit Profile
+            </button>
+            <button id="save-btn" class="hidden bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 text-sm">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Save Changes
+            </button>
+            <button id="cancel-btn" class="hidden bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-2 text-sm">
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="flex space-x-3">
-        <button id="edit-btn" class="capsource-button bg-capsource-purple hover:bg-opacity-90 rounded-lg px-6 py-3">
-          <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-          </svg>
-          Edit
-        </button>
-        <button id="save-btn" class="hidden capsource-button bg-green-600 hover:bg-green-700 rounded-lg px-6 py-3">
-          <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-          Save Changes
-        </button>
-        <button id="cancel-btn" class="hidden bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-6 py-3">
-          Cancel
+
+      <!-- Request Mentorship Button -->
+      <div class="flex-shrink-0">
+        <button class="bg-capsource-orange hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium">
+          Request Mentorship
         </button>
       </div>
     </div>
   </div>
 
-  <%= form_with url: update_profile_path, method: :patch, local: true, class: "space-y-8", id: "profile-form" do |form| %>
-    <!-- Personal Information -->
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-6 flex items-center">
-        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-        </svg>
-        Personal Information
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-capsource-dark mb-2">Full Name</label>
-          <div class="display-field">
-            <p class="text-lg text-gray-800 bg-gray-50 p-3 rounded"><%= @profile_data["personalInfo"]["fullName"] %></p>
-          </div>
-          <div class="edit-field hidden">
-            <%= form.text_field "personalInfo[fullName]", value: @profile_data["personalInfo"]["fullName"], class: "w-full text-lg p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-capsource-dark mb-2">Email</label>
-          <div class="display-field">
-            <p class="text-lg text-gray-800 bg-gray-50 p-3 rounded"><%= @profile_data["personalInfo"]["email"] %></p>
-          </div>
-          <div class="edit-field hidden">
-            <%= form.email_field "personalInfo[email]", value: @profile_data["personalInfo"]["email"], class: "w-full text-lg p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-capsource-dark mb-2">Phone</label>
-          <div class="display-field">
-            <p class="text-lg text-gray-800 bg-gray-50 p-3 rounded"><%= @profile_data["personalInfo"]["phone"] %></p>
-          </div>
-          <div class="edit-field hidden">
-            <%= form.text_field "personalInfo[phone]", value: @profile_data["personalInfo"]["phone"], class: "w-full text-lg p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-capsource-dark mb-2">Location</label>
-          <div class="display-field">
-            <p class="text-lg text-gray-800 bg-gray-50 p-3 rounded"><%= @profile_data["personalInfo"]["location"] %></p>
-          </div>
-          <div class="edit-field hidden">
-            <%= form.text_field "personalInfo[location]", value: @profile_data["personalInfo"]["location"], class: "w-full text-lg p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-capsource-dark mb-2">Website</label>
-          <div class="display-field">
-            <p class="text-lg text-gray-800 bg-gray-50 p-3 rounded"><%= @profile_data["personalInfo"]["website"] %></p>
-          </div>
-          <div class="edit-field hidden">
-            <%= form.url_field "personalInfo[website]", value: @profile_data["personalInfo"]["website"], class: "w-full text-lg p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-capsource-dark mb-2">LinkedIn</label>
-          <div class="display-field">
-            <p class="text-lg text-gray-800 bg-gray-50 p-3 rounded"><%= @profile_data["personalInfo"]["linkedin"] %></p>
-          </div>
-          <div class="edit-field hidden">
-            <%= form.text_field "personalInfo[linkedin]", value: @profile_data["personalInfo"]["linkedin"], class: "w-full text-lg p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Professional Summary -->
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-4">Professional Summary</h2>
+    <!-- About Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">About</h2>
       <div class="display-field">
-        <p class="text-lg text-gray-800 bg-gray-50 p-4 rounded leading-relaxed"><%= @profile_data["professionalSummary"] %></p>
+        <p class="text-gray-700 leading-relaxed"><%= @profile_data["professionalSummary"] %></p>
       </div>
       <div class="edit-field hidden">
-        <%= form.text_area "professionalSummary", value: @profile_data["professionalSummary"], rows: 4, class: "w-full text-lg p-4 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+        <%= form.text_area "professionalSummary", value: @profile_data["professionalSummary"], rows: 4, class: "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
       </div>
     </div>
 
-    <!-- Experience -->
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-6 flex items-center">
-        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 002 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2v-8a2 2 0 012-2V6"></path>
-        </svg>
-        Experience
-      </h2>
+    <!-- Skills Dashboard -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Skills Dashboard</h2>
 
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-gray-900">about 2 months</div>
+          <div class="text-sm text-gray-600">Of being an active member on CapSource</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-gray-900">0</div>
+          <div class="text-sm text-gray-600">Completed Courses</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-gray-900">0</div>
+          <div class="text-sm text-gray-600">Mentor experiences</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Contact Information</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <div class="display-field">
+            <p class="text-gray-900"><%= @profile_data["personalInfo"]["email"] %></p>
+          </div>
+          <div class="edit-field hidden">
+            <%= form.email_field "personalInfo[email]", value: @profile_data["personalInfo"]["email"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+          <div class="display-field">
+            <p class="text-gray-900"><%= @profile_data["personalInfo"]["phone"] %></p>
+          </div>
+          <div class="edit-field hidden">
+            <%= form.text_field "personalInfo[phone]", value: @profile_data["personalInfo"]["phone"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <div class="display-field">
+            <p class="text-gray-900"><%= @profile_data["personalInfo"]["location"] %></p>
+          </div>
+          <div class="edit-field hidden">
+            <%= form.text_field "personalInfo[location]", value: @profile_data["personalInfo"]["location"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
+          <div class="display-field">
+            <p class="text-gray-900"><%= @profile_data["personalInfo"]["linkedin"] %></p>
+          </div>
+          <div class="edit-field hidden">
+            <%= form.text_field "personalInfo[linkedin]", value: @profile_data["personalInfo"]["linkedin"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employment History -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Employment History</h2>
       <div class="space-y-6">
-        <% @profile_data["experience"].each do |exp| %>
-          <div class="border-l-4 border-capsource-orange pl-6 pb-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-3">
-              <h3 class="text-xl font-semibold text-capsource-dark"><%= exp["title"] %></h3>
-              <span class="text-capsource-mauve font-medium"><%= exp["startDate"] %> - <%= exp["endDate"] %></span>
-            </div>
-            <p class="text-lg text-capsource-purple font-medium mb-2"><%= exp["company"] %> • <%= exp["location"] %></p>
-            <p class="text-gray-700 mb-4"><%= exp["description"] %></p>
-
-            <% if exp["keyAchievements"].any? %>
-              <div>
-                <h4 class="font-medium text-capsource-dark mb-2">Key Achievements:</h4>
-                <ul class="list-disc list-inside space-y-1">
-                  <% exp["keyAchievements"].each do |achievement| %>
-                    <li class="text-gray-700"><%= achievement %></li>
-                  <% end %>
-                </ul>
+        <% @profile_data["experience"].each_with_index do |exp, index| %>
+          <div class="pb-6 border-b border-gray-100 last:border-b-0">
+            <!-- Display Mode -->
+            <div class="display-field">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-lg font-semibold text-gray-900"><%= exp["title"] %></h3>
+                <span class="text-sm text-gray-600"><%= exp["startDate"] %> - <%= exp["endDate"] %></span>
               </div>
-            <% end %>
+              <p class="text-gray-700 font-medium mb-3"><%= exp["company"] %> • <%= exp["location"] %></p>
+              <p class="text-gray-600 mb-3 text-sm leading-relaxed"><%= exp["description"] %></p>
+
+              <% if exp["keyAchievements"]&.any? %>
+                <div>
+                  <h4 class="font-medium text-gray-900 mb-2 text-sm">Key Achievements:</h4>
+                  <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                    <% exp["keyAchievements"].each do |achievement| %>
+                      <li><%= achievement %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- Edit Mode -->
+            <div class="edit-field hidden">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                  <%= form.text_field "experience[#{index}][title]", value: exp["title"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                  <%= form.text_field "experience[#{index}][startDate]", value: exp["startDate"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                  <%= form.text_field "experience[#{index}][endDate]", value: exp["endDate"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                  <%= form.text_field "experience[#{index}][company]", value: exp["company"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                  <%= form.text_field "experience[#{index}][location]", value: exp["location"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <%= form.text_area "experience[#{index}][description]", value: exp["description"], rows: 3, class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Key Achievements (one per line)</label>
+                <%= form.text_area "experience[#{index}][keyAchievements]", value: (exp["keyAchievements"] || []).join("\n"), rows: 3, class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>
     </div>
 
     <!-- Education -->
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-6 flex items-center">
-        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-        </svg>
-        Education
-      </h2>
-
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Education</h2>
       <div class="space-y-4">
-        <% @profile_data["education"].each do |edu| %>
-          <div class="border border-gray-200 rounded-lg p-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
-              <h3 class="text-xl font-semibold text-capsource-dark"><%= edu["degree"] %></h3>
-              <span class="text-capsource-mauve font-medium"><%= edu["graduationYear"] %></span>
+        <% @profile_data["education"].each_with_index do |edu, index| %>
+          <div class="border-b border-gray-100 pb-4 last:border-b-0">
+            <!-- Display Mode -->
+            <div class="display-field">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                  </svg>
+                </div>
+                <div class="flex-grow">
+                  <h3 class="font-semibold text-gray-900"><%= edu["degree"] %></h3>
+                  <p class="text-capsource-orange font-medium"><%= edu["institution"] %></p>
+                  <div class="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                    <span>Class of <%= edu["graduationYear"] %></span>
+                    <% if edu["gpa"] %>
+                      <span>GPA: <%= edu["gpa"] %></span>
+                    <% end %>
+                    <% if edu["honors"] %>
+                      <span><%= edu["honors"] %></span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
             </div>
-            <p class="text-lg text-capsource-purple font-medium mb-2"><%= edu["institution"] %></p>
-            <div class="flex space-x-4">
-              <% if edu["gpa"] %>
-                <span class="text-gray-700"><strong>GPA:</strong> <%= edu["gpa"] %></span>
-              <% end %>
-              <% if edu["honors"] %>
-                <span class="text-gray-700"><strong>Honors:</strong> <%= edu["honors"] %></span>
-              <% end %>
+
+            <!-- Edit Mode -->
+            <div class="edit-field hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+                  <%= form.text_field "education[#{index}][degree]", value: edu["degree"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+                  <%= form.text_field "education[#{index}][institution]", value: edu["institution"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
+                  <%= form.text_field "education[#{index}][graduationYear]", value: edu["graduationYear"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">GPA</label>
+                  <%= form.text_field "education[#{index}][gpa]", value: edu["gpa"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Honors</label>
+                  <%= form.text_field "education[#{index}][honors]", value: edu["honors"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                </div>
+              </div>
             </div>
           </div>
         <% end %>
       </div>
     </div>
 
-    <!-- Skills -->
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-6 flex items-center">
-        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-        </svg>
-        Skills
-      </h2>
+    <!-- Interests and Expertise -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Interests and Expertise</h2>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div>
-          <h3 class="text-lg font-medium text-capsource-dark mb-3">Technical Skills</h3>
+      <!-- Display Mode -->
+      <div class="display-field">
+        <div class="mb-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Development Interests</h3>
           <div class="flex flex-wrap gap-2">
             <% @profile_data["skills"]["technical"].each do |skill| %>
-              <span class="skill-tag technical-skill"><%= skill %></span>
+              <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm"><%= skill %></span>
             <% end %>
           </div>
         </div>
 
-        <div>
-          <h3 class="text-lg font-medium text-capsource-dark mb-3">Soft Skills</h3>
+        <div class="mb-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Area of Expertise</h3>
           <div class="flex flex-wrap gap-2">
             <% @profile_data["skills"]["soft"].each do |skill| %>
-              <span class="skill-tag soft-skill"><%= skill %></span>
+              <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm"><%= skill %></span>
             <% end %>
           </div>
+        </div>
+
+        <% if @profile_data["skills"]["languages"]&.any? %>
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Languages</h3>
+          <div class="flex flex-wrap gap-2">
+            <% @profile_data["skills"]["languages"].each do |language| %>
+              <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm"><%= language %></span>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+
+      <!-- Edit Mode -->
+      <div class="edit-field hidden">
+        <div class="mb-6">
+          <label class="block text-lg font-medium text-gray-900 mb-3">Development Interests</label>
+          <p class="text-sm text-gray-600 mb-2">Enter skills separated by commas</p>
+          <%= form.text_area "skills[technical]", value: (@profile_data["skills"]["technical"] || []).join(", "), rows: 2, class: "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-lg font-medium text-gray-900 mb-3">Area of Expertise</label>
+          <p class="text-sm text-gray-600 mb-2">Enter skills separated by commas</p>
+          <%= form.text_area "skills[soft]", value: (@profile_data["skills"]["soft"] || []).join(", "), rows: 2, class: "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
         </div>
 
         <div>
-          <h3 class="text-lg font-medium text-capsource-dark mb-3">Languages</h3>
-          <div class="flex flex-wrap gap-2">
-            <% @profile_data["skills"]["languages"].each do |language| %>
-              <span class="skill-tag language-skill"><%= language %></span>
-            <% end %>
-          </div>
+          <label class="block text-lg font-medium text-gray-900 mb-3">Languages</label>
+          <p class="text-sm text-gray-600 mb-2">Enter languages separated by commas</p>
+          <%= form.text_area "skills[languages]", value: (@profile_data["skills"]["languages"] || []).join(", "), rows: 2, class: "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
         </div>
       </div>
     </div>
 
-    <!-- Certifications -->
-    <% if @profile_data["certifications"].any? %>
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-6">Certifications</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <% @profile_data["certifications"].each do |cert| %>
-          <div class="border border-gray-200 rounded-lg p-4">
-            <h3 class="font-semibold text-capsource-dark"><%= cert["name"] %></h3>
-            <p class="text-capsource-purple"><%= cert["issuer"] %></p>
-            <p class="text-capsource-mauve"><%= cert["date"] %></p>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <% end %>
+    <!-- Professional Artifacts -->
+    <% if @profile_data["certifications"]&.any? || @profile_data["projects"]&.any? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Professional Artifacts</h2>
 
-    <!-- Projects -->
-    <% if @profile_data["projects"].any? %>
-    <div class="capsource-card rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-capsource-dark mb-6">Projects</h2>
-      <div class="space-y-4">
-        <% @profile_data["projects"].each do |project| %>
-          <div class="border border-gray-200 rounded-lg p-4">
-            <h3 class="text-xl font-semibold text-capsource-dark mb-2"><%= project["name"] %></h3>
-            <p class="text-gray-700 mb-3"><%= project["description"] %></p>
-            <div class="flex flex-wrap gap-2">
-              <% project["technologies"].each do |tech| %>
-                <span class="skill-tag technical-skill"><%= tech %></span>
+      <% if @profile_data["certifications"]&.any? %>
+        <div class="mb-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Certifications</h3>
+
+          <!-- Display Mode -->
+          <div class="display-field">
+            <div class="space-y-3">
+              <% @profile_data["certifications"].each do |cert| %>
+                <div class="flex items-center space-x-3">
+                  <div class="w-2 h-2 bg-capsource-orange rounded-full"></div>
+                  <div>
+                    <p class="font-medium text-gray-900"><%= cert["name"] %></p>
+                    <p class="text-sm text-gray-600"><%= cert["issuer"] %> • <%= cert["date"] %></p>
+                  </div>
+                </div>
               <% end %>
             </div>
           </div>
-        <% end %>
-      </div>
+
+          <!-- Edit Mode -->
+          <div class="edit-field hidden">
+            <div class="space-y-4">
+              <% @profile_data["certifications"].each_with_index do |cert, index| %>
+                <div class="border border-gray-200 rounded-lg p-4">
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Certification Name</label>
+                      <%= form.text_field "certifications[#{index}][name]", value: cert["name"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Issuer</label>
+                      <%= form.text_field "certifications[#{index}][issuer]", value: cert["issuer"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                      <%= form.text_field "certifications[#{index}][date]", value: cert["date"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @profile_data["projects"]&.any? %>
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Projects</h3>
+
+          <!-- Display Mode -->
+          <div class="display-field">
+            <div class="space-y-4">
+              <% @profile_data["projects"].each do |project| %>
+                <div class="border-l-2 border-capsource-orange pl-4">
+                  <h4 class="font-semibold text-gray-900"><%= project["name"] %></h4>
+                  <p class="text-sm text-gray-600 mb-2"><%= project["description"] %></p>
+                  <div class="flex flex-wrap gap-1">
+                    <% project["technologies"].each do |tech| %>
+                      <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"><%= tech %></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Edit Mode -->
+          <div class="edit-field hidden">
+            <div class="space-y-4">
+              <% @profile_data["projects"].each_with_index do |project, index| %>
+                <div class="border border-gray-200 rounded-lg p-4">
+                  <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                    <%= form.text_field "projects[#{index}][name]", value: project["name"], class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                  </div>
+                  <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <%= form.text_area "projects[#{index}][description]", value: project["description"], rows: 2, class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Technologies (comma separated)</label>
+                    <%= form.text_field "projects[#{index}][technologies]", value: (project["technologies"] || []).join(", "), class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
     <% end %>
 
     <!-- Actions -->
-    <div class="text-center">
-      <%= link_to "Upload Another Resume", root_path, class: "capsource-button rounded-lg px-8 py-4 text-lg" %>
+    <div class="text-center pt-8">
+      <%= link_to "← Upload Another Resume", root_path, class: "bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium inline-block", onclick: "sessionStorage.clear(); localStorage.clear();" %>
     </div>
   <% end %>
 </div>

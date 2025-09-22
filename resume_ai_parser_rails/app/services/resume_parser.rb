@@ -26,6 +26,7 @@ class ResumeParser
   def parse_profile_data
     # First, extract basic data using traditional parsing
     basic_data = {
+      "profileImageUrl" => nil,
       "personalInfo" => extract_personal_info,
       "professionalSummary" => extract_professional_summary,
       "experience" => extract_experience,

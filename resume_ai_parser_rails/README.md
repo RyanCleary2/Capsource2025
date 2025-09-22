@@ -14,9 +14,11 @@ This application uses advanced AI technology to parse PDF resumes and create enh
 - **Smart Parsing**: Combines traditional parsing with AI analysis
 - **Fallback System**: Works with or without OpenAI API key
 - **Editable Results**: Edit and save parsed profile information
+- **Profile Image Upload**: Upload and manage profile pictures in edit mode
 
 ### Extracted & Enhanced Data
 - **Personal Information**: Name, email, phone, location, LinkedIn, website
+- **Profile Image**: Upload and display professional profile pictures
 - **Professional Summary**: AI-generated compelling summary highlighting key strengths
 - **Work Experience**: Enhanced job descriptions with quantified achievements
 - **Education**: Degree, institution, graduation year, GPA, honors
@@ -107,7 +109,8 @@ Visit `http://localhost:3000` to access the application.
 2. **AI Processing**: Watch the progress bar as GPT-4o-mini analyzes your resume
 3. **Review Results**: View the extracted and enhanced profile data
 4. **Edit Information**: Click "Edit" to modify any information
-5. **Save Changes**: Click "Save Changes" to update the profile data
+5. **Upload Profile Image**: Add or change profile picture in edit mode
+6. **Save Changes**: Click "Save Changes" to update the profile data
 
 ### Step-by-Step Demo
 
@@ -138,10 +141,13 @@ When you click "View Sample Profile", the system:
 │ 📊 Sample Profile Data                      │
 │                                             │
 │ 👤 Personal Information                     │
-│ ┌─────────────────┬─────────────────────────┐ │
-│ │ Name: Sarah Johnson │ Email: sarah@email.com │ │
-│ │ Phone: 555-123-4567 │ Location: SF, CA       │ │
-│ └─────────────────┴─────────────────────────┘ │
+│ ┌──────────┬─────────────────────────────────┐ │
+│ │ 📷 [IMG] │ Name: Sarah Johnson             │ │
+│ │          │ Email: sarah@email.com          │ │
+│ │          │ Phone: 555-123-4567             │ │
+│ │          │ Location: SF, CA                │ │
+│ │          │ [Edit Profile] [🖼️ Upload]      │ │
+│ └──────────┴─────────────────────────────────┘ │
 │                                             │
 │ 💼 Experience                               │
 │ ├─ Senior Software Engineer @ TechCorp (2022-Present) │

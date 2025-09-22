@@ -47,8 +47,27 @@ class ResumesController < ApplicationController
     profile_data = Rails.cache.read(cache_key) if cache_key
 
     if profile_data
-      # Update the cached data with new values
-      profile_data.merge!(profile_params)
+      # Handle profile image upload
+      if params[:profile_image].present?
+        uploaded_file = params[:profile_image]
+        if uploaded_file.content_type.start_with?('image/')
+          # Generate unique filename
+          filename = "#{SecureRandom.hex(16)}_#{uploaded_file.original_filename}"
+          file_path = Rails.root.join('public', 'uploads', 'profile_images', filename)
+
+          # Save the file
+          File.open(file_path, 'wb') do |file|
+            file.write(uploaded_file.read)
+          end
+
+          # Store the relative path in profile data
+          profile_data["profileImageUrl"] = "/uploads/profile_images/#{filename}"
+        end
+      end
+
+      # Update the cached data with new values (excluding profile_image which we handled above)
+      update_params = profile_params.except(:profile_image)
+      profile_data.merge!(update_params)
       Rails.cache.write(cache_key, profile_data, expires_in: 1.hour)
       redirect_to result_path, notice: 'Profile data updated successfully!'
     else
@@ -61,12 +80,14 @@ class ResumesController < ApplicationController
   def profile_params
     params.permit(
       :professionalSummary,
+      :profile_image,
       personalInfo: [:fullName, :email, :phone, :location, :website, :linkedin]
     )
   end
 
   def demo_profile_data
     {
+      "profileImageUrl" => nil,
       "personalInfo" => {
         "fullName" => "Sarah Johnson",
         "email" => "sarah.johnson@email.com",
