@@ -1,0 +1,486 @@
+<div class="skills-page">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">Skills Management</h1>
+      <p class="page-subtitle"><%= @total_skills %> total skills</p>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Insights Card (Duplicate Detection) -->
+    <% if @duplicate_count > 0 %>
+      <div class="insights-card">
+        <div class="insights-icon">⚠️</div>
+        <div class="insights-content">
+          <h3>Data Quality Alert</h3>
+          <p><strong><%= @duplicate_count %></strong> duplicate <%= @duplicate_count == 1 ? 'entry' : 'entries' %> detected across <%= @duplicates.length %> skill <%= @duplicates.length == 1 ? 'name' : 'names' %>.</p>
+          <button class="btn btn-insights" onclick="document.getElementById('duplicates-modal').style.display='block'">
+            Review Duplicates
+          </button>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Search and Filters Section -->
+    <div class="search-filters-section">
+      <%= form_with url: skills_path, method: :get, class: "search-form", local: true do |form| %>
+        <div class="search-bar">
+          <%= form.text_field :search, placeholder: "Search skills by name...", value: params[:search], class: "search-input" %>
+        </div>
+
+        <div class="filters-section">
+          <div class="filter-group">
+            <label>Category</label>
+            <%= form.select :category_id,
+                options_for_select(@categories.map { |cat| [cat[:name], cat[:id]] }, params[:category_id]),
+                { include_blank: "All Categories" },
+                { class: "filter-select" } %>
+          </div>
+
+          <div class="filter-group">
+            <label>Level</label>
+            <%= form.select :skill_level,
+                options_for_select([
+                  ['All Levels', ''],
+                  ['Beginner', 'beginner'],
+                  ['Intermediate', 'intermediate'],
+                  ['Advanced', 'advanced']
+                ], params[:skill_level]),
+                {},
+                { class: "filter-select" } %>
+          </div>
+
+          <div class="filter-actions">
+            <%= form.submit "Apply Filters", class: "btn btn-filter" %>
+            <%= link_to "Clear All", skills_path, class: "btn btn-clear" %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Central Add Skill Button -->
+      <div class="new-skill-action">
+        <%= link_to new_skill_path, class: "btn btn-new-skill" do %>
+          <span class="btn-icon">+</span>
+          <span class="btn-text">Add New Skill</span>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Results Summary with Pagination -->
+    <div class="results-summary">
+      <div class="results-info">
+        <span class="results-count">Showing <%= @skills.length %> of <%= @total_skills %> skills</span>
+        <% if params[:search].present? || params[:category_id].present? || params[:skill_level].present? %>
+          <span class="filter-indicator">• Filters active</span>
+        <% end %>
+      </div>
+
+      <!-- Pagination Controls -->
+      <% if @total_skills > 50 %>
+        <div class="pagination-controls">
+          <% total_pages = (@total_skills / 50.0).ceil %>
+          <% current_page = @current_page || 1 %>
+          <%
+            # Convert params to hash for merging
+            filter_params = params.permit(:search, :category_id, :skill_level).to_h.symbolize_keys
+          %>
+
+          <%= link_to skills_path(filter_params.merge(page: current_page - 1)),
+              class: "pagination-btn pagination-prev #{current_page == 1 ? 'disabled' : ''}" do %>
+            <span>←</span> Previous
+          <% end %>
+
+          <div class="pagination-pages">
+            <% if total_pages <= 7 %>
+              <% (1..total_pages).each do |page| %>
+                <%= link_to page, skills_path(filter_params.merge(page: page)),
+                    class: "pagination-page #{page == current_page ? 'active' : ''}" %>
+              <% end %>
+            <% else %>
+              <%= link_to 1, skills_path(filter_params.merge(page: 1)),
+                  class: "pagination-page #{1 == current_page ? 'active' : ''}" %>
+
+              <% if current_page > 3 %>
+                <span class="pagination-ellipsis">...</span>
+              <% end %>
+
+              <% start_page = [2, current_page - 1].max %>
+              <% end_page = [total_pages - 1, current_page + 1].min %>
+              <% (start_page..end_page).each do |page| %>
+                <%= link_to page, skills_path(filter_params.merge(page: page)),
+                    class: "pagination-page #{page == current_page ? 'active' : ''}" %>
+              <% end %>
+
+              <% if current_page < total_pages - 2 %>
+                <span class="pagination-ellipsis">...</span>
+              <% end %>
+
+              <%= link_to total_pages, skills_path(filter_params.merge(page: total_pages)),
+                  class: "pagination-page #{total_pages == current_page ? 'active' : ''}" %>
+            <% end %>
+          </div>
+
+          <%= link_to skills_path(filter_params.merge(page: current_page + 1)),
+              class: "pagination-btn pagination-next #{current_page >= total_pages ? 'disabled' : ''}" do %>
+            Next <span>→</span>
+          <% end %>
+
+          <span class="pagination-info">Page <%= current_page %> of <%= total_pages %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Skills Table -->
+    <div class="skills-table-container">
+      <table class="skills-table">
+        <thead>
+          <tr>
+            <th class="checkbox-column">
+              <input type="checkbox" id="header-checkbox" aria-label="Select all skills">
+            </th>
+            <th class="id-column">ID</th>
+            <th class="name-column">Skill Name</th>
+            <th class="category-column">Category</th>
+            <th class="domain-column">Domain</th>
+            <th class="partner-column">Partner</th>
+            <th class="created-column">Created</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @skills.empty? %>
+            <tr class="empty-state">
+              <td colspan="8">
+                <div class="empty-state-content">
+                  <div class="empty-icon">🔍</div>
+                  <h3>No skills found</h3>
+                  <p>Try adjusting your filters or search terms.</p>
+                  <%= link_to "Clear all filters", skills_path, class: "btn btn-primary" %>
+                </div>
+              </td>
+            </tr>
+          <% else %>
+            <% @skills.each do |skill| %>
+              <tr class="skill-row" data-skill-id="<%= skill[:id] %>">
+                <td class="checkbox-column">
+                  <input type="checkbox" class="skill-checkbox" value="<%= skill[:id] %>" aria-label="Select <%= skill[:name] %>">
+                </td>
+                <td class="id-column">
+                  <span class="skill-id">#<%= skill[:id] %></span>
+                </td>
+                <td class="name-column">
+                  <strong class="skill-name"><%= skill[:name] %></strong>
+                </td>
+                <td class="category-column">
+                  <% category = @categories.find { |cat| cat[:id] == skill[:category] } %>
+                  <span class="category-badge category-<%= skill[:category] %>">
+                    <%= category&.dig(:name) || 'Uncategorized' %>
+                  </span>
+                </td>
+                <td class="domain-column">
+                  <span class="domain-text"><%= skill[:domain].presence || '—' %></span>
+                </td>
+                <td class="partner-column">
+                  <span class="partner-text"><%= skill[:partner].presence || '—' %></span>
+                </td>
+                <td class="created-column">
+                  <% if skill[:created_at] %>
+                    <span class="date-text" title="<%= skill[:created_at].strftime("%B %d, %Y at %I:%M %p") %>">
+                      <%= time_ago_in_words(skill[:created_at]) %> ago
+                    </span>
+                  <% else %>
+                    <span class="date-text">—</span>
+                  <% end %>
+                </td>
+                <td class="actions-column">
+                  <div class="action-links">
+                    <button class="action-link roadmap-link"
+                            onclick="openRoadmapModal(<%= skill[:id] %>)"
+                            title="View progression roadmap"
+                            data-skill-name="<%= skill[:name] %>">
+                      Roadmap
+                    </button>
+                    <%= link_to "View", skill_path(skill[:id]), class: "action-link view-link", title: "View skill details" %>
+                    <%= link_to "Edit", edit_skill_path(skill[:id]), class: "action-link edit-link", title: "Edit skill" %>
+                    <%= link_to "Delete", skill_path(skill[:id]), method: :delete,
+                        data: { confirm: "Are you sure you want to delete '#{skill[:name]}'?" },
+                        class: "action-link delete-link", title: "Delete skill" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Duplicates Modal -->
+<div id="duplicates-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Duplicate Skills Detected</h2>
+      <button class="modal-close" onclick="document.getElementById('duplicates-modal').style.display='none'">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-description">
+        The following skills have duplicate entries in the database. Consider merging or removing duplicates to maintain data quality.
+      </p>
+      <% @duplicates.each do |duplicate| %>
+        <div class="duplicate-item">
+          <div class="duplicate-header">
+            <strong><%= duplicate[:name] %></strong>
+            <span class="duplicate-count-badge"><%= duplicate[:count] %> duplicates</span>
+          </div>
+          <div class="duplicate-details">
+            <p>IDs: <%= duplicate[:ids].join(', ') %></p>
+            <div class="duplicate-actions">
+              <% duplicate[:skills].each do |skill| %>
+                <%= link_to "View ##{skill[:id]}", skill_path(skill[:id]), class: "btn btn-small", target: "_blank" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+// Roadmap Modal Functions - Inline for immediate availability
+window.openRoadmapModal = function(skillId) {
+  const modal = document.getElementById('roadmap-modal');
+  const loading = document.getElementById('roadmap-loading');
+  const container = document.getElementById('roadmap-container');
+  const emptyState = document.getElementById('roadmap-empty');
+
+  // Safety check - ensure all elements exist
+  if (!modal || !loading || !container || !emptyState) {
+    console.error('Modal elements not found:', { modal, loading, container, emptyState });
+    alert('Modal elements not loaded. Please refresh the page.');
+    return;
+  }
+
+  modal.style.display = 'block';
+  loading.style.display = 'flex';
+  container.style.display = 'none';
+  emptyState.style.display = 'none';
+
+  fetch(`/skills/${skillId}/roadmap`)
+    .then(response => {
+      console.log('Response status:', response.status);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Roadmap data:', data);
+      renderRoadmap(data);
+      loading.style.display = 'none';
+
+      const hasContent = data.prerequisites.length > 0 || data.progressions.length > 0 || data.related.length > 0;
+      if (hasContent) {
+        container.style.display = 'block';
+      } else {
+        emptyState.style.display = 'block';
+      }
+    })
+    .catch(error => {
+      console.error('Roadmap Error:', error);
+      loading.innerHTML = `<div style="text-align: center; color: #E53E3E;"><p>⚠️ Failed to load roadmap</p><p style="font-size: 13px;">${error.message}</p></div>`;
+    });
+};
+
+window.closeRoadmapModal = function() {
+  document.getElementById('roadmap-modal').style.display = 'none';
+};
+
+function renderRoadmap(data) {
+  const { current, prerequisites, progressions, related } = data;
+
+  const titleEl = document.getElementById('roadmap-title');
+  if (titleEl) {
+    titleEl.textContent = `Progression Roadmap: ${current.name}`;
+  }
+
+  const badge = document.getElementById('current-skill-badge');
+  if (!badge) {
+    console.error('current-skill-badge element not found');
+    return;
+  }
+
+  const categories = {
+    'programming': { name: 'Programming Languages' },
+    'data-analytics': { name: 'Data & Analytics' },
+    'engineering': { name: 'Engineering & CAD' },
+    'web-dev': { name: 'Web Development' },
+    'devops': { name: 'DevOps & Tools' },
+    'business': { name: 'Business Strategy' },
+    'marketing': { name: 'Marketing & Sales' },
+    'communication': { name: 'Communication' },
+    'project-mgmt': { name: 'Project Management' },
+    'research': { name: 'Research & Analysis' },
+    'other': { name: 'Other' }
+  };
+  const category = categories[current.category] || categories['other'];
+
+  badge.innerHTML = `
+    <div class="skill-badge-name">${current.name}</div>
+    <div class="skill-badge-level">${current.skill_level || 'Intermediate'}</div>
+    ${current.description ? `<p style="margin-top: 12px; font-size: 13px; line-height: 1.5; opacity: 0.95;">${current.description}</p>` : ''}
+    <div style="margin-top: 12px; font-size: 12px;">
+      <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 10px;">${category.name}</span>
+    </div>
+  `;
+
+  renderSection('prerequisites', prerequisites);
+  renderSection('progression', progressions);
+  renderRelatedSkills(related);
+}
+
+function renderSection(sectionType, skills) {
+  const section = document.getElementById(`${sectionType}-section`);
+  const path = document.getElementById(`${sectionType}-path`);
+
+  if (!section || !path) {
+    console.error(`Section elements not found: ${sectionType}-section or ${sectionType}-path`);
+    return;
+  }
+
+  if (skills.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  path.innerHTML = skills.map((skill, index) => {
+    const arrow = index > 0 ? '<div class="roadmap-arrow"></div>' : '';
+    return arrow + `
+      <div class="skill-badge" onclick="openRoadmapModal(${skill.id})">
+        <div class="skill-badge-name">${skill.name}</div>
+        <div class="skill-badge-level">${skill.skill_level || 'Intermediate'}</div>
+        ${skill.effort_weeks ? `<div class="skill-badge-effort">${skill.effort_weeks} weeks</div>` : ''}
+        ${skill.similarity_score ? `<div class="skill-badge-similarity">${skill.similarity_score}% match</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderRelatedSkills(skills) {
+  const section = document.getElementById('related-section');
+  const grid = document.getElementById('related-grid');
+
+  if (!section || !grid) {
+    console.error('Related section elements not found: related-section or related-grid');
+    return;
+  }
+
+  if (skills.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  grid.innerHTML = skills.map(skill => `
+    <div class="skill-badge" onclick="openRoadmapModal(${skill.id})">
+      <div class="skill-badge-name">${skill.name}</div>
+      <div class="skill-badge-level">${skill.skill_level || 'Intermediate'}</div>
+      ${skill.similarity_score ? `<div class="skill-badge-similarity">${skill.similarity_score}% match</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// Wait for DOM to be ready before setting up event listeners
+document.addEventListener('DOMContentLoaded', function() {
+  window.onclick = function(event) {
+    const modal = document.getElementById('roadmap-modal');
+    if (modal && event.target === modal) closeRoadmapModal();
+  };
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      const modal = document.getElementById('roadmap-modal');
+      if (modal && modal.style.display === 'block') closeRoadmapModal();
+    }
+  });
+});
+</script>
+
+<!-- Skill Progression Roadmap Modal -->
+<div id="roadmap-modal" class="modal roadmap-modal">
+  <div class="modal-content roadmap-content">
+    <div class="modal-header">
+      <h2 id="roadmap-title">Progression Roadmap</h2>
+      <button class="modal-close" onclick="closeRoadmapModal()">&times;</button>
+    </div>
+    <div class="modal-body roadmap-body">
+      <div class="roadmap-loading" id="roadmap-loading">
+        <div class="loading-spinner"></div>
+        <p>Loading skill progression...</p>
+      </div>
+      <div class="roadmap-container" id="roadmap-container" style="display: none;">
+        <!-- Current Skill Section -->
+        <div class="roadmap-current">
+          <div class="roadmap-section-header">
+            <span class="section-icon">🎯</span>
+            <h3>Current Skill</h3>
+          </div>
+          <div class="skill-badge skill-badge-current" id="current-skill-badge">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Prerequisites Section -->
+        <div class="roadmap-section" id="prerequisites-section">
+          <div class="roadmap-section-header">
+            <span class="section-icon">📚</span>
+            <h3>Prerequisites</h3>
+            <span class="section-subtitle">Skills to learn first</span>
+          </div>
+          <div class="roadmap-timeline">
+            <div class="roadmap-path" id="prerequisites-path">
+              <!-- Populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Progression Section -->
+        <div class="roadmap-section" id="progression-section">
+          <div class="roadmap-section-header">
+            <span class="section-icon">🚀</span>
+            <h3>Next Steps</h3>
+            <span class="section-subtitle">Evolution pathway</span>
+          </div>
+          <div class="roadmap-timeline">
+            <div class="roadmap-path" id="progression-path">
+              <!-- Populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Skills Section -->
+        <div class="roadmap-section" id="related-section">
+          <div class="roadmap-section-header">
+            <span class="section-icon">🔗</span>
+            <h3>Related Skills</h3>
+            <span class="section-subtitle">Similar or complementary</span>
+          </div>
+          <div class="roadmap-grid" id="related-grid">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="roadmap-empty" id="roadmap-empty" style="display: none;">
+          <div class="empty-icon">🗺️</div>
+          <h3>No progression data available</h3>
+          <p>This skill doesn't have any identified prerequisites or next steps yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

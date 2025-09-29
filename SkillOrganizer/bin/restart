@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+echo "🔄 Restarting SkillOrganizer..."
+
+# Kill any Rails servers running on port 3000
+echo "🛑 Stopping any existing Rails servers..."
+lsof -ti:3000 | xargs kill -9 2>/dev/null || true
+
+# Kill any Puma processes
+echo "🛑 Stopping any Puma processes..."
+pkill -f puma 2>/dev/null || true
+
+# Wait a moment for processes to fully stop
+sleep 2
+
+# Clear any temporary files
+echo "🧹 Cleaning temporary files..."
+rm -rf tmp/pids/* 2>/dev/null || true
+rm -rf tmp/sockets/* 2>/dev/null || true
+
+# Start the Rails server
+echo "🚀 Starting Rails server on http://localhost:3000..."
+rails server -p 3000
+
+echo "✅ SkillOrganizer is ready!"
+echo "📖 Open http://localhost:3000 in your browser"
