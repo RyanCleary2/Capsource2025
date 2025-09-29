@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CapSource AI Case Generator</title>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_importmap_tags %>
+  <style>
+    :root {
+      --primary-color: #e27d60;
+      --primary-light: #e8a87c;
+      --primary-dark: #c7654e;
+      --secondary-color: #85cdca;
+      --accent-color: #c38d9e;
+      --text-color: #41444b;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --dark-accent: #41444b;
+      --light-accent: #f2f3f4;
+      --border-radius: 8px;
+      --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      --content-shadow: 0 6px 12px rgba(226, 125, 96, 0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--light-bg); color: var(--text-color); line-height: 1.6; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    header { background-color: var(--white); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08); position: sticky; top: 0; z-index: 1000; }
+    .header-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+    .logo { display: flex; align-items: center; }
+    .logo img { height: 40px; margin-right: 10px; }
+    .logo h1 { color: var(--primary-color); font-size: 24px; font-weight: 600; }
+    nav { display: flex; margin-left: 40px; }
+    .nav-links { display: flex; list-style: none; gap: 25px; }
+    .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; transition: color 0.3s; font-size: 15px; }
+    .nav-links a:hover { color: var(--primary-color); }
+    .auth-buttons { display: flex; gap: 10px; }
+    .btn { padding: 10px 22px; border-radius: var(--border-radius); font-weight: 500; cursor: pointer; transition: all 0.3s; text-decoration: none; text-align: center; font-size: 14px; }
+    .btn-outline { border: 2px solid var(--primary-color); color: var(--primary-color); background: transparent; }
+    .btn-outline:hover { background-color: var(--primary-color); color: var(--white); transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: var(--white); border: none; box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3); }
+    .btn-primary:hover { box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4); transform: translateY(-2px); }
+    .hero { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); padding: 60px 0; color: white; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%); }
+    .hero-content { position: relative; z-index: 1; }
+    .hero h1 { font-size: 36px; margin-bottom: 15px; font-weight: 700; }
+    .hero p { font-size: 18px; max-width: 800px; margin: 0 auto; opacity: 0.9; }
+    .progress-tracker { display: flex; justify-content: center; gap: 20px; margin: 30px 0 0 0; }
+    .progress-step { background: var(--light-accent); color: var(--primary-dark); padding: 10px 24px; border-radius: var(--border-radius); font-weight: 600; font-size: 16px; box-shadow: var(--box-shadow); }
+    .progress-step.active { background: var(--primary-color); color: var(--white); }
+    .case-generator { padding: 60px 0; }
+    .generator-container { background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 40px; margin-top: -80px; position: relative; z-index: 10; }
+    .generator-heading { text-align: center; margin-bottom: 40px; }
+    .generator-heading h2 { font-size: 30px; color: var(--primary-dark); margin-bottom: 10px; font-weight: 700; }
+    .generator-heading p { color: #666; font-size: 16px; }
+    .form-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+    .form-section:last-child { border-bottom: none; }
+    .form-section h3 { font-size: 20px; margin-bottom: 20px; color: var(--primary-dark); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color); }
+    .optional-label { color: #999; font-size: 14px; font-weight: normal; }
+    .form-group input[type="text"], .form-group input[type="url"], .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--border-radius); font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s; }
+    .form-group input[type="text"]:focus, .form-group input[type="url"]:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(226, 125, 96, 0.1); outline: none; }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .generation-mode { background-color: var(--light-accent); padding: 20px; border-radius: var(--border-radius); margin-bottom: 20px; }
+    .generation-mode label { display: flex; align-items: center; font-weight: 500; margin-bottom: 10px; }
+    .generation-mode input[type="checkbox"] { margin-right: 10px; width: 18px; height: 18px; }
+    .generation-mode p { color: #666; font-size: 14px; margin-left: 28px; }
+    .topics-checkboxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; padding: 15px; background-color: var(--light-accent); border-radius: var(--border-radius); }
+    .topics-checkboxes label { display: flex; align-items: center; font-weight: normal; font-size: 14px; }
+    .topics-checkboxes input[type="checkbox"] { margin-right: 8px; }
+    .form-footer { margin-top: 30px; text-align: center; }
+    .generate-btn { padding: 15px 40px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; border: none; border-radius: var(--border-radius); font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3); }
+    .generate-btn:hover { box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4); transform: translateY(-2px); }
+    .hidden { display: none !important; }
+    .error-message { color: #e74c3c; font-size: 14px; margin-top: 10px; display: none; }
+    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .topics-checkboxes { grid-template-columns: 1fr 1fr; } .generator-container { padding: 30px 20px; } .hero { padding: 40px 0; } .hero h1 { font-size: 28px; } .hero p { font-size: 16px; } }
+    @media (max-width: 576px) { .topics-checkboxes { grid-template-columns: 1fr; } }
+    footer { background-color: var(--dark-accent); color: var(--white); padding: 30px 0; font-size: 14px; margin-top: 60px; }
+    .footer-container { display: flex; justify-content: space-between; align-items: center; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--white); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--primary-light); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <div style="display: flex; align-items: center;">
+        <div class="logo">
+          <%= image_tag 'logo.png', alt: 'CapSource Logo', height: '40' %>
+          <h1>CapSource</h1>
+        </div>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#">EDUCATORS</a></li>
+            <li><a href="#">STUDENTS</a></li>
+            <li><a href="#">ORGANIZATIONS</a></li>
+            <li><a href="#">OPPORTUNITIES</a></li>
+            <li><a href="#">LEARN MORE</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="auth-buttons">
+        <a href="#" class="btn btn-outline">LOGIN</a>
+        <a href="#" class="btn btn-primary">REGISTER</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>AI-Powered Mentorship Plan Generator</h1>
+      <p>Create industry-relevant mentorship plans for students with AI assistance. Choose to generate a full plan or explore plan ideas based on topics.</p>
+      <div class="progress-tracker">
+        <div class="progress-step active">1. Enter Details</div>
+        <div class="progress-step">2. Generate Results</div>
+        <div class="progress-step">3. Review and Save</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="generator" class="case-generator">
+    <div class="container">
+      <div class="generator-container">
+        <div class="generator-heading">
+          <h2>Mentorship Plan Generator</h2>
+          <p>Fill in the details below to create a personalized mentorship plan for a mentee and mentor pairing.</p>
+        </div>
+
+        <%= form_with url: generate_mentorship_plan_path, local: true, id: 'mentorship-form' do |f| %>
+          <% if flash.now[:alert] %>
+            <div style="color: #e74c3c; background-color: #f9eae9; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px;">
+              <%= flash.now[:alert] %>
+            </div>
+          <% end %>
+
+          <div class="form-section">
+            <h3>Mentee Information</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <%= f.label :mentee_goal, 'Mentee Goal' %>
+                <%= f.text_field :mentee_goal, placeholder: 'e.g., Find an internship, transition into data science', required: true %>
+              </div>
+              <div class="form-group">
+                <%= f.label :mentee_background, 'Current Skill Level / Background' %>
+                <%= f.select :mentee_background, [['Select background', ''], 'Student', 'Early Career', 'Mid-Career', 'Other'], required: true %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :mentee_interests, 'Interest Topics' %> <span class="optional-label">(select at least one)</span>
+              <div class="topics-checkboxes">
+                <label><input type="checkbox" name="mentee_interests[]" value="Achieving Work Life Balance"> Achieving Work Life Balance</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Cover Letter Review"> Cover Letter Review</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Crushing Job Interviews"> Crushing Job Interviews</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Exploring Majors & Careers"> Exploring Majors & Careers</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Goal Setting"> Goal Setting</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Industry Insights"> Industry Insights</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Industry-related Tools & Techniques"> Industry-related Tools & Techniques</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Job Role Insights"> Job Role Insights</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Maximizing the College Experience"> Maximizing the College Experience</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Negotiating Salary & Benefits"> Negotiating Salary & Benefits</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Personal Branding"> Personal Branding</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Professional Communication"> Professional Communication</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Public Speaking"> Public Speaking</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Relocating for Work"> Relocating for Work</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="Resume Review"> Resume Review</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="The Job Search"> The Job Search</label>
+                <label><input type="checkbox" name="mentee_interests[]" value="The Post-Covid Workplace"> The Post-Covid Workplace</label>
+              </div>
+              <div class="error-message" id="mentee-interests-error">Please select at least one interest topic</div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Mentor Information</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <%= f.label :mentor_industry, 'Industry / Role' %>
+                <%= f.text_field :mentor_industry, placeholder: 'e.g., Software Engineer in Fintech, HR Manager', required: true %>
+              </div>
+              <div class="form-group">
+                <%= f.label :mentor_style, 'Preferred Mentorship Style' %>
+                <%= f.select :mentor_style, [['Select style', ''], 'Structured Sessions', 'Casual Guidance', 'Project-Based', 'Other'], required: true %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :mentor_expertise, 'Areas of Expertise' %> <span class="optional-label">(select at least one)</span>
+              <div class="topics-checkboxes">
+                <label><input type="checkbox" name="mentor_expertise[]" value="Machine Learning"> Machine Learning</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Career Coaching"> Career Coaching</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Entrepreneurship"> Entrepreneurship</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Leadership"> Leadership</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Industry Knowledge"> Industry Knowledge</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Technical Skills"> Technical Skills</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Networking"> Networking</label>
+                <label><input type="checkbox" name="mentor_expertise[]" value="Other"> Other</label>
+              </div>
+              <div class="error-message" id="mentor-expertise-error">Please select at least one area of expertise</div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Relationship Context</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <%= f.label :relationship_duration, 'Duration' %>
+                <%= f.text_field :relationship_duration, placeholder: 'e.g., 6 weeks', required: true %>
+              </div>
+              <div class="form-group">
+                <%= f.label :session_frequency, 'Session Frequency' %>
+                <%= f.select :session_frequency, [['Select frequency', ''], 'Weekly', 'Biweekly', 'Monthly', 'Other'], required: true %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <%= f.submit 'Generate Mentorship Plan', class: 'generate-btn', id: 'generate-btn' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-container">
+      <div>© 2025 CapSource. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mentorshipForm = document.getElementById('mentorship-form');
+      const menteeInterestsError = document.getElementById('mentee-interests-error');
+      const mentorExpertiseError = document.getElementById('mentor-expertise-error');
+
+      mentorshipForm.addEventListener('submit', function(event) {
+        let valid = true;
+        const menteeInterests = document.querySelectorAll('input[name="mentee_interests[]"]:checked');
+        const mentorExpertise = document.querySelectorAll('input[name="mentor_expertise[]"]:checked');
+
+        if (menteeInterests.length === 0) {
+          menteeInterestsError.style.display = 'block';
+          document.querySelector('input[name="mentee_interests[]"]').scrollIntoView({ behavior: 'smooth' });
+          valid = false;
+        } else {
+          menteeInterestsError.style.display = 'none';
+        }
+
+        if (mentorExpertise.length === 0) {
+          mentorExpertiseError.style.display = 'block';
+          document.querySelector('input[name="mentor_expertise[]"]').scrollIntoView({ behavior: 'smooth' });
+          valid = false;
+        } else {
+          mentorExpertiseError.style.display = 'none';
+        }
+
+        if (!valid) {
+          event.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
