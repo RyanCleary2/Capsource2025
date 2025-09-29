@@ -7,7 +7,81 @@
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_importmap_tags %>
   <style>
-    /* All styles remain unchanged */
+    :root {
+      --primary-color: #e27d60;
+      --primary-light: #e8a87c;
+      --primary-dark: #c7654e;
+      --secondary-color: #85cdca;
+      --accent-color: #c38d9e;
+      --text-color: #41444b;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --dark-accent: #41444b;
+      --light-accent: #f2f3f4;
+      --border-radius: 8px;
+      --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      --content-shadow: 0 6px 12px rgba(226, 125, 96, 0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--light-bg); color: var(--text-color); line-height: 1.6; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    header { background-color: var(--white); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08); position: sticky; top: 0; z-index: 1000; }
+    .header-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+    .logo { display: flex; align-items: center; }
+    .logo img { height: 40px; margin-right: 10px; }
+    .logo h1 { color: var(--primary-color); font-size: 24px; font-weight: 600; }
+    nav { display: flex; margin-left: 40px; }
+    .nav-links { display: flex; list-style: none; gap: 25px; }
+    .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; transition: color 0.3s; font-size: 15px; }
+    .nav-links a:hover { color: var(--primary-color); }
+    .auth-buttons { display: flex; gap: 10px; }
+    .btn { padding: 10px 22px; border-radius: var(--border-radius); font-weight: 500; cursor: pointer; transition: all 0.3s; text-decoration: none; text-align: center; font-size: 14px; }
+    .btn-outline { border: 2px solid var(--primary-color); color: var(--primary-color); background: transparent; }
+    .btn-outline:hover { background-color: var(--primary-color); color: var(--white); transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: var(--white); border: none; box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3); }
+    .btn-primary:hover { box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4); transform: translateY(-2px); }
+    .hero { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); padding: 60px 0; color: white; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%); }
+    .hero-content { position: relative; z-index: 1; }
+    .hero h1 { font-size: 36px; margin-bottom: 15px; font-weight: 700; }
+    .hero p { font-size: 18px; max-width: 800px; margin: 0 auto; opacity: 0.9; }
+    .progress-tracker { display: flex; justify-content: center; gap: 20px; margin: 30px 0 0 0; }
+    .progress-step { background: var(--light-accent); color: var(--primary-dark); padding: 10px 24px; border-radius: var(--border-radius); font-weight: 600; font-size: 16px; box-shadow: var(--box-shadow); }
+    .progress-step.active { background: var(--primary-color); color: var(--white); }
+    .case-generator { padding: 60px 0; }
+    .generator-container { background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 40px; margin-top: -80px; position: relative; z-index: 10; }
+    .generator-heading { text-align: center; margin-bottom: 40px; }
+    .generator-heading h2 { font-size: 30px; color: var(--primary-dark); margin-bottom: 10px; font-weight: 700; }
+    .generator-heading p { color: #666; font-size: 16px; }
+    .form-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+    .form-section:last-child { border-bottom: none; }
+    .form-section h3 { font-size: 20px; margin-bottom: 20px; color: var(--primary-dark); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color); }
+    .optional-label { color: #999; font-size: 14px; font-weight: normal; }
+    .form-group input[type="text"], .form-group input[type="url"], .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--border-radius); font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s; }
+    .form-group input[type="text"]:focus, .form-group input[type="url"]:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(226, 125, 96, 0.1); outline: none; }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .generation-mode { background-color: var(--light-accent); padding: 20px; border-radius: var(--border-radius); margin-bottom: 20px; }
+    .generation-mode label { display: flex; align-items: center; font-weight: 500; margin-bottom: 10px; }
+    .generation-mode input[type="checkbox"] { margin-right: 10px; width: 18px; height: 18px; }
+    .generation-mode p { color: #666; font-size: 14px; margin-left: 28px; }
+    .topics-checkboxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; padding: 15px; background-color: var(--light-accent); border-radius: var(--border-radius); }
+    .topics-checkboxes label { display: flex; align-items: center; font-weight: normal; font-size: 14px; }
+    .topics-checkboxes input[type="checkbox"] { margin-right: 8px; }
+    .form-footer { margin-top: 30px; text-align: center; }
+    .generate-btn { padding: 15px 40px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; border: none; border-radius: var(--border-radius); font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3); }
+    .generate-btn:hover { box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4); transform: translateY(-2px); }
+    .hidden { display: none !important; }
+    .error-message { color: #e74c3c; font-size: 14px; margin-top: 10px; display: none; }
+    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .topics-checkboxes { grid-template-columns: 1fr 1fr; } .generator-container { padding: 30px 20px; } .hero { padding: 40px 0; } .hero h1 { font-size: 28px; } .hero p { font-size: 16px; } }
+    @media (max-width: 576px) { .topics-checkboxes { grid-template-columns: 1fr; } }
+    footer { background-color: var(--dark-accent); color: var(--white); padding: 30px 0; font-size: 14px; margin-top: 60px; }
+    .footer-container { display: flex; justify-content: space-between; align-items: center; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--white); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--primary-light); }
   </style>
 </head>
 <body>
@@ -39,6 +113,11 @@
     <div class="container hero-content">
       <h1>AI-Powered Case Generator</h1>
       <p>Create industry-relevant cases for students with AI assistance. Choose to generate a full case scope or explore case ideas based on topics.</p>
+      <div class="progress-tracker">
+        <div class="progress-step active">1. Enter Details</div>
+        <div class="progress-step">2. Generate Results</div>
+        <div class="progress-step">3. Implement</div>
+      </div>
     </div>
   </section>
 
@@ -101,11 +180,12 @@
             </div>
           </div>
 
-          <div class="form-section hidden" id="topics-group">
+          <div class="form-section" id="topics-group">
             <h3>Case Topics</h3>
             <div class="form-group">
               <%= f.label :topics, 'Select Topics' %> <span class="optional-label">(select at least one)</span>
               <div class="topics-checkboxes">
+                <!-- All topic checkboxes remain unchanged -->
                 <label><input type="checkbox" name="topics[]" value="technology-commercialization"> Technology Commercialization</label>
                 <label><input type="checkbox" name="topics[]" value="innovation"> Innovation</label>
                 <label><input type="checkbox" name="topics[]" value="training-development"> Training & Development</label>
@@ -178,63 +258,51 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // DOM Elements
       const modeCheckbox = document.getElementById('mode-checkbox');
       const backgroundGroup = document.getElementById('background-group');
-      const topicsGroup = document.getElementById('topics-group');
       const generateButton = document.getElementById('generate-btn');
       const form = document.getElementById('case-form');
       const topicsError = document.getElementById('topics-error');
 
-      // Debugging: Check if elements are found
-      console.log('Mode Checkbox:', modeCheckbox);
-      console.log('Background Group:', backgroundGroup);
-      console.log('Topics Group:', topicsGroup);
-      console.log('Generate Button:', generateButton);
-      console.log('Form:', form);
-
-      // Ensure all elements exist
-      if (!modeCheckbox || !backgroundGroup || !topicsGroup || !generateButton || !form || !topicsError) {
+      if (!modeCheckbox || !backgroundGroup || !generateButton || !form || !topicsError) {
         console.error('One or more DOM elements not found.');
         return;
       }
 
-      // Function to toggle visibility of sections
       function toggleFormSections() {
         const isIdeasMode = modeCheckbox.checked;
-        console.log('Ideas Mode:', isIdeasMode);
-
         if (isIdeasMode) {
           backgroundGroup.classList.add('hidden');
-          topicsGroup.classList.remove('hidden');
-          generateButton.value = 'Generate Case Ideas';
-          // Remove required attribute from goal statement field in ideas mode
+          if (generateButton.tagName === 'INPUT') {
+            generateButton.value = 'Generate Case Ideas';
+          } else {
+            generateButton.textContent = 'Generate Case Ideas';
+          }
           const goalField = document.querySelector('textarea[name="background"]');
           if (goalField) goalField.removeAttribute('required');
         } else {
           backgroundGroup.classList.remove('hidden');
-          topicsGroup.classList.add('hidden');
-          generateButton.value = 'Generate Case Scope';
-          // Restore required attribute for goal statement field in scope mode
+          if (generateButton.tagName === 'INPUT') {
+            generateButton.value = 'Generate Case Scope';
+          } else {
+            generateButton.textContent = 'Generate Case Scope';
+          }
           const goalField = document.querySelector('textarea[name="background"]');
           if (goalField) goalField.setAttribute('required', '');
         }
+        // Topics section is always visible now!
       }
 
-      // Set initial state
       toggleFormSections();
-
-      // Add event listener for checkbox changes
       modeCheckbox.addEventListener('change', toggleFormSections);
 
-      // Form submission validation for topics
       form.addEventListener('submit', function(event) {
         if (modeCheckbox.checked) {
           const selectedTopics = document.querySelectorAll('input[name="topics[]"]:checked');
           if (selectedTopics.length === 0) {
             event.preventDefault();
             topicsError.style.display = 'block';
-            topicsGroup.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('topics-group').scrollIntoView({ behavior: 'smooth' });
           } else {
             topicsError.style.display = 'none';
           }

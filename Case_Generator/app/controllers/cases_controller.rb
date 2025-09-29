@@ -88,14 +88,19 @@ class CasesController < ApplicationController
       - Brief Background and Objective
       - Key Action Items (bulleted list)
       - Ways to Measure Success (bulleted list)
-      Format the response as a numbered list.
+      Format the response as a numbered list. Ensure the ideas are relevant and actionable. 
+      Avoid generic or overly broad suggestions. Make sure the ideas are distinct from each other.
+      Everything must be original content, do not copy from the website. All tasks must be realistic and achievable for a student.
+      All tasks must be able to be completed asynchronously, without requiring in-person interaction.
+      Key Action Items should be specific and practical for a student. Primarily research and analysis based.
+      Make the ideas engaging and an adventure of learning experiences.
     PROMPT
 
     response = client.chat(
       parameters: {
         model: "gpt-4o-mini",
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 500,
+        max_tokens: 800,
         temperature: 0.8
       }
     )
@@ -108,11 +113,16 @@ class CasesController < ApplicationController
   # Generates a detailed case scope using the OpenAI API based on a website URL and objective/idea.
   def generate_case_scope(client, url, objective)
     prompt = <<~PROMPT
-      Given the company website: #{url}, and their objective: "#{objective}", generate a full Case Generator scope with the following structure:
+      Given the company website: #{url}, and their objective: "#{objective}", make the case and engaging and meaningful for students.
+      make sure the case is relevant to the company's context and the provided objective. Avoid generic or overly broad suggestions.
+      Ensure the case scope is detailed and actionable. Make the scope engaging and thought-provoking to promote student interest.
+      Everything must be original content, do not copy from the website. All tasks must be realistic and achievable for a student.
+      All tasks must be able to be completed asynchronously, without requiring in-person interaction.
+      generate a full Case Generator scope with the following structure:
 
       Case Title
 
-      Background and Objective (150–200 words)
+      Background and Objective [400-500 words] (give robust context, detail case setting, and clearly define the objective and challenge)
 
       Key Action Items (bulleted list)
 
@@ -125,7 +135,7 @@ class CasesController < ApplicationController
       parameters: {
         model: "gpt-4o-mini",
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 1000,
+        max_tokens: 1500,
         temperature: 0.7
       }
     )

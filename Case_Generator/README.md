@@ -1,6 +1,8 @@
-# CapSource AI Project Generator
+# CapSource AI Case Generator 1.0
 
-A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized student projects and full project scopes based on a company website, background goals, or topic selections.
+Last Edited 9/22/2025 - Ryan Cleary 
+
+A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized student cases and full case scopes based on a company website, background goals, or topic selections.
 
 ---
 
@@ -26,8 +28,8 @@ A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized stu
 
 ## Features
 
-- **Project Ideas**: AI-powered generation of 3–5 project ideas based on selected topics.  
-- **Project Scope**: Full, structured project outline (title, challenge, milestones, resources).  
+- **Case Ideas**: AI-powered generation of 3–5 case ideas based on selected topics.  
+- **Case Scope**: Full, structured case outline (title, background/objective, milestones, resources).  
 - **Dynamic Forms**: Toggle between scope and ideas modes with live form updates.  
 - **Clean UI**: Responsive, modern CSS design using Propshaft & Importmap.  
 - **CORS Enabled**: Rack-CORS allows cross-origin requests for headless front-ends.
@@ -61,8 +63,8 @@ A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized stu
 ### Clone & Install
 
 ```bash
-git clone https://github.com/your_org/capsource-generator.git
-cd capsource-generator
+git clone https://github.com/your_org/capsource-case-generator.git
+cd capsource-case-generator
 bundle install
 ```
 
@@ -110,9 +112,9 @@ http://localhost:3000
 .
 ├── app/
 │   ├── controllers/
-│   │   └── projects_controller.rb     # core form handling & OpenAI calls
+│   │   └── cases_controller.rb        # core form handling & OpenAI calls
 │   ├── views/
-│   │   └── projects/
+│   │   └── cases/
 │   │       ├── index.html.erb         # form + topic checkboxes + toggle JS
 │   │       └── result.html.erb        # results view with dynamic rendering
 │   └── assets/                        # propshaft-managed CSS & JS
@@ -133,9 +135,9 @@ http://localhost:3000
 
 | Verb | Path                        | Controller#Action               | Purpose                           |
 |------|-----------------------------|---------------------------------|-----------------------------------|
-| GET  | `/`                         | `projects#index`                | Show generator form               |
-| POST | `/generate_project`         | `projects#generate_project`     | Generate ideas or full scope      |
-| POST | `/generate_scope_from_idea` | `projects#generate_scope_from_idea` | Build full scope from selected idea |
+| GET  | `/`                         | `cases#index`                   | Show generator form               |
+| POST | `/generate_case`            | `cases#generate_case`           | Generate ideas or full scope      |
+| POST | `/generate_scope_from_idea` | `cases#generate_scope_from_idea`| Build full scope from selected idea |
 
 ---
 
@@ -156,10 +158,10 @@ response = client.chat(
 )
 ```
 
-Helper methods live in `ProjectsController`:
+Helper methods live in `CasesController`:
 
-- `generate_project_ideas`  
-- `generate_project_scope`  
+- `generate_case_ideas`  
+- `generate_case_scope`  
 
 ---
 
@@ -196,8 +198,3 @@ Recommend adding:
 Please follow the existing code style, file naming conventions, and add tests for new behavior.
 
 ---
-
-## License
-
-[MIT License](LICENSE)
-
