@@ -7,33 +7,16 @@ class PlansController < ApplicationController
   # POST /generate_mentorship_plan
   # Generates a mentorship plan based on user inputs (no website required).
   def generate_mentorship_plan
-    mentee_goal = params[:mentee_goal]
-    mentee_background = params[:mentee_background]
-    mentee_interests = params[:mentee_interests] || []
-    mentor_industry = params[:mentor_industry]
-    mentor_expertise = params[:mentor_expertise] || []
-    mentor_style = params[:mentor_style]
-    relationship_duration = params[:relationship_duration]
-    session_frequency = params[:session_frequency]
+  # New simplified flow: accept only a single goal statement
+  goal_statement = params[:mentee_goal]
 
-    if mentee_goal.blank? || mentee_background.blank? || mentee_interests.empty? || mentor_industry.blank? || mentor_expertise.empty? || mentor_style.blank? || relationship_duration.blank? || session_frequency.blank?
-      flash.now[:alert] = "Please fill in all mentorship plan fields."
+    if goal_statement.blank?
+      flash.now[:alert] = "Please provide a goal statement for the mentorship plan."
       return render :index
     end
 
     client = OpenAI::Client.new(api_key: ENV.fetch("OPENAI_API_KEY"))
-    @mentorship_plan = generate_mentorship_plan_content(
-      client,
-      mentee_goal,
-      mentee_background,
-      mentee_interests,
-      mentor_industry,
-      mentor_expertise,
-      mentor_style,
-      relationship_duration,
-      session_frequency
-    )
-    @mode = "mentorship_plan"
+    @mentorship_plan = generate_mentorship_plan_content_from_goal(client, goal_statement)
 
     if @mentorship_plan.present?
       render :result
@@ -46,36 +29,16 @@ class PlansController < ApplicationController
   # POST /generate_mentorship_plan_from_idea
   # Generates a mentorship plan based on a user-provided theme/idea and mentorship plan fields (no website required).
   def generate_mentorship_plan_from_idea
-    idea = params[:case_idea]
-    @mode = "mentorship_plan"
+  # Treat the provided idea as a goal statement and reuse the simplified flow
+  idea = params[:case_idea]
 
-    mentee_goal = params[:mentee_goal]
-    mentee_background = params[:mentee_background]
-    mentee_interests = params[:mentee_interests] || []
-    mentor_industry = params[:mentor_industry]
-    mentor_expertise = params[:mentor_expertise] || []
-    mentor_style = params[:mentor_style]
-    relationship_duration = params[:relationship_duration]
-    session_frequency = params[:session_frequency]
-
-    if idea.blank? || mentee_goal.blank? || mentee_background.blank? || mentee_interests.empty? || mentor_industry.blank? || mentor_expertise.empty? || mentor_style.blank? || relationship_duration.blank? || session_frequency.blank?
-      flash.now[:alert] = "Please fill in all mentorship plan fields and provide a theme or idea."
+    if idea.blank?
+      flash.now[:alert] = "Please provide a theme or goal statement."
       return render :index
     end
 
     client = OpenAI::Client.new(api_key: ENV.fetch("OPENAI_API_KEY"))
-    @mentorship_plan = generate_mentorship_plan_content(
-      client,
-      mentee_goal,
-      mentee_background,
-      mentee_interests,
-      mentor_industry,
-      mentor_expertise,
-      mentor_style,
-      relationship_duration,
-      session_frequency,
-      idea
-    )
+    @mentorship_plan = generate_mentorship_plan_content_from_goal(client, idea)
 
     if @mentorship_plan.present?
       render :result
@@ -88,30 +51,23 @@ class PlansController < ApplicationController
   private
 
   # Generates a detailed mentorship plan using the OpenAI API based on all provided fields (no website context).
-  def generate_mentorship_plan_content(client, mentee_goal, mentee_background, mentee_interests, mentor_industry, mentor_expertise, mentor_style, relationship_duration, session_frequency, idea=nil)
+  def generate_mentorship_plan_content_from_goal(client, goal_statement)
+    # Improved prompt: infer appropriate duration and session frequency from the goal (default 6 weeks, weekly)
     prompt = <<~PROMPT
-      Mentorship Plan Context:
+      Mentorship Plan Goal: "#{goal_statement}"
 
-      Mentee Goal: #{mentee_goal}
-      Mentee Background: #{mentee_background}
-      Mentee Interest Topics: #{mentee_interests.join(', ')}
+      Context and requirements:
+      - Infer an appropriate mentorship duration and session frequency from the goal. If unsure, default to a 6 meeting program, no more than 8 meetings.
+      - Provide a clear Pre-Meeting Assignment that sets expectations, defines short-term and long-term goals, and includes preparatory work for the mentee.
+      - Divide the plan into meetings. For each meeting provide tailored conversation starters / guiding questions, a suggested deliverable, this may include getting exposure for upcoming meetings or applying what was discussed previously.
+      - Use an amount of conversation starters/questions that seems appropriate for each meeting and across the plan — do not exceed a total of 6 questions each meeting.
+      - Ensure the mentor can leverage domain expertise to guide tasks. Pre-meeting assignments should be brief, experiential, thought-provoking, and produce artifacts that demonstrate progress.
+      - After each meeting, suggest a deliverable that captures key takeaways and evidence of learning (e.g., an updated resume, a LinkedIn message, a mock interview recording, a one-page reflection).
+      - Avoid generic advice. Personalize suggestions to common career-development, skill, or personal growth contexts (internships, career transitions, experiences).
+      - Format the response with headings: Plan Title (short), Pre-Meeting Assignment, Meeting 1..N, Questions, Deliverable), a short Summary, and resource links if applicable.
+      - Keep the Pre-Meeting Assignment should be an interesting learning experience that is concise and asynchronous-friendly.
 
-      Mentor Industry/Role: #{mentor_industry}
-      Mentor Areas of Expertise: #{mentor_expertise.join(', ')}
-      Mentor Preferred Mentorship Style: #{mentor_style}
-
-      Relationship Duration: #{relationship_duration}
-      Session Frequency: #{session_frequency}
-
-      #{idea.present? ? "Mentorship Theme or Focus: #{idea}" : ""}
-
-      Generate a detailed Mentorship Plan for this pairing. The plan should include:
-      1. Pre-Meeting Assignment: Define expectations, set goals, include a short reflection prompt about the topic, and prepare the student for their first discussion with the mentor.
-      2. Meeting Schedule: List the number of meetings (based on duration/frequency), and for each meeting, provide 4–6 conversation starters or guiding questions tailored to the mentee's goal, background, and interests, and the mentor's expertise and style.
-      3. For each meeting, suggest a small action item or reflection for the mentee to complete before the next session.
-      4. Make the plan actionable, engaging, and personalized. Avoid generic advice. Ensure the plan is realistic for the given duration and frequency.
-      5. Format the response clearly with headings for each section.
-      6. Everything must be original content.
+      Generate the mentorship plan now.
     PROMPT
 
     response = client.chat(

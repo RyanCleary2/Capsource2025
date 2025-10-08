@@ -137,81 +137,10 @@
           <% end %>
 
           <div class="form-section">
-            <h3>Mentee Information</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <%= f.label :mentee_goal, 'Mentee Goal' %>
-                <%= f.text_field :mentee_goal, placeholder: 'e.g., Find an internship, transition into data science', required: true %>
-              </div>
-              <div class="form-group">
-                <%= f.label :mentee_background, 'Current Skill Level / Background' %>
-                <%= f.select :mentee_background, [['Select background', ''], 'Student', 'Early Career', 'Mid-Career', 'Other'], required: true %>
-              </div>
-            </div>
+            <h3>Mentorship Goal</h3>
             <div class="form-group">
-              <%= f.label :mentee_interests, 'Interest Topics' %> <span class="optional-label">(select at least one)</span>
-              <div class="topics-checkboxes">
-                <label><input type="checkbox" name="mentee_interests[]" value="Achieving Work Life Balance"> Achieving Work Life Balance</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Cover Letter Review"> Cover Letter Review</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Crushing Job Interviews"> Crushing Job Interviews</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Exploring Majors & Careers"> Exploring Majors & Careers</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Goal Setting"> Goal Setting</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Industry Insights"> Industry Insights</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Industry-related Tools & Techniques"> Industry-related Tools & Techniques</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Job Role Insights"> Job Role Insights</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Maximizing the College Experience"> Maximizing the College Experience</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Negotiating Salary & Benefits"> Negotiating Salary & Benefits</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Personal Branding"> Personal Branding</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Professional Communication"> Professional Communication</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Public Speaking"> Public Speaking</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Relocating for Work"> Relocating for Work</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="Resume Review"> Resume Review</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="The Job Search"> The Job Search</label>
-                <label><input type="checkbox" name="mentee_interests[]" value="The Post-Covid Workplace"> The Post-Covid Workplace</label>
-              </div>
-              <div class="error-message" id="mentee-interests-error">Please select at least one interest topic</div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <h3>Mentor Information</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <%= f.label :mentor_industry, 'Industry / Role' %>
-                <%= f.text_field :mentor_industry, placeholder: 'e.g., Software Engineer in Fintech, HR Manager', required: true %>
-              </div>
-              <div class="form-group">
-                <%= f.label :mentor_style, 'Preferred Mentorship Style' %>
-                <%= f.select :mentor_style, [['Select style', ''], 'Structured Sessions', 'Casual Guidance', 'Project-Based', 'Other'], required: true %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= f.label :mentor_expertise, 'Areas of Expertise' %> <span class="optional-label">(select at least one)</span>
-              <div class="topics-checkboxes">
-                <label><input type="checkbox" name="mentor_expertise[]" value="Machine Learning"> Machine Learning</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Career Coaching"> Career Coaching</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Entrepreneurship"> Entrepreneurship</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Leadership"> Leadership</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Industry Knowledge"> Industry Knowledge</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Technical Skills"> Technical Skills</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Networking"> Networking</label>
-                <label><input type="checkbox" name="mentor_expertise[]" value="Other"> Other</label>
-              </div>
-              <div class="error-message" id="mentor-expertise-error">Please select at least one area of expertise</div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <h3>Relationship Context</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <%= f.label :relationship_duration, 'Duration' %>
-                <%= f.text_field :relationship_duration, placeholder: 'e.g., 6 weeks', required: true %>
-              </div>
-              <div class="form-group">
-                <%= f.label :session_frequency, 'Session Frequency' %>
-                <%= f.select :session_frequency, [['Select frequency', ''], 'Weekly', 'Biweekly', 'Monthly', 'Other'], required: true %>
-              </div>
+              <%= f.label :mentee_goal, 'Goal Statement' %>
+              <%= f.text_area :mentee_goal, placeholder: 'Describe the mentee goal (e.g., "Find an internship in software engineering")', required: true %>
             </div>
           </div>
 
@@ -234,38 +163,6 @@
     </div>
   </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const mentorshipForm = document.getElementById('mentorship-form');
-      const menteeInterestsError = document.getElementById('mentee-interests-error');
-      const mentorExpertiseError = document.getElementById('mentor-expertise-error');
-
-      mentorshipForm.addEventListener('submit', function(event) {
-        let valid = true;
-        const menteeInterests = document.querySelectorAll('input[name="mentee_interests[]"]:checked');
-        const mentorExpertise = document.querySelectorAll('input[name="mentor_expertise[]"]:checked');
-
-        if (menteeInterests.length === 0) {
-          menteeInterestsError.style.display = 'block';
-          document.querySelector('input[name="mentee_interests[]"]').scrollIntoView({ behavior: 'smooth' });
-          valid = false;
-        } else {
-          menteeInterestsError.style.display = 'none';
-        }
-
-        if (mentorExpertise.length === 0) {
-          mentorExpertiseError.style.display = 'block';
-          document.querySelector('input[name="mentor_expertise[]"]').scrollIntoView({ behavior: 'smooth' });
-          valid = false;
-        } else {
-          mentorExpertiseError.style.display = 'none';
-        }
-
-        if (!valid) {
-          event.preventDefault();
-        }
-      });
-    });
-  </script>
+  <!-- No client-side validation required for single goal input -->
 </body>
 </html>
