@@ -47,19 +47,20 @@ class SkillDataService
     end
 
     def categories
-      @categories ||= [
-        { id: 'programming', name: 'Programming Languages' },
-        { id: 'data-analytics', name: 'Data & Analytics' },
-        { id: 'engineering', name: 'Engineering & CAD' },
-        { id: 'web-dev', name: 'Web Development' },
-        { id: 'devops', name: 'DevOps & Tools' },
-        { id: 'business', name: 'Business Strategy' },
-        { id: 'marketing', name: 'Marketing & Sales' },
-        { id: 'communication', name: 'Communication & Soft Skills' },
-        { id: 'project-mgmt', name: 'Project Management' },
-        { id: 'research', name: 'Research & Analysis' },
-        { id: 'other', name: 'Other' }
-      ]
+      @categories ||= begin
+        # Extract unique categories from loaded skills
+        unique_categories = all_skills.map { |s| s[:parent_category] }.compact.uniq.sort
+
+        # Convert to hash format with id and name
+        categories_list = unique_categories.map do |cat|
+          { id: normalize_category(cat), name: cat }
+        end
+
+        # Add 'other' category for skills without a parent category
+        categories_list << { id: 'other', name: 'Other' } unless categories_list.any? { |c| c[:id] == 'other' }
+
+        categories_list.sort_by { |c| c[:name] }
+      end
     end
 
     def skill_levels
@@ -213,7 +214,7 @@ class SkillDataService
     end
 
     def load_and_process_skills
-      csv_file = Rails.root.join('skillDatabase.csv')
+      csv_file = Rails.root.join('skills_categorized.csv')
       skills = []
       row_counter = 0
 
@@ -230,11 +231,16 @@ class SkillDataService
         csv_id = row['Id']&.strip&.to_i
         skill_id = (csv_id && csv_id > 0) ? csv_id : row_counter
 
+        # Use Parent category from CSV if available, otherwise auto-categorize
+        parent_category = row['Parent category']&.strip
+        category = parent_category.present? ? normalize_category(parent_category) : categorize_skill(skill_name)
+
         skill = {
           id: skill_id,
           name: skill_name,
           description: generate_description(skill_name),
-          category: categorize_skill(skill_name),
+          category: category,
+          parent_category: parent_category,
           skill_level: determine_skill_level(skill_name),
           domain: extract_domain(skill_name),
           partner: row['Partner'],
@@ -322,6 +328,17 @@ class SkillDataService
       rescue
         Time.current
       end
+    end
+
+    def normalize_category(category_name)
+      return 'other' if category_name.blank?
+
+      # Convert category name to a URL-friendly ID
+      category_name.downcase
+        .gsub(/\s+/, '-')
+        .gsub(/[^a-z0-9\-]/, '')
+        .gsub(/-+/, '-')
+        .gsub(/^-|-$/, '')
     end
   end
 end

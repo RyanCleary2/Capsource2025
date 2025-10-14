@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Rails
+SkillOrganizer/log/*.log
+SkillOrganizer/tmp/
+SkillOrganizer/tmp/pids/
+SkillOrganizer/tmp/cache/
+SkillOrganizer/tmp/sockets/
+
+# Environment variables
+.env
+.env.local

@@ -7,14 +7,15 @@ Ruby on Rails application for managing and organizing CapSource's skills databas
 ## Key Features
 
 ### 🎯 Smart Organization
-- **Auto-categorization**: 11 intelligent categories (Programming, Data Analytics, Engineering & CAD, etc.)
+- **Auto-categorization**: 124 intelligent categories (Programming Languages, Data Analytics, Engineering & CAD, AI and Machine Learning, etc.)
 - **Skill Progression Roadmaps**: Interactive pathways showing prerequisites, next steps, and related skills
 - **Duplicate Detection**: Automatic identification and merge suggestions
 - **Hierarchical Structure**: Parent-child relationships and skill levels (Beginner/Intermediate/Advanced)
+- **Pre-categorized Skills**: All 650+ skills now categorized using `skills_categorized.csv`
 
 ### 🔍 Advanced Search & Filtering
 - Real-time search across 650+ skills
-- Multi-filter by category, level, domain, and partner
+- Multi-filter by category (124 categories), level, domain, and partner
 - Pagination and results summary
 - Tag-based skill grouping
 
@@ -27,8 +28,9 @@ Ruby on Rails application for managing and organizing CapSource's skills databas
 ### 📊 Data Quality Tools
 - Name normalization and validation
 - UTF-8 BOM handling for CSV imports
-- Duplicate detection with 651 skills loaded
+- Duplicate detection with 652 skills loaded
 - Similarity scoring for skill relationships
+- Pre-categorized skill taxonomy from `skills_categorized.csv`
 
 ## Quick Start
 
@@ -63,7 +65,7 @@ app/
 └── javascript/roadmap.js                  # Roadmap modal interactions
 
 config/routes.rb                            # Routes with roadmap endpoint
-skillDatabase.csv                           # 650+ skills (UTF-8 BOM)
+skills_categorized.csv                      # 652 skills with 124 categories (UTF-8 BOM)
 ```
 
 ## Core Functionality
@@ -81,7 +83,8 @@ Click "Roadmap" on any skill to see:
 
 ### Data Processing
 - **Normalization**: Strips quotes, validates length, titleizes names
-- **Categorization**: Keyword-based auto-assignment to 11 categories
+- **Categorization**: Pre-categorized with 124 parent categories from CSV (fallback: keyword-based auto-assignment)
+- **Category Mapping**: Parent categories mapped to URL-friendly IDs (e.g., "AI and Machine Learning" → "ai-and-machine-learning")
 - **Tag Generation**: Ecosystem tags (Python, Data Science, CAD Software, etc.)
 - **Duplicate Handling**: Case-insensitive name matching
 
@@ -111,7 +114,8 @@ bin/rails runner "puts 'Duplicates: ' + SkillDataService.duplicate_count.to_s"
 ## CSV Mode vs Database Mode
 
 **Current**: CSV mode (read-only, fast prototyping)
-- Skills loaded from `skillDatabase.csv` on boot
+- Skills loaded from `skills_categorized.csv` on boot with pre-defined categories
+- 124 unique parent categories automatically extracted from CSV
 - Create/Edit/Delete disabled (demo notices shown)
 - Cached in memory for performance
 
@@ -141,7 +145,7 @@ bin/rails runner "puts 'Duplicates: ' + SkillDataService.duplicate_count.to_s"
 - KPI: Track merge completions
 
 ### 2. Filter System
-- **Category**: 11 dropdowns (Programming, Engineering, etc.)
+- **Category**: 124 dropdowns (Programming Languages, AI and Machine Learning, Engineering & CAD, etc.)
 - **Level**: Beginner/Intermediate/Advanced
 - **Search**: Fuzzy name matching
 - **Active Filters**: Badge indicator + "Clear All" button
@@ -161,10 +165,15 @@ bin/rails runner "puts 'Duplicates: ' + SkillDataService.duplicate_count.to_s"
 
 ## Known Issues & Future Work
 
+### Recent Updates ✅
+- [x] All skills now categorized using `skills_categorized.csv`
+- [x] 124 unique categories dynamically loaded from CSV
+- [x] Category normalization to URL-friendly IDs
+
 ### Immediate
-- [ ] Partner column empty (populate from CSV or manual entry)
+- [ ] Partner column mostly empty (populate from CSV or manual entry)
 - [ ] Level filtering underutilized (add level badges to table)
-- [ ] Some misfits in "Engineering & CAD" (e.g., "Brand Identity Design")
+- [ ] Review category assignments for quality and consistency
 
 ### Phase 2
 - [ ] AI-powered categorization refinement
@@ -183,7 +192,8 @@ bin/rails runner "puts 'Duplicates: ' + SkillDataService.duplicate_count.to_s"
 
 ## Performance
 
-- **Load Time**: 651 skills in <1s (cached)
+- **Load Time**: 652 skills in <1s (cached)
+- **Categories**: 124 unique categories dynamically extracted
 - **Search**: <100ms response (in-memory filtering)
 - **Roadmap**: Lazy-loaded via AJAX (~200ms)
 
@@ -193,6 +203,6 @@ Proprietary software for CapSource ecosystem.
 
 ---
 
-**Version**: 1.1.0
-**Last Updated**: September 2025
-**Features**: Progression Roadmaps, Duplicate Detection, Advanced Filtering
+**Version**: 1.2.0
+**Last Updated**: October 2025
+**Features**: Pre-Categorized Skills (124 Categories), Progression Roadmaps, Duplicate Detection, Advanced Filtering
