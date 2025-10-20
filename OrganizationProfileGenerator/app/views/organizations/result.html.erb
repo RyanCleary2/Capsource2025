@@ -1,0 +1,413 @@
+<%= form_with url: update_profile_path, method: :patch, local: true, multipart: true, class: "space-y-6", id: "profile-form" do |form| %>
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Editable Notice -->
+  <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 px-4 py-3 rounded mb-6" role="alert">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span class="font-medium">This profile is fully editable. Review the information and make any corrections before saving.</span>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if notice %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
+      <span class="block sm:inline"><%= notice %></span>
+    </div>
+  <% end %>
+
+  <% if alert %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+      <span class="block sm:inline"><%= alert %></span>
+    </div>
+  <% end %>
+
+  <!-- Breadcrumb Navigation -->
+  <div class="flex items-center space-x-2 text-sm text-gray-600 mb-8">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+    <span class="text-capsource-orange">Organizations</span>
+    <span>></span>
+    <span><%= @organization_type == 'company' ? 'Company' : 'University' %> Profile</span>
+  </div>
+
+  <!-- Banner Section -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+    <div class="h-48 bg-gradient-to-r from-red-800 to-red-600 flex items-center justify-center relative">
+      <% if @profile_data["bannerUrl"].present? %>
+        <img src="<%= @profile_data["bannerUrl"] %>" alt="<%= @profile_data["name"] %> Banner" class="w-full h-full object-cover" loading="lazy">
+      <% end %>
+
+      <!-- Banner Upload (hidden in display mode) -->
+      <div class="edit-field hidden absolute top-4 right-4 bg-white rounded-lg p-2">
+        <%= form.file_field "banner_image", accept: "image/*", class: "text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div class="flex items-start justify-between mb-6">
+        <div class="flex items-start space-x-6">
+          <!-- Logo -->
+          <div class="flex-shrink-0 relative -mt-20">
+            <div class="w-32 h-32 bg-white border-4 border-white rounded-lg flex items-center justify-center overflow-hidden shadow-lg">
+              <% if @profile_data["logoUrl"].present? %>
+                <img src="<%= @profile_data["logoUrl"] %>" alt="<%= @profile_data["name"] %> Logo" class="w-full h-full object-contain p-2" loading="lazy">
+              <% else %>
+                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+              <% end %>
+            </div>
+
+            <!-- Logo Upload (hidden in display mode) -->
+            <div class="edit-field hidden mt-3">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Logo</label>
+              <%= form.file_field "logo_image", accept: "image/*", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+            </div>
+          </div>
+
+          <!-- Name and Basic Info -->
+          <div class="flex-grow pt-12">
+            <!-- Display Mode -->
+            <div class="display-field">
+              <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @profile_data["name"] %></h1>
+              <% if @profile_data["tagline"].present? %>
+                <p class="text-lg text-capsource-mauve italic mb-2"><%= @profile_data["tagline"] %></p>
+              <% end %>
+            </div>
+
+            <!-- Edit Mode -->
+            <div class="edit-field hidden mb-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <%= form.text_field "name", value: @profile_data["name"], class: "text-3xl font-bold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-capsource-orange focus:ring-0 p-1 w-full mb-2" %>
+
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+              <%= form.text_field "tagline", value: @profile_data["tagline"], class: "text-lg text-capsource-mauve bg-transparent border-0 border-b-2 border-gray-300 focus:border-capsource-orange focus:ring-0 p-1 w-full" %>
+            </div>
+
+            <div class="flex items-center space-x-3 mt-4">
+              <% if @profile_data["website"].present? %>
+                <a href="<%= @profile_data["website"] %>" target="_blank" class="text-capsource-orange hover:underline flex items-center">
+                  <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                  </svg>
+                  Website
+                </a>
+              <% end %>
+            </div>
+
+            <!-- Edit Controls -->
+            <div class="flex space-x-3 mt-4">
+              <button type="button" id="edit-btn" class="hidden bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-2 text-sm">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                Edit Profile
+              </button>
+              <button type="button" id="save-btn" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 text-sm">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Save Changes
+              </button>
+              <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-2 text-sm">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">About</h2>
+    <div class="display-field">
+      <p class="text-gray-700 leading-relaxed"><%= @profile_data["description"] %></p>
+    </div>
+    <div class="edit-field hidden">
+      <%= form.text_area "description", value: @profile_data["description"], rows: 4, class: "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent" %>
+    </div>
+  </div>
+
+  <!-- Development Interests -->
+  <% if @profile_data["developmentInterests"]&.any? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Development Interests</h2>
+      <div class="flex flex-wrap gap-3">
+        <% @profile_data["developmentInterests"].each do |interest| %>
+          <span class="px-4 py-2 border-2 border-capsource-orange text-capsource-dark rounded-full text-sm font-medium hover:bg-capsource-orange hover:text-white transition-colors cursor-pointer">
+            <%= interest %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Area of Expertise -->
+  <% if @profile_data["areasOfExpertise"]&.any? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Area of Expertise</h2>
+      <div class="flex flex-wrap gap-3">
+        <% @profile_data["areasOfExpertise"].each do |expertise| %>
+          <span class="px-4 py-2 bg-capsource-purple text-white rounded-full text-sm font-medium hover:bg-opacity-80 transition-colors">
+            <%= expertise %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Skills & Expertise -->
+  <% if @profile_data["skills"]&.any? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Skills & Expertise</h2>
+      <div class="flex flex-wrap gap-3">
+        <% @profile_data["skills"].each do |skill| %>
+          <span class="px-4 py-2 bg-capsource-blue text-white rounded-lg text-sm font-medium hover:bg-opacity-90 transition-colors">
+            <%= skill %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Programs -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-900">Programs (<%= @profile_data["programs"]&.length || 0 %>)</h2>
+      <button type="button" class="bg-capsource-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+        + Add Program
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-capsource-dark text-white">
+          <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Title</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Organization</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Type</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Managers</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @profile_data["programs"]&.any? %>
+            <% @profile_data["programs"].each_with_index do |program, index| %>
+              <tr class="<%= index.even? ? 'bg-white' : 'bg-gray-50' %> border-b border-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-900"><%= program["title"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= program["organization"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= program["type"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= program["managers"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= program["endDate"] %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                No programs yet. Click "Add Program" to get started.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-900">Projects (<%= @profile_data["projects"]&.length || 0 %>)</h2>
+      <button type="button" class="bg-capsource-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+        + Add Project
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-capsource-dark text-white">
+          <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Title</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Organization</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Type</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Managers</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @profile_data["projects"]&.any? %>
+            <% @profile_data["projects"].each_with_index do |project, index| %>
+              <tr class="<%= index.even? ? 'bg-white' : 'bg-gray-50' %> border-b border-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-900"><%= project["title"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= project["organization"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= project["type"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= project["managers"] %></td>
+                <td class="px-4 py-3 text-sm text-gray-700"><%= project["endDate"] %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                No projects yet. Click "Add Project" to get started.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Social Media -->
+  <% if @profile_data["socialMedia"].present? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Social Media</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% @profile_data["socialMedia"].each do |platform, url| %>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1 capitalize"><%= platform %></label>
+            <div class="display-field">
+              <% if url.present? %>
+                <a href="<%= url %>" target="_blank" class="text-blue-600 hover:underline break-all"><%= url %></a>
+              <% else %>
+                <p class="text-gray-500">Not provided</p>
+              <% end %>
+            </div>
+            <div class="edit-field hidden">
+              <%= form.text_field "socialMedia[#{platform}]", value: url, class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Actions -->
+  <div class="text-center pt-8">
+    <%= link_to "← Generate Another Profile", root_path, class: "bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium inline-block" %>
+  </div>
+</div>
+<% end %>
+
+<script>
+(function() {
+  'use strict';
+
+  function initializeEditFunctionality() {
+    const editBtn = document.getElementById('edit-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const profileForm = document.getElementById('profile-form');
+
+    if (!editBtn) return;
+
+    let originalValues = {};
+
+    function storeOriginalValues() {
+      const inputs = document.querySelectorAll('.edit-field input, .edit-field textarea');
+      inputs.forEach(input => {
+        originalValues[input.name] = input.value;
+      });
+    }
+
+    function enterEditMode() {
+      storeOriginalValues();
+
+      document.querySelectorAll('.display-field').forEach(field => {
+        field.style.display = 'none';
+      });
+
+      document.querySelectorAll('.edit-field').forEach(field => {
+        field.style.display = 'block';
+        field.classList.remove('hidden');
+      });
+
+      editBtn.style.display = 'none';
+      if (saveBtn) {
+        saveBtn.style.display = 'inline-flex';
+        saveBtn.classList.remove('hidden');
+      }
+      if (cancelBtn) {
+        cancelBtn.style.display = 'inline-flex';
+        cancelBtn.classList.remove('hidden');
+      }
+    }
+
+    function exitEditMode() {
+      document.querySelectorAll('.display-field').forEach(field => {
+        field.style.display = 'block';
+      });
+
+      document.querySelectorAll('.edit-field').forEach(field => {
+        field.style.display = 'none';
+        field.classList.add('hidden');
+      });
+
+      editBtn.style.display = 'inline-flex';
+      if (saveBtn) {
+        saveBtn.style.display = 'none';
+        saveBtn.classList.add('hidden');
+      }
+      if (cancelBtn) {
+        cancelBtn.style.display = 'none';
+        cancelBtn.classList.add('hidden');
+      }
+    }
+
+    function restoreOriginalValues() {
+      const inputs = document.querySelectorAll('.edit-field input, .edit-field textarea');
+      inputs.forEach(input => {
+        if (originalValues[input.name] !== undefined) {
+          input.value = originalValues[input.name];
+        }
+      });
+    }
+
+    editBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      enterEditMode();
+    });
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        restoreOriginalValues();
+        exitEditMode();
+      });
+    }
+
+    if (saveBtn && profileForm) {
+      saveBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        profileForm.submit();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeEditFunctionality();
+      // Automatically enter edit mode on page load
+      setTimeout(function() {
+        const editBtn = document.getElementById('edit-btn');
+        if (editBtn) {
+          editBtn.click();
+        }
+      }, 100);
+    });
+  } else {
+    setTimeout(function() {
+      initializeEditFunctionality();
+      // Automatically enter edit mode on page load
+      setTimeout(function() {
+        const editBtn = document.getElementById('edit-btn');
+        if (editBtn) {
+          editBtn.click();
+        }
+      }, 100);
+    }, 100);
+  }
+})();
+</script>
