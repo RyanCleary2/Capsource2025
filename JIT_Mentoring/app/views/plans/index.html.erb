@@ -142,6 +142,10 @@
               <%= f.label :mentee_goal, 'Goal Statement' %>
               <%= f.text_area :mentee_goal, placeholder: 'Describe the mentee goal (e.g., "Find an internship in software engineering")', required: true %>
             </div>
+            <div class="form-group">
+              <%= f.label :number_of_meetings, 'Number of Meetings' %>
+              <%= f.select :number_of_meetings, (1..10).map { |i| [i, i] }, { selected: 5 }, { required: true } %>
+            </div>
           </div>
 
           <div class="form-footer">

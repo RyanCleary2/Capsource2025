@@ -253,6 +253,80 @@
       border-left: 4px solid var(--primary-color);
       font-size: 15px;
       box-shadow: var(--content-shadow);
+      position: relative;
+    }
+
+    .editable-content {
+      min-height: 200px;
+      outline: none;
+      padding: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .editable-content:focus {
+      background-color: #ffffff;
+      border-left: 4px solid var(--secondary-color);
+    }
+
+    .edit-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .edit-btn,
+    .save-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .edit-btn {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #6fb9b6;
+      transform: translateY(-2px);
+    }
+
+    .save-btn {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+      display: none;
+    }
+
+    .save-btn:hover {
+      box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .save-btn.active {
+      display: inline-block;
+    }
+
+    .edit-mode-indicator {
+      display: none;
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: var(--border-radius);
+      font-size: 13px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .edit-mode-indicator.active {
+      display: block;
     }
 
     .case-idea {
@@ -522,15 +596,26 @@
           </p>
         </div>
 
+        <div class="edit-mode-indicator" id="edit-indicator">
+          ✏️ Edit Mode Active - Click anywhere in the text below to make changes
+        </div>
+
         <div class="results-content">
           <% if @mentorship_plan.present? %>
-            <div class="case-scope">
+            <div class="case-scope editable-content" id="editable-plan" contenteditable="false">
               <%= format_case_text(@mentorship_plan) %>
             </div>
           <% else %>
             <p>No mentorship plan generated. Please try again.</p>
           <% end %>
         </div>
+
+        <% if @mentorship_plan.present? %>
+          <div class="edit-controls">
+            <button class="edit-btn" id="edit-btn">Enable Editing</button>
+            <button class="save-btn" id="save-btn">Save Changes</button>
+          </div>
+        <% end %>
 
         <div class="action-buttons">
           <%= link_to root_path, class: 'back-btn' do %>
@@ -562,5 +647,73 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const editBtn = document.getElementById('edit-btn');
+      const saveBtn = document.getElementById('save-btn');
+      const editableContent = document.getElementById('editable-plan');
+      const editIndicator = document.getElementById('edit-indicator');
+
+      if (!editBtn || !saveBtn || !editableContent) return;
+
+      let isEditing = false;
+      let originalContent = editableContent.innerHTML;
+
+      editBtn.addEventListener('click', function() {
+        isEditing = !isEditing;
+        
+        if (isEditing) {
+          editableContent.setAttribute('contenteditable', 'true');
+          editableContent.focus();
+          editBtn.textContent = 'Cancel Editing';
+          editBtn.style.backgroundColor = '#e74c3c';
+          saveBtn.classList.add('active');
+          editIndicator.classList.add('active');
+        } else {
+          editableContent.setAttribute('contenteditable', 'false');
+          editableContent.innerHTML = originalContent; // Restore original content
+          editBtn.textContent = 'Enable Editing';
+          editBtn.style.backgroundColor = '';
+          saveBtn.classList.remove('active');
+          editIndicator.classList.remove('active');
+        }
+      });
+
+      saveBtn.addEventListener('click', function() {
+        // Save the edited content
+        originalContent = editableContent.innerHTML;
+        
+        // Disable editing mode
+        editableContent.setAttribute('contenteditable', 'false');
+        isEditing = false;
+        editBtn.textContent = 'Enable Editing';
+        editBtn.style.backgroundColor = '';
+        saveBtn.classList.remove('active');
+        editIndicator.classList.remove('active');
+        
+        // Show success message
+        const successMsg = document.createElement('div');
+        successMsg.textContent = '✓ Changes saved successfully!';
+        successMsg.style.cssText = 'background-color: #2ecc71; color: white; padding: 12px 20px; border-radius: 8px; position: fixed; top: 80px; right: 20px; font-weight: 500; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 1001;';
+        document.body.appendChild(successMsg);
+        
+        setTimeout(function() {
+          successMsg.style.transition = 'opacity 0.3s';
+          successMsg.style.opacity = '0';
+          setTimeout(function() {
+            document.body.removeChild(successMsg);
+          }, 300);
+        }, 2000);
+      });
+
+      // Optional: Detect if content has been modified
+      editableContent.addEventListener('input', function() {
+        if (isEditing && editableContent.innerHTML !== originalContent) {
+          saveBtn.style.animation = 'pulse 1.5s infinite';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
