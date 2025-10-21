@@ -5,27 +5,29 @@ class ResumesController < ApplicationController
   def process_resume
     if params[:file].present? && params[:file].content_type == 'application/pdf'
       begin
-        # Save uploaded file temporarily
-        temp_file = Tempfile.new(['resume', '.pdf'])
-        temp_file.binmode
-        temp_file.write(params[:file].read)
-        temp_file.close
-
-        # Parse the PDF
-        parser = ResumeParser.new(temp_file.path)
-        profile_data = parser.parse_profile_data
-
-        # Store in Rails cache instead of session to avoid cookie overflow
+        # Generate cache key for this processing session
         cache_key = "profile_data_#{SecureRandom.hex(16)}"
-        Rails.cache.write(cache_key, profile_data, expires_in: 1.hour)
         session[:profile_cache_key] = cache_key
 
-        # Clean up temp file
-        temp_file.unlink
+        # Save uploaded file to a persistent location for the background job
+        uploads_dir = Rails.root.join('tmp', 'uploads')
+        FileUtils.mkdir_p(uploads_dir) unless Dir.exist?(uploads_dir)
 
-        redirect_to result_path
+        file_path = uploads_dir.join("resume_#{cache_key}.pdf")
+        File.open(file_path, 'wb') do |file|
+          file.write(params[:file].read)
+        end
+
+        # Mark processing as in progress
+        Rails.cache.write("#{cache_key}_status", 'processing', expires_in: 1.hour)
+
+        # Enqueue the background job to process the resume
+        # This runs in a separate process so the app doesn't slow down
+        ResumeProcessingJob.perform_later(file_path.to_s, cache_key)
+
+        redirect_to result_path, notice: 'Resume is being processed. Please wait...'
       rescue => e
-        Rails.logger.error "PDF parsing error: #{e.message}"
+        Rails.logger.error "Error enqueueing resume processing: #{e.message}"
         redirect_to root_path, alert: 'Error processing PDF. Please try again or use a different file.'
       end
     else
@@ -35,10 +37,33 @@ class ResumesController < ApplicationController
 
   def result
     cache_key = session[:profile_cache_key]
-    @profile_data = Rails.cache.read(cache_key) if cache_key
 
-    if @profile_data.nil?
+    if cache_key.nil?
       redirect_to root_path, alert: 'No data found. Please upload a resume first.'
+      return
+    end
+
+    # Check the processing status
+    @processing_status = Rails.cache.read("#{cache_key}_status")
+    @profile_data = Rails.cache.read(cache_key)
+    @error_message = Rails.cache.read("#{cache_key}_error")
+
+    case @processing_status
+    when 'processing'
+      # Still processing - the view should show a loading state
+      # and auto-refresh or use JavaScript to poll for completion
+      flash.now[:notice] = 'Your resume is being processed. This may take a few moments...'
+    when 'failed'
+      # Processing failed
+      flash.now[:alert] = "Processing failed: #{@error_message || 'Unknown error'}"
+    when 'completed'
+      # Processing completed successfully
+      if @profile_data.nil?
+        redirect_to root_path, alert: 'Processing completed but no data found. Please try again.'
+      end
+    else
+      # No status found
+      redirect_to root_path, alert: 'No processing status found. Please upload a resume first.'
     end
   end
 

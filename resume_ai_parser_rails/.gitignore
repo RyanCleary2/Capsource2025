@@ -35,3 +35,6 @@
 
 # Ignore uploaded profile images
 /public/uploads/
+
+# Ignore temporary resume uploads for background job processing
+/tmp/uploads/
