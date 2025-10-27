@@ -1,0 +1,707 @@
+<!-- app/views/field_placement/result.html.erb -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CapSource Field Placement Results</title>
+  <style>
+    :root {
+      --primary-color: #e27d60;
+      --primary-light: #e8a87c;
+      --primary-dark: #c7654e;
+      --secondary-color: #85cdca;
+      --accent-color: #c38d9e;
+      --text-color: #41444b;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --dark-accent: #41444b;
+      --light-accent: #f2f3f4;
+      --border-radius: 8px;
+      --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      --content-shadow: 0 6px 12px rgba(226, 125, 96, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background-color: var(--white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .logo h1 {
+      color: var(--primary-color);
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    nav {
+      display: none;
+      margin-left: 40px;
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        display: flex;
+      }
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 22px;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .btn-outline {
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary-color);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      border: none;
+      box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      padding: 30px 0;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+    }
+
+    .hero-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .progress-tracker {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .progress-step.active {
+      color: white;
+      font-weight: 600;
+    }
+
+    .progress-step:not(:last-child)::after {
+      content: "→";
+      margin-left: 10px;
+      opacity: 0.7;
+    }
+
+    .results {
+      padding: 60px 0;
+      background-color: var(--light-bg);
+      position: relative;
+    }
+
+    .results::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background-color: var(--light-bg);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+      z-index: 1;
+    }
+
+    .results-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .results-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .results-heading h2 {
+      font-size: 30px;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .results-heading p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .results-content {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--primary-color);
+      font-size: 15px;
+      box-shadow: var(--content-shadow);
+      position: relative;
+    }
+
+  /* Field placement cards */
+  .field-placement-overview { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  .fp-card { background: #fff; border: 1px solid #eef3f2; padding: 18px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.03); }
+  .fp-card h3 { margin: 0 0 10px; font-size: 16px; color: var(--primary-dark); }
+  .fp-content { background: #f8faf9; padding: 12px; border-radius: 6px; }
+
+    .field-placement-scope ul,
+    .field-placement-scope ol {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .case-scope li {
+      margin-bottom: 10px;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--primary-light), transparent);
+      margin: 30px 0;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    /* Editable UI */
+    .editable-content {
+      min-height: 200px;
+      outline: none;
+      padding: 10px;
+      transition: background-color 0.3s, border-left-color 0.3s;
+    }
+
+    .editable-content[contenteditable="true"] {
+      background-color: #fff;
+      border-left-color: var(--secondary-color);
+    }
+
+    .edit-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .edit-btn,
+    .save-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .edit-btn { background-color: var(--secondary-color); color: white; }
+    .edit-btn:hover { background-color: #6fb9b6; transform: translateY(-2px); }
+
+    .save-btn { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; box-shadow: 0 4px 8px rgba(226,125,96,.3); display: none; }
+    .save-btn:hover { box-shadow: 0 6px 12px rgba(226,125,96,.4); transform: translateY(-2px); }
+    .save-btn.active { display: inline-block; }
+
+    .edit-mode-indicator { display: none; background-color: var(--secondary-color); color: white; padding: 8px 15px; border-radius: var(--border-radius); font-size: 13px; margin-bottom: 10px; font-weight: 500; }
+    .edit-mode-indicator.active { display: block; }
+
+    .back-btn {
+      display: flex;
+      padding: 12px 24px;
+      background-color: var(--dark-accent);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .back-btn:hover {
+      background-color: #333;
+      transform: translateY(-2px);
+    }
+
+    .download-btn {
+      display: flex;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 8px rgba(226, 125, 96, 0.3);
+      font-weight: 500;
+    }
+
+    .download-btn:hover {
+      box-shadow: 0 6px 12px rgba(226, 125, 96, 0.4);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      background-color: var(--dark-accent);
+      color: var(--white);
+      padding: 30px 0;
+      font-size: 14px;
+      margin-top: 60px;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+
+    @media (max-width: 768px) {
+      .footer-container {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .back-btn,
+      .download-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .progress-tracker {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .progress-step:not(:last-child)::after {
+        content: "↓";
+        display: block;
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <div style="display: flex; align-items: center;">
+        <div class="logo">
+          <%= image_tag 'logo.png', alt: 'CapSource Logo' %>
+          <h1>CapSource</h1>
+        </div>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#">EDUCATORS</a></li>
+            <li><a href="#">STUDENTS</a></li>
+            <li><a href="#">ORGANIZATIONS</a></li>
+            <li><a href="#">OPPORTUNITIES</a></li>
+            <li><a href="#">LEARN MORE</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="auth-buttons">
+        <a href="#" class="btn btn-outline">LOGIN</a>
+        <a href="#" class="btn btn-primary">REGISTER</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-container">
+      <h2>Field Placement Results</h2>
+      <p>
+        Your industry-relevant field placement
+        <% if @mode == 'ideas' %>ideas have been created<% else %>scope has been created<% end %>
+      </p>
+      <!-- Progress tracker -->
+      <div class="progress-tracker">
+        <div class="progress-step <%= @mode == 'ideas' ? 'active' : '' %>">1. Select Placement Idea</div>
+        <div class="progress-step <%= @mode == 'scope' ? 'active' : '' %>">2. View Placement Scope</div>
+        <div class="progress-step">3. Download &amp; Implement</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="results">
+    <div class="container">
+      <div class="results-container">
+        <div class="results-heading">
+          <h2><%= @mode == 'ideas' ? 'Field Placement Ideas' : 'Field Placement Scope' %></h2>
+          <p>
+            <% if @mode == 'ideas' %>
+              Select a field placement idea to generate a full scope
+            <% else %>
+              Here's your AI-generated field placement based on your specifications
+            <% end %>
+          </p>
+        </div>
+
+        <div class="results-content">
+          <% if @mode == 'ideas' && @case_ideas.present? %>
+            <% @case_ideas.split("\n\n").each_with_index do |idea, idx| %>
+              <% if idea.strip.present? %>
+                <div class="case-idea">
+                  <div class="editable-content" id="idea-<%= idx %>" contenteditable="false">
+                    <%= format_case_text(idea) %>
+                  </div>
+                  <div class="edit-controls">
+                    <button type="button" class="edit-btn" data-target="idea-<%= idx %>">Enable Editing</button>
+                    <button type="button" class="save-btn" data-target="idea-<%= idx %>">Save Changes</button>
+                  </div>
+                  <%= form_with url: generate_scope_from_idea_path, method: :post, local: true, html: { class: 'idea-form' } do |f| %>
+                    <%= f.hidden_field :website_url, value: @website_url %>
+                    <%= f.hidden_field :student_level, value: @student_level %>
+                    <%= f.hidden_field :case_idea, value: idea, id: "idea-input-#{idx}" %>
+                    <button type="submit" class="select-btn" data-source="idea-<%= idx %>" data-input="idea-input-<%= idx %>">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                      Select This Field Placement
+                    </button>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          <% elsif @mode == 'scope' && @case_scope.present? %>
+            <% sections = parse_field_placement_sections(@case_scope) %>
+            <div class="field-placement-overview">
+              <div class="fp-card">
+                <h3>Title</h3>
+                <div class="fp-content"><%= sections[:title].presence || '—' %></div>
+              </div>
+
+              <div class="fp-card">
+                <h3>Description</h3>
+                <div class="fp-content"><%= format_case_text(sections[:description] || @case_scope) %></div>
+              </div>
+
+              <div class="fp-card">
+                <h3>Key Responsibilities</h3>
+                <div class="fp-content"><%= format_case_text(sections[:responsibilities] || '') %></div>
+              </div>
+
+              <div class="fp-card">
+                <h3>Learning Outcomes</h3>
+                <div class="fp-content"><%= format_case_text(sections[:outcomes] || '') %></div>
+              </div>
+            </div>
+            <div class="edit-controls">
+              <button type="button" class="edit-btn" data-target="editable-scope">Enable Editing</button>
+              <button type="button" class="save-btn" data-target="editable-scope">Save Changes</button>
+            </div>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                const content = document.querySelector('.case-scope');
+                const keyTerms = ['Timeline', 'Tasks', 'Deliverables', 'Milestones'];
+                
+                keyTerms.forEach(term => {
+                  const elements = content.querySelectorAll('h2, h3');
+                  elements.forEach(el => {
+                    if (el.textContent.includes(term)) {
+                      let section = document.createElement('div');
+                      section.className = 'highlight-section';
+                      let heading = el.cloneNode(true);
+                      section.appendChild(heading);
+                      let nextEl = el.nextElementSibling;
+                      let elementsArray = [];
+                      while (nextEl && !['H2', 'H3'].includes(nextEl.tagName)) {
+                        elementsArray.push(nextEl);
+                        nextEl = nextEl.nextElementSibling;
+                      }
+                      elementsArray.forEach(element => {
+                        section.appendChild(element.cloneNode(true));
+                      });
+                      el.parentNode.insertBefore(section, el);
+                      el.remove();
+                      elementsArray.forEach(element => element.remove());
+                    }
+                  });
+                });
+                
+                const paragraphs = content.querySelectorAll('p');
+                paragraphs.forEach(p => {
+                  const text = p.innerHTML;
+                  if (text.includes('• ') || text.match(/\d+\.\s/)) {
+                    const isBullet = text.includes('• ');
+                    const listType = isBullet ? 'ul' : 'ol';
+                    const list = document.createElement(listType);
+                    const items = text.split('<br>');
+                    items.forEach(item => {
+                      if (!item.trim()) return;
+                      let cleanItem = isBullet ? item.replace('• ', '') : item.replace(/^\d+\.\s/, '');
+                      const li = document.createElement('li');
+                      li.innerHTML = cleanItem;
+                      list.appendChild(li);
+                    });
+                    if (list.children.length > 0) {
+                      p.parentNode.insertBefore(list, p);
+                      p.remove();
+                    }
+                  }
+                });
+                
+                const majorHeadings = content.querySelectorAll('h2');
+                majorHeadings.forEach((heading, index) => {
+                  if (index > 0) {
+                    const divider = document.createElement('div');
+                    divider.className = 'section-divider';
+                    heading.parentNode.insertBefore(divider, heading);
+                  }
+                });
+              });
+            </script>
+          <% else %>
+            <p>No content generated. Please try again.</p>
+          <% end %>
+        </div>
+
+        <div class="action-buttons">
+          <%= link_to root_path, class: 'back-btn' do %>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Generator
+          <% end %>
+          <% if @mode == 'scope' %>
+            <%= link_to '#', class: 'download-btn' do %>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              Download PDF
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-container">
+      <div>© 2025 CapSource. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      function toggleEdit(targetId, editBtn, saveBtn) {
+        const el = document.getElementById(targetId);
+        if (!el) return;
+        const editing = el.getAttribute('contenteditable') === 'true';
+        if (editing) {
+          el.setAttribute('contenteditable', 'false');
+          editBtn.textContent = 'Enable Editing';
+          saveBtn.classList.remove('active');
+        } else {
+          el.setAttribute('contenteditable', 'true');
+          el.focus();
+          editBtn.textContent = 'Cancel Editing';
+          saveBtn.classList.add('active');
+        }
+      }
+
+      // Wire up edit/save buttons
+      document.querySelectorAll('.edit-controls').forEach(ctrl => {
+        const editBtn = ctrl.querySelector('.edit-btn');
+        const saveBtn = ctrl.querySelector('.save-btn');
+        if (!editBtn || !saveBtn) return;
+        const targetId = editBtn.getAttribute('data-target');
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        // Track original content for cancel
+        let originalHTML = target.innerHTML;
+
+        editBtn.addEventListener('click', () => {
+          const isEditing = target.getAttribute('contenteditable') === 'true';
+          if (isEditing) {
+            // cancel editing and restore
+            target.innerHTML = originalHTML;
+          } else {
+            originalHTML = target.innerHTML;
+          }
+          toggleEdit(targetId, editBtn, saveBtn);
+        });
+
+        saveBtn.addEventListener('click', () => {
+          // simply exit edit mode and keep new content
+          toggleEdit(targetId, editBtn, saveBtn);
+          // feedback toast
+          const toast = document.createElement('div');
+          toast.textContent = '✓ Changes saved';
+          toast.style.cssText = 'position: fixed; top: 80px; right: 20px; background:#2ecc71; color:#fff; padding:10px 14px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,.2); z-index:1001;';
+          document.body.appendChild(toast);
+          setTimeout(() => { toast.remove(); }, 2000);
+        });
+      });
+
+      // Ensure edited idea content is submitted when selecting
+      document.querySelectorAll('.select-btn[data-source][data-input]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const sourceId = btn.getAttribute('data-source');
+          const inputId = btn.getAttribute('data-input');
+          const source = document.getElementById(sourceId);
+          const hiddenInput = document.getElementById(inputId);
+          if (source && hiddenInput) {
+            // convert innerHTML back to plain text preserving basic structure
+            // For safety, strip excessive whitespace.
+            hiddenInput.value = source.innerText.trim();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
