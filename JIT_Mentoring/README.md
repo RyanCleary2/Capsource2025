@@ -1,60 +1,55 @@
-# CapSource AI Case Generator 1.0
+# CapSource JIT Mentoring — Mentorship Plan Generator 1.0
 
-Last Edited 9/22/2025 - Ryan Cleary 
+Last Edited: 2025-10-27
 
-A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized student cases and full case scopes based on a company website, background goals, or topic selections.
+This is a lightweight Rails 8 application that uses OpenAI (GPT-4o) to generate personalized mentorship plans for students and early professionals. The app provides a simple form to describe a mentee goal, choose the number of meetings, and generate a structured plan. Results are displayed on a friendly UI and can be edited in-place for quick refinement.
 
 ---
 
 ## Table of Contents
 
-1. [Features](#features)  
-2. [Tech Stack](#tech-stack)  
-3. [Prerequisites](#prerequisites)  
-4. [Getting Started](#getting-started)  
-   1. [Clone & Install](#clone--install)  
-   2. [Environment Variables](#environment-variables)  
-   3. [Database Setup (optional)](#database-setup-optional)  
-5. [Running the App](#running-the-app)  
-6. [Project Structure](#project-structure)  
-7. [Routes & Endpoints](#routes--endpoints)  
-8. [AI Integration](#ai-integration)  
-9. [Testing](#testing)  
-10. [Deployment](#deployment)  
-11. [Contributing](#contributing)  
-12. [License](#license)  
+1. [Features](#features)
+2. [Tech Stack](#tech-stack)
+3. [Prerequisites](#prerequisites)
+4. [Getting Started](#getting-started)
+   1. [Clone & Install](#clone--install)
+   2. [Environment Variables](#environment-variables)
+5. [Running the App](#running-the-app)
+6. [Project Structure (JIT_Mentoring)](#project-structure-jit_mentoring)
+7. [Routes & Endpoints](#routes--endpoints)
+8. [AI Integration](#ai-integration)
+9. [Testing](#testing)
+10. [Deployment](#deployment)
+11. [Contributing](#contributing)
 
 ---
 
 ## Features
 
-- **Case Ideas**: AI-powered generation of 3–5 case ideas based on selected topics.  
-- **Case Scope**: Full, structured case outline (title, background/objective, milestones, resources).  
-- **Dynamic Forms**: Toggle between scope and ideas modes with live form updates.  
-- **Clean UI**: Responsive, modern CSS design using Propshaft & Importmap.  
-- **CORS Enabled**: Rack-CORS allows cross-origin requests for headless front-ends.
+- Generate a full mentorship plan from a concise goal statement.
+- Choose the number of meetings (dropdown 1–10) to influence plan granularity.
+- Editable results: review and modify the generated plan directly on the results page (enable editing, save/cancel, then select an idea if converting an idea into a scope).
+- Clean, responsive UI using Rails view templates and minimal JS (no heavy frontend frameworks).
+- Integration with OpenAI for natural, context-aware plans.
 
 ---
 
 ## Tech Stack
 
-- **Ruby** 3.2.2 (via rbenv)  
-- **Rails** 8.0.2  
-- **JavaScript** (ES6, importmap-rails)  
-- **CSS** (custom modern styling, no external frameworks)  
-- **OpenAI** GPT-4o API (`ruby-openai` gem)  
-- **Propshaft** for asset pipeline  
-- **SQLite3** (dev/test) & **PostgreSQL** (prod)  
-- **Rack-CORS** for API cross-origin  
+- Ruby 3.x (project uses Ruby 3.2.x in other modules)
+- Rails 8.x
+- OpenAI via the `ruby-openai` gem
+- Propshaft & Importmap for asset handling (minimal JS/CSS builds)
+- SQLite3 for development by default (Postgres recommended for production)
 
 ---
 
 ## Prerequisites
 
-- macOS or Linux  
-- [rbenv](https://github.com/rbenv/rbenv) or [RVM] for Ruby version management  
-- Homebrew (macOS) for native dependencies  
-- PostgreSQL (if using `pg` in development)  
+- macOS or Linux
+- rbenv or RVM for Ruby version management
+- Homebrew (macOS) for native dependencies
+- PostgreSQL if you plan to run with `pg` in development/production
 
 ---
 
@@ -63,138 +58,138 @@ A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized stu
 ### Clone & Install
 
 ```bash
-git clone https://github.com/your_org/capsource-case-generator.git
-cd capsource-case-generator
+git clone <your-repo-url>
+cd Capsource2025/JIT_Mentoring
 bundle install
 ```
 
 ### Environment Variables
 
-Create a `.env` in the project root:
+Create a `.env` (or set the environment variables directly) in the JIT_Mentoring directory:
 
 ```bash
 OPENAI_API_KEY=sk-...
 ```
 
-Rails (dotenv-rails) will auto-load this.
-
-### Database Setup (optional)
-
-If you plan to use PostgreSQL locally:
-
-```bash
-brew install postgresql
-brew services start postgresql
-
-# adjust `config/database.yml` if needed
-rails db:create db:migrate
-```
-
-Otherwise the app runs with SQLite out of the box.
+The project expects `OPENAI_API_KEY` to be available when making GPT calls.
 
 ---
 
 ## Running the App
 
-```bash
-# start the server
-bin/rails server -b 127.0.0.1 -p 3000
+From the `JIT_Mentoring` folder:
 
-# visit in browser
-http://localhost:3000
+```bash
+# start the Rails server (zsh)
+bin/rails server -b 127.0.0.1 -p 3001
+
+# then open in browser
+http://localhost:3001
 ```
+
+Note: port choice is arbitrary; pick a port that doesn't conflict with other services.
 
 ---
 
-## Project Structure
+## Project Structure (JIT_Mentoring)
 
 ```
-.
+JIT_Mentoring/
 ├── app/
 │   ├── controllers/
-│   │   └── cases_controller.rb        # core form handling & OpenAI calls
+│   │   └── plans_controller.rb      # handles form and OpenAI requests
 │   ├── views/
-│   │   └── cases/
-│   │       ├── index.html.erb         # form + topic checkboxes + toggle JS
-│   │       └── result.html.erb        # results view with dynamic rendering
-│   └── assets/                        # propshaft-managed CSS & JS
+│   │   └── plans/
+│   │       ├── index.html.erb       # generator form (goal + number_of_meetings)
+│   │       └── result.html.erb      # editable result view
+│   └── assets/
 ├── config/
-│   ├── initializers/
-│   │   ├── cors.rb                    # rack-cors config
-│   │   └── openai.rb                  # OpenAI client setup
-│   └── routes.rb                      # root & POST endpoints
-├── Gemfile                            # ruby-openai, rack-cors, dotenv-rails, etc.
-├── .env                               # local env vars (gitignore’d)
-├── README.md                          # this file
-└── ...
+│   └── routes.rb
+├── Gemfile
+└── README.md
 ```
 
 ---
 
 ## Routes & Endpoints
 
-| Verb | Path                        | Controller#Action               | Purpose                           |
-|------|-----------------------------|---------------------------------|-----------------------------------|
-| GET  | `/`                         | `cases#index`                   | Show generator form               |
-| POST | `/generate_case`            | `cases#generate_case`           | Generate ideas or full scope      |
-| POST | `/generate_scope_from_idea` | `cases#generate_scope_from_idea`| Build full scope from selected idea |
+| Verb | Path | Controller#Action | Purpose |
+|------|------|-------------------|---------|
+| GET  | `/`  | `plans#index`     | Show mentorship generator form |
+| POST | `/generate_mentorship_plan` | `plans#generate_mentorship_plan` | Generate mentorship plan (uses OpenAI) |
+
+The form submits fields including:
+- `mentee_goal` (string) — required
+- `number_of_meetings` (integer 1–10) — required
+
+The result view exposes an in-browser editing workflow; edits are client-side by default and not persisted to the server unless additional endpoints are added.
 
 ---
 
 ## AI Integration
 
-All GPT requests use the `ruby-openai` gem:
+The app uses the `ruby-openai` gem to call OpenAI's chat API. Typical usage:
 
 ```ruby
-client = OpenAI::Client.new(api_key: ENV.fetch("OPENAI_API_KEY"))
+client = OpenAI::Client.new(api_key: ENV.fetch('OPENAI_API_KEY'))
+
+prompt = "Given the mentee goal: #{goal} and #{meetings} meetings, create a mentorship plan..."
 
 response = client.chat(
   parameters: {
-    model:       "gpt-4o-mini",
-    messages:    [{ role: "user", content: prompt }],
-    max_tokens:  1000,
+    model: 'gpt-4o-mini',
+    messages: [{ role: 'user', content: prompt }],
+    max_tokens: 1000,
     temperature: 0.7
   }
 )
+
+generated_text = response.dig('choices', 0, 'message', 'content')&.strip
 ```
 
-Helper methods live in `CasesController`:
-
-- `generate_case_ideas`  
-- `generate_case_scope`  
+Helper logic is in `PlansController` and builds prompts based on the `mentee_goal` and `number_of_meetings` inputs.
 
 ---
 
 ## Testing
 
-_No automated tests yet._  
-Recommend adding:
-
-- **RSpec** for controller/unit tests  
-- **VCR** / Webmock to record API interactions  
-- **Capybara** for end-to-end form flows  
+- No automated tests yet. Recommended additions:
+  - RSpec for controller and unit testing
+  - VCR / WebMock for recording OpenAI API interactions
+  - Capybara for basic end-to-end form flows
 
 ---
 
 ## Deployment
 
-1. Ensure `OPENAI_API_KEY` is set in your host environment.  
-2. Use PostgreSQL in production (`pg` gem).  
-3. Precompile assets:
-   ```bash
-   RAILS_ENV=production bin/rails assets:precompile
-   ```
-4. Start your server behind a reverse proxy (nginx, Passenger, etc.).
+1. Ensure `OPENAI_API_KEY` is set in your environment on the host.
+2. Use PostgreSQL in production (`pg` gem) and update `config/database.yml`.
+3. Precompile assets if deploying:
+
+```bash
+RAILS_ENV=production bin/rails assets:precompile
+```
+
+4. Start the app behind a reverse proxy (nginx, Passenger, etc.) or deploy to a platform that supports Rails apps.
 
 ---
 
 ## Contributing
 
-1. Fork the repo  
-2. Create a feature branch: `git checkout -b feat/awesome`  
-3. Commit: `git commit -am "Add feature"`  
-4. Push & open a PR  
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/mentorship-ui`
+3. Commit changes: `git commit -am "Add mentorship feature"`
+4. Push & open a pull request
 
-Please follow the existing code style, file naming conventions, and add tests for new behavior.
+Please follow existing conventions and add tests for any new behavior.
 
 ---
+
+If you'd like, I can:
+
+- Add server-side persistence for edited plans (save/load per session or user).
+- Add an endpoint to download an edited plan as PDF/DOCX.
+- Wire a small integration test (RSpec + VCR) for the OpenAI prompt flow.
+
+Which of these would you like next?
+
