@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization Profile – Preview</title>
+  <!-- Tailwind CDN purely for this temporary preview -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --cap-orange:#ff7a00; --cap-purple:#6c5bd6; --cap-blue:#1e88e5; --cap-dark:#2b2b2b; --cap-mauve:#7b7b93;
+    }
+    .capsource-button{background:var(--cap-orange);color:#fff}
+    .capsource-button:hover{background:#e86e00}
+    .capsource-chip{border:1px solid var(--cap-orange);color:var(--cap-dark)}
+    .capsource-card{background:#fff;border:1px solid #e5e7eb}
+  </style>
+</head>
+<body class="bg-gray-50 text-[15px]">
+  <div class="max-w-6xl mx-auto p-6">
+    <!-- Top bar -->
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center space-x-2 text-sm text-gray-500">
+        <span class="font-medium text-[13px] text-[var(--cap-orange)]">Network</span>
+        <span>›</span>
+        <span>Florida State University</span>
+      </div>
+      <div>
+        <button class="px-3 py-2 rounded-md border text-sm">Save</button>
+      </div>
+    </div>
+
+    <!-- Header banner -->
+    <div class="capsource-card rounded-lg overflow-hidden mb-6">
+      <div class="h-52 bg-gradient-to-r from-red-800 to-red-600 relative">
+        <img src="https://images.unsplash.com/photo-1558427412-2e9b8b4b8f58?q=80&w=1920&auto=format&fit=crop" class="w-full h-full object-cover opacity-90" alt="Banner"/>
+        <div class="absolute -bottom-10 left-6 w-28 h-28 rounded-lg shadow-lg overflow-hidden border-4 border-white bg-white flex items-center justify-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Seal_of_Florida_State_University.svg/200px-Seal_of_Florida_State_University.svg.png" class="object-contain p-2" alt="Logo"/>
+        </div>
+      </div>
+      <div class="p-6 pt-14">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Florida State University</h1>
+            <p class="text-[var(--cap-mauve)] mt-1">Empowering Minds, Shaping Futures: Excellence in Education at Florida State University</p>
+            <div class="flex items-center gap-3 mt-3 text-sm">
+              <a class="text-[var(--cap-orange)] hover:underline" href="#">Website</a>
+              <span class="text-gray-300">|</span>
+              <span>Higher Education Institution</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="capsource-button px-4 py-2 rounded-md text-sm">Contact</button>
+            <button class="px-4 py-2 rounded-md border text-sm">Share</button>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+          <div>
+            <div class="text-xs text-gray-500">Website</div>
+            <div class="text-sm text-gray-900 truncate">https://fsu.edu</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">Year Founded</div>
+            <div class="text-sm text-gray-900">1851</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">HQ Location</div>
+            <div class="text-sm text-gray-900">Tallahassee, Florida</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">Employees</div>
+            <div class="text-sm text-gray-900">5,001–10,000</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">Category</div>
+            <div class="text-sm text-gray-900">Higher Education</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left/Main -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- About -->
+        <section class="capsource-card rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-3">About Florida State University</h2>
+          <p class="text-gray-700 leading-relaxed">Florida State University is among the nation’s most entrepreneurial and innovative universities, transforming the lives of students through rigorous academics and strong industry engagement...</p>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="rounded-lg border p-3 flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=640&q=80" class="w-28 h-16 object-cover rounded" alt="Thumb"/>
+              <div>
+                <div class="font-medium">Campus Tour</div>
+                <div class="text-sm text-gray-500">2:34</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active Programs -->
+        <section class="capsource-card rounded-lg p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xl font-semibold">Active Programs (8)</h2>
+            <button class="capsource-button px-3 py-2 rounded-md text-sm">+ Add Program</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-[var(--cap-dark)] text-white">
+                <tr>
+                  <th class="px-4 py-2 text-left font-semibold">Title</th>
+                  <th class="px-4 py-2 text-left font-semibold">Type</th>
+                  <th class="px-4 py-2 text-left font-semibold">Managers</th>
+                  <th class="px-4 py-2 text-left font-semibold">End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b">
+                  <td class="px-4 py-2">Spring 2024 FSU Live Case Competition</td>
+                  <td class="px-4 py-2">Project</td>
+                  <td class="px-4 py-2">Caleb Phillips</td>
+                  <td class="px-4 py-2">4/25/2024</td>
+                </tr>
+                <tr class="bg-gray-50 border-b">
+                  <td class="px-4 py-2">Marketing Analytics Internship</td>
+                  <td class="px-4 py-2">Internship</td>
+                  <td class="px-4 py-2">Adrian Johns</td>
+                  <td class="px-4 py-2">5/20/2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Project Archive -->
+        <section class="capsource-card rounded-lg p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xl font-semibold">Project Archive (3)</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-[var(--cap-dark)] text-white">
+                <tr>
+                  <th class="px-4 py-2 text-left font-semibold">Title</th>
+                  <th class="px-4 py-2 text-left font-semibold">Type</th>
+                  <th class="px-4 py-2 text-left font-semibold">Managers</th>
+                  <th class="px-4 py-2 text-left font-semibold">End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b">
+                  <td class="px-4 py-2">Create a Brand Communication Strategy</td>
+                  <td class="px-4 py-2">Live Case</td>
+                  <td class="px-4 py-2">James Smith</td>
+                  <td class="px-4 py-2">4/25/2024</td>
+                </tr>
+                <tr class="bg-gray-50 border-b">
+                  <td class="px-4 py-2">Revamp Onboarding Curriculum</td>
+                  <td class="px-4 py-2">Internship</td>
+                  <td class="px-4 py-2">Jennifer Martinez</td>
+                  <td class="px-4 py-2">4/20/2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Collaboration Requests -->
+        <section class="capsource-card rounded-lg p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xl font-semibold">Collaboration Requests (5)</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-[var(--cap-dark)] text-white">
+                <tr>
+                  <th class="px-4 py-2 text-left font-semibold">Title</th>
+                  <th class="px-4 py-2 text-left font-semibold">Type</th>
+                  <th class="px-4 py-2 text-left font-semibold">Managers</th>
+                  <th class="px-4 py-2 text-left font-semibold">Start Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b">
+                  <td class="px-4 py-2">Improve CSR Strategy</td>
+                  <td class="px-4 py-2">Project</td>
+                  <td class="px-4 py-2">James Smith</td>
+                  <td class="px-4 py-2">4/15/2024</td>
+                </tr>
+                <tr class="bg-gray-50 border-b">
+                  <td class="px-4 py-2">Process & Materials Optimization</td>
+                  <td class="px-4 py-2">Project Proposal</td>
+                  <td class="px-4 py-2">Jennifer Martinez</td>
+                  <td class="px-4 py-2">4/05/2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right/Sidebar -->
+      <div class="space-y-6">
+        <!-- Members -->
+        <section class="capsource-card rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-3">Associated Members (253)</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-200"></div>
+              <div>
+                <div class="font-medium text-sm">John Doe <span class="text-gray-400 font-normal">— Student</span></div>
+                <div class="text-xs text-gray-500">Florida State University</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-200"></div>
+              <div>
+                <div class="font-medium text-sm">Jane Doe <span class="text-gray-400 font-normal">— Department Chair</span></div>
+                <div class="text-xs text-gray-500">College of Social Work</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Collaborators -->
+        <section class="capsource-card rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-3">Collaborators (213)</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-200"></div>
+              <div>
+                <div class="font-medium text-sm">John Doe <span class="text-gray-400 font-normal">— Project Manager</span></div>
+                <div class="text-xs text-gray-500">Florida State University</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Departments -->
+        <section class="capsource-card rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-3">Departments (8)</h2>
+          <ul class="space-y-2 text-sm">
+            <li>College of Law</li>
+            <li>College of Social Work</li>
+            <li>College of Communication & Information</li>
+          </ul>
+        </section>
+
+        <!-- Similar Orgs -->
+        <section class="capsource-card rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-3">Similar Organizations</h2>
+          <ul class="space-y-2 text-sm">
+            <li>University of California, Irvine</li>
+            <li>Pepperdine University</li>
+            <li>Loyola Marymount University</li>
+          </ul>
+        </section>
+
+        <!-- Resources -->
+        <section class="capsource-card rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-3">Resources</h2>
+          <ul class="list-disc pl-5 space-y-1 text-sm">
+            <li><a class="text-blue-700" href="#">FSU – Profile, Rankings & Data</a></li>
+            <li><a class="text-blue-700" href="#">FSUview | FSU News</a></li>
+            <li><a class="text-blue-700" href="#">FSU | Welcome</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+

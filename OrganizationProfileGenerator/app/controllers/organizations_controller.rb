@@ -64,10 +64,10 @@ class OrganizationsController < ApplicationController
     organization_type = session[:organization_type] || 'company'
 
     if profile_data
-      # Handle logo upload
+      # Handle logo upload (PNG only)
       if params[:logo_image].present?
         uploaded_file = params[:logo_image]
-        if uploaded_file.content_type.start_with?('image/')
+        if uploaded_file.content_type == 'image/png'
           # Create uploads directory if it doesn't exist
           FileUtils.mkdir_p(Rails.root.join('public', 'uploads', 'logos'))
 
@@ -82,10 +82,10 @@ class OrganizationsController < ApplicationController
         end
       end
 
-      # Handle banner upload
+      # Handle banner upload (PNG only)
       if params[:banner_image].present?
         uploaded_file = params[:banner_image]
-        if uploaded_file.content_type.start_with?('image/')
+        if uploaded_file.content_type == 'image/png'
           FileUtils.mkdir_p(Rails.root.join('public', 'uploads', 'banners'))
 
           filename = "#{SecureRandom.hex(16)}_#{uploaded_file.original_filename}"
@@ -96,6 +96,23 @@ class OrganizationsController < ApplicationController
           end
 
           profile_data["bannerUrl"] = "/uploads/banners/#{filename}"
+        end
+      end
+
+      # Handle promo video upload
+      if params[:promo_video].present?
+        uploaded_file = params[:promo_video]
+        if uploaded_file.content_type.start_with?('video/')
+          FileUtils.mkdir_p(Rails.root.join('public', 'uploads', 'videos'))
+
+          filename = "#{SecureRandom.hex(16)}_#{uploaded_file.original_filename}"
+          file_path = Rails.root.join('public', 'uploads', 'videos', filename)
+
+          File.open(file_path, 'wb') do |file|
+            file.write(uploaded_file.read)
+          end
+
+          profile_data["promoVideoUrl"] = "/uploads/videos/#{filename}"
         end
       end
 
@@ -115,17 +132,33 @@ class OrganizationsController < ApplicationController
   def profile_params(org_type)
     if org_type == 'company'
       params.permit(
-        :name, :description, :website, :yearFounded, :address,
+        :name, :description, :website, :yearFounded, :address, :hqLocation,
         :numberOfEmployees, :businessModel, :organizationType, :tagline,
-        :logo_image, :banner_image,
-        socialMedia: [:linkedin, :facebook, :twitter, :instagram, :youtube]
+        :logo_image, :banner_image, :promo_video,
+        socialMedia: [:linkedin, :facebook, :twitter, :instagram, :youtube],
+        programs: [:title, :type, :managers, :endDate],
+        projectArchive: [:title, :type, :managers, :endDate],
+        collaborationRequests: [:title, :type, :managers, :startDate],
+        associatedMembers: [:name, :title],
+        collaborators: [:name, :title],
+        departments: [],
+        similarOrganizations: [],
+        resources: [:title, :url]
       )
     else # school
       params.permit(
-        :name, :description, :website, :yearFounded, :address,
+        :name, :description, :website, :yearFounded, :address, :hqLocation,
         :numberOfStudents, :numberOfEmployees, :organizationType,
-        :tagline, :administrators, :logo_image, :banner_image,
-        socialMedia: [:linkedin, :facebook, :twitter, :instagram, :youtube]
+        :tagline, :administrators, :logo_image, :banner_image, :promo_video,
+        socialMedia: [:linkedin, :facebook, :twitter, :instagram, :youtube],
+        programs: [:title, :type, :managers, :endDate],
+        projectArchive: [:title, :type, :managers, :endDate],
+        collaborationRequests: [:title, :type, :managers, :startDate],
+        associatedMembers: [:name, :title],
+        collaborators: [:name, :title],
+        departments: [],
+        similarOrganizations: [],
+        resources: [:title, :url]
       )
     end
   end
