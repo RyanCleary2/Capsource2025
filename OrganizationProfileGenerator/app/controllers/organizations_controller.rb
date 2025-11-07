@@ -117,7 +117,7 @@ class OrganizationsController < ApplicationController
       end
 
       # Update profile data with form values
-      update_params = profile_params(organization_type).except(:logo_image, :banner_image)
+      update_params = profile_params(organization_type).except(:logo_image, :banner_image, :promo_video)
       profile_data.merge!(update_params)
 
       Rails.cache.write(cache_key, profile_data, expires_in: 1.hour)

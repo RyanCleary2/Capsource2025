@@ -13,3 +13,12 @@ SkillOrganizer/tmp/sockets/
 # Environment variables
 .env
 .env.local
+
+# Data files
+*.csv
+
+# Test/preview files
+page.html
+
+# ResumeSkillMatcher (not ready yet)
+ResumeSkillMatcher/

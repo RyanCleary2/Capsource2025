@@ -175,13 +175,11 @@
       <p class="text-gray-700 leading-relaxed"><%= @profile_data["description"] %></p>
       <!-- Video card preview style -->
       <% if @profile_data["promoVideoUrl"].present? %>
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="rounded-lg border p-3 flex items-center gap-3">
-            <video controls class="w-28 h-16 object-cover rounded bg-black" src="<%= @profile_data["promoVideoUrl"] %>"></video>
-            <div>
-              <div class="font-medium">Company Video</div>
-              <div class="text-sm text-gray-500">Promotional</div>
-            </div>
+        <div class="mt-6">
+          <div class="rounded-lg border p-4">
+            <div class="font-medium text-lg mb-3">Company Video</div>
+            <video controls class="w-full h-96 object-cover rounded bg-black" src="<%= @profile_data["promoVideoUrl"] %>"></video>
+            <div class="text-sm text-gray-500 mt-2">Promotional</div>
           </div>
         </div>
       <% end %>
@@ -430,7 +428,17 @@
     <h2 class="text-xl font-semibold text-gray-900 mb-4">Similar Organizations</h2>
     <div class="space-y-2">
       <% (@profile_data["similarOrganizations"] || []).each_with_index do |org, index| %>
-        <div class="display-field text-sm text-gray-900"><%= org %></div>
+        <div class="display-field">
+          <a href="#"
+             class="similar-org-link text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer flex items-center group"
+             data-org-name="<%= org %>"
+             data-org-type="<%= @organization_type %>">
+            <svg class="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            <%= org %>
+          </a>
+        </div>
         <div class="edit-field hidden">
           <%= form.text_field "similarOrganizations[#{index}]", value: org, class: "w-full p-2 border border-gray-300 rounded" %>
         </div>
@@ -571,6 +579,284 @@
     setTimeout(function() {
       initializeEditFunctionality();
     }, 100);
+  }
+})();
+
+// Similar Organizations Click Handler
+(function() {
+  'use strict';
+
+  function guessOrganizationUrl(orgName, orgType) {
+    // Remove common suffixes and clean the name
+    let cleanName = orgName
+      .toLowerCase()
+      .replace(/\s+inc\.?$/i, '')
+      .replace(/\s+llc\.?$/i, '')
+      .replace(/\s+corp\.?$/i, '')
+      .replace(/\s+corporation$/i, '')
+      .replace(/\s+company$/i, '')
+      .replace(/\s+co\.?$/i, '')
+      .replace(/\s+limited$/i, '')
+      .replace(/\s+ltd\.?$/i, '')
+      .replace(/university$/i, '')
+      .replace(/college$/i, '')
+      .replace(/^the\s+/i, '')
+      .trim();
+
+    // For universities/schools, try common patterns
+    if (orgType === 'school') {
+      // Expanded known university database
+      const knownUniversities = {
+        'mit': 'https://mit.edu',
+        'ucla': 'https://ucla.edu',
+        'usc': 'https://usc.edu',
+        'university of southern california': 'https://usc.edu',
+        'nyu': 'https://nyu.edu',
+        'stanford': 'https://stanford.edu',
+        'stanford university': 'https://stanford.edu',
+        'harvard': 'https://harvard.edu',
+        'harvard university': 'https://harvard.edu',
+        'yale': 'https://yale.edu',
+        'yale university': 'https://yale.edu',
+        'princeton': 'https://princeton.edu',
+        'princeton university': 'https://princeton.edu',
+        'columbia': 'https://columbia.edu',
+        'columbia university': 'https://columbia.edu',
+        'cornell': 'https://cornell.edu',
+        'cornell university': 'https://cornell.edu',
+        'penn': 'https://upenn.edu',
+        'upenn': 'https://upenn.edu',
+        'university of pennsylvania': 'https://upenn.edu',
+        'drexel': 'https://drexel.edu',
+        'drexel university': 'https://drexel.edu',
+        'temple': 'https://temple.edu',
+        'temple university': 'https://temple.edu',
+        'university of michigan': 'https://umich.edu',
+        'university of california berkeley': 'https://berkeley.edu',
+        'uc berkeley': 'https://berkeley.edu',
+        'university of texas austin': 'https://utexas.edu',
+        'ut austin': 'https://utexas.edu',
+        'university of washington': 'https://washington.edu',
+        'uw': 'https://washington.edu',
+        'carnegie mellon': 'https://cmu.edu',
+        'carnegie mellon university': 'https://cmu.edu',
+        'cmu': 'https://cmu.edu',
+        'duke': 'https://duke.edu',
+        'duke university': 'https://duke.edu',
+        'northwestern': 'https://northwestern.edu',
+        'northwestern university': 'https://northwestern.edu',
+        'johns hopkins': 'https://jhu.edu',
+        'johns hopkins university': 'https://jhu.edu',
+        'university of chicago': 'https://uchicago.edu',
+        'georgetown': 'https://georgetown.edu',
+        'georgetown university': 'https://georgetown.edu',
+        'brown': 'https://brown.edu',
+        'brown university': 'https://brown.edu',
+        'dartmouth': 'https://dartmouth.edu',
+        'dartmouth college': 'https://dartmouth.edu'
+      };
+
+      // Check known universities first with multiple lookup strategies
+      // Try original name (lowercased and trimmed)
+      let lookup1 = orgName.toLowerCase().trim();
+      if (knownUniversities[lookup1]) {
+        return knownUniversities[lookup1];
+      }
+
+      // Try cleaned name
+      if (knownUniversities[cleanName]) {
+        return knownUniversities[cleanName];
+      }
+
+      // Try without spaces (for acronyms like "U S C" -> "usc")
+      let lookup2 = cleanName.replace(/\s+/g, '');
+      if (knownUniversities[lookup2]) {
+        return knownUniversities[lookup2];
+      }
+
+      // For "University of X" format - be more cautious
+      if (orgName.match(/^University of /i)) {
+        // Special state name mappings
+        const stateUniversities = {
+          'california': 'https://universityofcalifornia.edu',
+          'southern california': 'https://usc.edu',
+          'michigan': 'https://umich.edu',
+          'texas': 'https://utexas.edu',
+          'washington': 'https://washington.edu',
+          'virginia': 'https://virginia.edu',
+          'florida': 'https://ufl.edu',
+          'illinois': 'https://illinois.edu',
+          'wisconsin': 'https://wisc.edu',
+          'minnesota': 'https://umn.edu',
+          'maryland': 'https://umd.edu',
+          'north carolina': 'https://unc.edu',
+          'south carolina': 'https://sc.edu',
+          'georgia': 'https://uga.edu',
+          'pennsylvania': 'https://upenn.edu'
+        };
+
+        let state = cleanName.replace(/^university of\s+/i, '');
+        if (stateUniversities[state]) {
+          return stateUniversities[state];
+        }
+
+        // Otherwise try the generic pattern
+        let stateName = state.replace(/\s+/g, '');
+        return `https://${stateName}.edu`;
+      }
+
+      // For "X University" or "X College" format
+      let domainName = cleanName.replace(/\s+/g, '');
+      return `https://${domainName}.edu`;
+    }
+
+    // For companies, try common patterns
+    if (orgType === 'company') {
+      // Check for well-known companies
+      const knownCompanies = {
+        'amazon': 'https://amazon.com',
+        'google': 'https://google.com',
+        'facebook': 'https://facebook.com',
+        'meta': 'https://meta.com',
+        'microsoft': 'https://microsoft.com',
+        'apple': 'https://apple.com',
+        'apple inc': 'https://apple.com',
+        'netflix': 'https://netflix.com',
+        'tesla': 'https://tesla.com',
+        'walmart': 'https://walmart.com',
+        'target': 'https://target.com',
+        'ebay': 'https://ebay.com',
+        'salesforce': 'https://salesforce.com',
+        'oracle': 'https://oracle.com',
+        'adobe': 'https://adobe.com',
+        'ibm': 'https://ibm.com',
+        'intel': 'https://intel.com',
+        'cisco': 'https://cisco.com',
+        'uber': 'https://uber.com',
+        'lyft': 'https://lyft.com',
+        'airbnb': 'https://airbnb.com',
+        'spotify': 'https://spotify.com',
+        'zoom': 'https://zoom.us',
+        'slack': 'https://slack.com',
+        'hubspot': 'https://hubspot.com',
+        'mailchimp': 'https://mailchimp.com',
+        'shopify': 'https://shopify.com',
+        'stripe': 'https://stripe.com',
+        'square': 'https://squareup.com',
+        'paypal': 'https://paypal.com',
+        'twitter': 'https://twitter.com',
+        'linkedin': 'https://linkedin.com',
+        'instagram': 'https://instagram.com',
+        'tiktok': 'https://tiktok.com',
+        'pinterest': 'https://pinterest.com',
+        'snapchat': 'https://snapchat.com',
+        'reddit': 'https://reddit.com',
+        'github': 'https://github.com',
+        'gitlab': 'https://gitlab.com',
+        'atlassian': 'https://atlassian.com',
+        'jira': 'https://atlassian.com',
+        'confluence': 'https://atlassian.com',
+        'dropbox': 'https://dropbox.com',
+        'box': 'https://box.com',
+        'asana': 'https://asana.com',
+        'trello': 'https://trello.com',
+        'monday': 'https://monday.com',
+        'notion': 'https://notion.so',
+        'figma': 'https://figma.com',
+        'canva': 'https://canva.com',
+        'adobe systems': 'https://adobe.com',
+        'salesforce.com': 'https://salesforce.com'
+      };
+
+      // Check known companies with multiple lookup strategies
+      // Try original name (lowercased and trimmed)
+      let lookup1 = orgName.toLowerCase().trim();
+      if (knownCompanies[lookup1]) {
+        return knownCompanies[lookup1];
+      }
+
+      // Try cleaned name
+      if (knownCompanies[cleanName]) {
+        return knownCompanies[cleanName];
+      }
+
+      // Try without spaces
+      let lookup2 = cleanName.replace(/\s+/g, '');
+      if (knownCompanies[lookup2]) {
+        return knownCompanies[lookup2];
+      }
+
+      // Default: try company name + .com
+      let domainName = cleanName.replace(/\s+/g, '').toLowerCase();
+      return `https://${domainName}.com`;
+    }
+
+    // Fallback
+    let domainName = cleanName.replace(/\s+/g, '').toLowerCase();
+    return `https://${domainName}.com`;
+  }
+
+  function handleSimilarOrgClick(event) {
+    event.preventDefault();
+
+    const link = event.currentTarget;
+    const orgName = link.getAttribute('data-org-name');
+    const orgType = link.getAttribute('data-org-type');
+
+    if (!orgName) return;
+
+    // Show confirmation
+    const confirmMsg = `Generate profile for ${orgName}?\n\nThis will navigate to a new profile generation.`;
+    if (!confirm(confirmMsg)) return;
+
+    // Guess the organization URL
+    const guessedUrl = guessOrganizationUrl(orgName, orgType);
+
+    // Create a form and submit it
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/organizations/process';
+
+    // Add CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    if (csrfToken) {
+      const csrfInput = document.createElement('input');
+      csrfInput.type = 'hidden';
+      csrfInput.name = 'authenticity_token';
+      csrfInput.value = csrfToken.getAttribute('content');
+      form.appendChild(csrfInput);
+    }
+
+    // Add URL input
+    const urlInput = document.createElement('input');
+    urlInput.type = 'hidden';
+    urlInput.name = 'url';
+    urlInput.value = guessedUrl;
+    form.appendChild(urlInput);
+
+    // Add organization type
+    const typeInput = document.createElement('input');
+    typeInput.type = 'hidden';
+    typeInput.name = 'organization_type';
+    typeInput.value = orgType;
+    form.appendChild(typeInput);
+
+    // Append to body and submit
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  function initializeSimilarOrgLinks() {
+    const links = document.querySelectorAll('.similar-org-link');
+    links.forEach(link => {
+      link.addEventListener('click', handleSimilarOrgClick);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSimilarOrgLinks);
+  } else {
+    initializeSimilarOrgLinks();
   }
 })();
 </script>
