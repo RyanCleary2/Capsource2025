@@ -1,9 +1,12 @@
 # CapSource Projects
 
-This repository hosts two complementary projects designed to empower students, educators, and industry professionals through AI-driven career coaching and customized project generation:
+This repository hosts five complementary AI-powered projects designed to empower students, educators, and industry professionals through intelligent career coaching, automated profile generation, project ideation, case study creation, and mentorship guidance:
 
 - **CapChat** – An AI Career & Project Coach for CapSource
 - **CapSource AI Project Generator** – A Rails 8 web application that creates student project ideas and scopes
+- **CapSource AI Profile Generator** – Automated profile generation from resumes and websites using AI
+- **AI Case Generator** – AI-powered case study generator for CapSource
+- **AI Mentoring** – AI-driven mentorship matching and guidance system
 
 ---
 
@@ -30,6 +33,27 @@ This repository hosts two complementary projects designed to empower students, e
    - [Deployment](#deployment)
    - [Contributing](#contributing)
    - [License](#license)
+
+3. [CapSource AI Profile Generator](#capsource-ai-profile-generator)
+   - [Overview](#overview-2)
+   - [Features](#features-2)
+   - [Tech Stack](#tech-stack-1)
+   - [Architecture](#architecture-1)
+   - [Prerequisites](#prerequisites-1)
+   - [Installation & Running](#installation--running-1)
+   - [Routes & Endpoints](#routes--endpoints-1)
+   - [AI Integration](#ai-integration-1)
+   - [Background Jobs](#background-jobs)
+   - [Deployment](#deployment-1)
+   - [Live Application](#live-application)
+
+4. [AI Case Generator](#ai-case-generator)
+   - [Overview](#overview-3)
+   - [Status](#status)
+
+5. [AI Mentoring](#ai-mentoring)
+   - [Overview](#overview-4)
+   - [Status](#status-1)
 
 ---
 
@@ -78,7 +102,7 @@ Preprocessing → Intent & NER → Memory Lookup
      Response Generation & Clarification
                ↓
         Feedback Collection (Explicit + Implicit)
-```  
+```
 
 ### Code Highlights
 - **`ragFirstDraft.py`** implements the end-to-end pipeline:
@@ -96,7 +120,7 @@ Preprocessing → Intent & NER → Memory Lookup
 
 ### Setup & Usage
 **Prerequisites**:
-- Python 3.8+
+- Python 3.8+
 - OpenAI API key
 - PostgreSQL (session memory)
 - MongoDB (profile memory)
@@ -127,7 +151,7 @@ Refer to `Train AI chatbot.docx` for details.
 ## CapSource AI Project Generator
 
 ### Overview
-A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized student project ideas and full project scopes based on a company website or selected topics.
+A Rails 8 web application that uses OpenAI's GPT-4o to generate customized student project ideas and full project scopes based on a company website or selected topics.
 
 ### Features
 - **Project Ideas**: Generates 3–5 concise project ideas per topic
@@ -137,8 +161,8 @@ A Rails 8 web application that uses OpenAI’s GPT-4o to generate customized st
 - **CORS Enabled**: Rack-CORS for headless front-end use
 
 ### Tech Stack
-- **Ruby** 3.2.2 (rbenv)
-- **Rails** 8.0.2
+- **Ruby** 3.2.2 (rbenv)
+- **Rails** 8.0.2
 - **JavaScript** (ES6, importmap-rails)
 - **CSS** (custom, no frameworks)
 - **OpenAI GPT-4o** (`ruby-openai` gem)
@@ -163,14 +187,14 @@ bundle install
 ```bash
 # create .env with:
 OPENAI_API_KEY=sk-...
-```  
+```
 
 **Database** (optional):
 ```bash
 brew install postgresql
 brew services start postgresql
 rails db:create db:migrate
-```  
+```
 
 **Start server**:
 ```bash
@@ -214,7 +238,7 @@ response = client.chat(
     temperature: 0.7
   }
 )
-```  
+```
 Helper methods in `ProjectsController`:
 - `generate_project_ideas`
 - `generate_project_scope`
@@ -244,3 +268,181 @@ Please follow existing style and add tests for new behavior.
 
 ### License
 MIT © CapSource Team
+
+---
+
+## CapSource AI Profile Generator
+
+### Overview
+A Rails 8 web application that automates the creation of student and organization profiles using AI. The application can parse resume PDFs to generate student profiles and scrape website URLs to create organization profiles, using OpenAI's GPT-4o-mini for intelligent data extraction and enhancement.
+
+### Features
+- **Resume Parsing**: Upload PDF resumes and automatically extract structured profile data
+- **Website Scraping**: Generate organization profiles from company website URLs
+- **AI Enhancement**: Uses OpenAI GPT-4o-mini to intelligently parse and structure information
+- **Background Processing**: Solid Queue for handling time-intensive AI operations
+- **Profile Editing**: Review and edit AI-generated profiles before saving
+- **Dual Profile Types**: Supports both student profiles and organization profiles
+- **Modern Rails Stack**: Built with Rails 8 leveraging the latest framework features
+
+### Tech Stack
+- **Ruby** 3.2+ (rbenv/RVM)
+- **Rails** 8.0+
+- **OpenAI GPT-4o-mini** (via `ruby-openai` gem)
+- **Solid Queue** for background job processing
+- **PDF Processing** for resume parsing
+- **Web Scraping** libraries for website content extraction
+- **PostgreSQL** (production), **SQLite3** (dev/test)
+- **Propshaft** asset pipeline
+
+### Architecture
+```
+User Input (PDF/URL)
+   │
+   ▼
+Upload Handler → Background Job Queue (Solid Queue)
+   │
+   ▼
+PDF Parser / Web Scraper
+   │
+   ▼
+AI Processing (GPT-4o-mini)
+   │
+   ▼
+Structured Profile Data → Review & Edit Interface
+   │
+   ▼
+Profile Storage
+```
+
+### Prerequisites
+- Ruby 3.2+
+- Rails 8.0+
+- OpenAI API key
+- PostgreSQL (for production)
+- PDF processing libraries
+- Background job processor (Solid Queue)
+
+### Installation & Running
+```bash
+git clone https://github.com/your_org/capsource-profile-generator.git
+cd capsource-profile-generator
+bundle install
+```
+
+**Environment**:
+```bash
+# create .env with:
+OPENAI_API_KEY=sk-...
+```
+
+**Database setup**:
+```bash
+rails db:create db:migrate
+```
+
+**Start server and background jobs**:
+```bash
+# Terminal 1: Rails server
+bin/rails server
+
+# Terminal 2: Solid Queue worker
+bin/jobs
+```
+
+### Routes & Endpoints
+| Verb | Path                    | Controller#Action              | Purpose                           |
+|------|-------------------------|--------------------------------|-----------------------------------|
+| GET  | `/students/new`         | `students#new`                | Upload resume form                |
+| POST | `/students`             | `students#create`             | Process resume and generate profile |
+| GET  | `/students/:id/edit`    | `students#edit`               | Edit generated student profile    |
+| GET  | `/organizations/new`    | `organizations#new`           | Enter website URL form            |
+| POST | `/organizations`        | `organizations#create`        | Scrape and generate org profile   |
+| GET  | `/organizations/:id/edit` | `organizations#edit`        | Edit generated organization profile |
+
+### AI Integration
+```ruby
+client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
+
+# Resume parsing prompt
+response = client.chat(
+  parameters: {
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: "Extract structured profile data from this resume..." },
+      { role: "user", content: resume_text }
+    ],
+    temperature: 0.3
+  }
+)
+
+# Website scraping prompt
+response = client.chat(
+  parameters: {
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: "Extract company information from this website..." },
+      { role: "user", content: website_content }
+    ],
+    temperature: 0.3
+  }
+)
+```
+
+### Background Jobs
+The application uses **Solid Queue** for processing:
+- PDF text extraction
+- Website content scraping
+- AI API calls to OpenAI
+- Profile data structuring
+
+Jobs are monitored through the Solid Queue dashboard and processed asynchronously to maintain responsive user experience.
+
+### Deployment
+The application is deployed on **Google Cloud Run**:
+- Container-based deployment
+- Automatic scaling
+- Integrated with Cloud SQL (PostgreSQL)
+- Environment variables managed through Cloud Run secrets
+
+### Live Application
+**Production URL**: https://capsource-profile-builder-493243725919.us-central1.run.app
+
+Visit the live application to:
+- Generate student profiles from resume PDFs
+- Create organization profiles from website URLs
+- Experience AI-powered profile generation in action
+
+---
+
+## AI Case Generator
+
+### Overview
+AI-powered case study generator for CapSource that creates comprehensive case studies for student projects and industry collaborations.
+
+### Status
+[To be documented]
+
+Documentation for this tool is currently in progress. This section will be updated with:
+- Detailed features and capabilities
+- Technical architecture
+- Setup and installation instructions
+- API endpoints and usage examples
+- Deployment information
+
+---
+
+## AI Mentoring
+
+### Overview
+AI-driven mentorship matching and guidance system that connects students with appropriate mentors and provides intelligent mentorship recommendations.
+
+### Status
+[To be documented]
+
+Documentation for this tool is currently in progress. This section will be updated with:
+- Matching algorithm details
+- Mentorship guidance features
+- Technical implementation
+- Setup and configuration
+- Integration with other CapSource tools
