@@ -49,7 +49,8 @@
     .progress-step { background: var(--light-accent); color: var(--primary-dark); padding: 10px 24px; border-radius: var(--border-radius); font-weight: 600; font-size: 16px; box-shadow: var(--box-shadow); }
     .progress-step.active { background: var(--primary-color); color: var(--white); }
     .case-generator { padding: 60px 0; }
-    .generator-container { background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 40px; margin-top: -80px; position: relative; z-index: 10; }
+    /* Move the generator down so it no longer overlaps the hero background */
+    .generator-container { background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 40px; margin-top: 40px; position: relative; z-index: 10; }
     .generator-heading { text-align: center; margin-bottom: 40px; }
     .generator-heading h2 { font-size: 30px; color: var(--primary-dark); margin-bottom: 10px; font-weight: 700; }
     .generator-heading p { color: #666; font-size: 16px; }
@@ -136,11 +137,28 @@
             </div>
           <% end %>
 
+          <div class="form-section generation-mode">
+            <h3>Generation Mode</h3>
+            <label><input type="radio" name="generation_mode" value="scope" checked> Generate Full Scope</label>
+            <label style="margin-left:16px;"><input type="radio" name="generation_mode" value="ideas"> Generate Ideas (5 titles + objectives)</label>
+            <p>Choose "Ideas" to brainstorm five tailored titles with short objectives. Choose one to generate the full scope.</p>
+          </div>
+
           <div class="form-section">
             <h3>Field Placement Inputs</h3>
             <div class="form-group">
+              <%= f.label :organization_name, 'Organization Name' %>
+              <%= f.text_field :organization_name, placeholder: 'e.g., RiverWatch Alliance (optional)' %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :website_url, 'Organization Website' %>
+              <%= f.url_field :website_url, placeholder: 'https://example.org (optional)' %>
+            </div>
+
+            <div class="form-group" id="background-group">
               <%= f.label :background, 'Field Placement Objective Statement' %>
-              <%= f.text_area :background, placeholder: 'Describe the purpose and learning goals for this field placement (what should students accomplish?)', required: true %>
+              <%= f.text_area :background, placeholder: 'Describe the purpose and learning goals for this field placement (what should students accomplish?)', required: true, id: 'background' %>
             </div>
 
             <div class="form-group">
@@ -197,8 +215,12 @@
       const topicsError = document.getElementById('topics-error');
       const disciplineSelect = document.getElementById('discipline-select');
       const topicsContainer = document.getElementById('topics-container');
-      const selectAllBtn = document.getElementById('select-all-topics');
+  const selectAllBtn = document.getElementById('select-all-topics');
       const clearBtn = document.getElementById('clear-topics');
+  const backgroundField = document.getElementById('background');
+  const backgroundGroup = document.getElementById('background-group');
+  const topicsGroup = document.getElementById('topics-group');
+  const modeRadios = document.querySelectorAll('input[name="generation_mode"]');
 
       if (!generateButton || !form || !topicsError || !disciplineSelect || !topicsContainer) {
         console.error('One or more DOM elements not found.');
@@ -255,14 +277,50 @@
         topicsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
       });
 
-      // Validate that at least one topic is selected before submitting
-      form.addEventListener('submit', function(event) {
-        const selectedTopics = document.querySelectorAll('input[name="topics[]"]:checked');
-        if (selectedTopics.length === 0) {
-          event.preventDefault();
-          topicsError.style.display = 'block';
-          document.getElementById('topics-group').scrollIntoView({ behavior: 'smooth' });
+      function applyModeUI(mode) {
+        if (mode === 'ideas') {
+          // Background optional in ideas mode
+          backgroundField && backgroundField.removeAttribute('required');
+          // Hide the description/background field entirely when generating ideas
+          backgroundGroup && backgroundGroup.classList.add('hidden');
+          // Topics optional in ideas mode; visually de-emphasize
+          topicsError && (topicsError.style.display = 'none');
+          // Keep topics visible in ideas mode so users can optionally pick some after choosing a discipline
+          // (No validation in ideas mode; selection is optional.)
         } else {
+          // Full scope mode: require background
+          backgroundField && backgroundField.setAttribute('required', 'required');
+          // Show the background field
+          backgroundGroup && backgroundGroup.classList.remove('hidden');
+          topicsGroup && (topicsGroup.classList.remove('hidden'));
+        }
+      }
+
+      // Initialize mode UI
+      let currentMode = document.querySelector('input[name="generation_mode"]:checked')?.value || 'scope';
+      applyModeUI(currentMode);
+
+      modeRadios.forEach(r => {
+        r.addEventListener('change', (e) => {
+          currentMode = e.target.value;
+          applyModeUI(currentMode);
+        });
+      });
+
+      // Validate that at least one topic is selected before submitting (only for scope mode)
+      form.addEventListener('submit', function(event) {
+        const mode = document.querySelector('input[name="generation_mode"]:checked')?.value || 'scope';
+        if (mode === 'scope') {
+          const selectedTopics = document.querySelectorAll('input[name="topics[]"]:checked');
+          if (selectedTopics.length === 0) {
+            event.preventDefault();
+            topicsError.style.display = 'block';
+            document.getElementById('topics-group').scrollIntoView({ behavior: 'smooth' });
+          } else {
+            topicsError.style.display = 'none';
+          }
+        } else {
+          // ideas mode: no topics requirement
           topicsError.style.display = 'none';
         }
       });

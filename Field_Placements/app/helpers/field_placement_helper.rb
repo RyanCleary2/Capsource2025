@@ -123,6 +123,10 @@ module FieldPlacementHelper
     # Collapse more than two consecutive blank lines
     str.gsub!(/\n{3,}/, "\n\n")
 
+    # Remove any leftover 'ENDS HERE' markers (or small variants) left by the model
+    str.gsub!(/\bENDS?\s*HERE\b[\.\:\-\s]*$/i, '')
+    str.gsub!(/\bENDS?\s*HERE\b[\.\:\-\s]*/i, '')
+
     str.strip
   end
 end

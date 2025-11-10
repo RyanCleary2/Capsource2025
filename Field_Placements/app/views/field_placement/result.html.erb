@@ -300,21 +300,57 @@
     .edit-controls {
       display: flex;
       justify-content: flex-end;
+      align-items: center; /* vertically center buttons */
       gap: 10px;
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid #e0e0e0;
     }
 
+    /* Ensure all direct children (buttons and the inline form) participate in flex alignment
+       and have identical height so they line up perfectly. */
+    .edit-controls > * {
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
+      margin: 0;
+    }
+
+    .edit-controls form { 
+      display: inline-flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      gap: inherit;
+      flex-wrap: nowrap;
+    }
+    .edit-controls button { 
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .edit-controls svg { 
+      display: block;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
     .edit-btn,
     .save-btn {
-      padding: 10px 20px;
+      padding: 10px 14px; /* increased from 6px/12px to add 2px more breathing room */
       border: none;
-      border-radius: var(--border-radius);
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.18s ease;
       font-weight: 500;
       font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1; /* keep height tight around text */
+      min-width: 0;
+      height: 36px; /* fixed height so all control buttons match */
     }
 
     .edit-btn { background-color: var(--secondary-color); color: white; }
@@ -322,7 +358,30 @@
 
     .save-btn { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white; box-shadow: 0 4px 8px rgba(226,125,96,.3); display: none; }
     .save-btn:hover { box-shadow: 0 6px 12px rgba(226,125,96,.4); transform: translateY(-2px); }
-    .save-btn.active { display: inline-block; }
+    .save-btn.active { display: inline-flex; }
+
+    /* Smaller inline select button that sits next to edit controls */
+    .select-btn {
+      padding: 8px 12px; /* increased from 6px/10px for consistent breathing room */
+      font-size: 14px;
+      border-radius: 8px;
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+      height: 36px; /* match edit/save height */
+    }
+
+    /* Make the select button visually distinct (outline) while matching size */
+    .edit-controls .select-btn {
+      background: transparent;
+      color: var(--secondary-color);
+      border: 1px solid var(--secondary-color);
+    }
+    .edit-controls .select-btn:hover {
+      background: rgba(133,205,202,0.08);
+    }
 
     .edit-mode-indicator { display: none; background-color: var(--secondary-color); color: white; padding: 8px 15px; border-radius: var(--border-radius); font-size: 13px; margin-bottom: 10px; font-weight: 500; }
     .edit-mode-indicator.active { display: block; }
@@ -496,18 +555,19 @@
                   <div class="edit-controls">
                     <button type="button" class="edit-btn" data-target="idea-<%= idx %>">Enable Editing</button>
                     <button type="button" class="save-btn" data-target="idea-<%= idx %>">Save Changes</button>
+                    <%= form_with url: generate_scope_from_idea_path, method: :post, local: true, html: { class: 'idea-form'} do |f| %>
+                      <%= f.hidden_field :organization_name, value: @organization_name %>
+                      <%= f.hidden_field :website_url, value: @website_url %>
+                      <%= f.hidden_field :discipline, value: @discipline %>
+                      <%= f.hidden_field :case_idea, value: idea, id: "idea-input-#{idx}" %>
+                      <button type="submit" class="edit-btn select-btn" data-source="idea-<%= idx %>" data-input="idea-input-<%= idx %>">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                        Select This Field Placement
+                      </button>
+                    <% end %>
                   </div>
-                  <%= form_with url: generate_scope_from_idea_path, method: :post, local: true, html: { class: 'idea-form' } do |f| %>
-                    <%= f.hidden_field :website_url, value: @website_url %>
-                    <%= f.hidden_field :student_level, value: @student_level %>
-                    <%= f.hidden_field :case_idea, value: idea, id: "idea-input-#{idx}" %>
-                    <button type="submit" class="select-btn" data-source="idea-<%= idx %>" data-input="idea-input-<%= idx %>">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                      </svg>
-                      Select This Field Placement
-                    </button>
-                  <% end %>
                 </div>
               <% end %>
             <% end %>
@@ -516,27 +576,47 @@
             <div class="field-placement-overview">
               <div class="fp-card">
                 <h3>Title</h3>
-                <div class="fp-content"><%= sections[:title].presence || '—' %></div>
+                <div class="fp-content">
+                  <div id="fp-title" class="editable-content" contenteditable="false"><h2 style="margin:0;"><%= sections[:title].presence || '—' %></h2></div>
+                  <div class="edit-controls">
+                    <button type="button" class="edit-btn" data-target="fp-title">Enable Editing</button>
+                    <button type="button" class="save-btn" data-target="fp-title">Save Changes</button>
+                  </div>
+                </div>
               </div>
 
               <div class="fp-card">
                 <h3>Description</h3>
-                <div class="fp-content"><%= format_case_text(sections[:description] || @case_scope) %></div>
+                <div class="fp-content">
+                  <div id="fp-description" class="editable-content" contenteditable="false"><%= format_case_text(sections[:description] || @case_scope) %></div>
+                  <div class="edit-controls">
+                    <button type="button" class="edit-btn" data-target="fp-description">Enable Editing</button>
+                    <button type="button" class="save-btn" data-target="fp-description">Save Changes</button>
+                  </div>
+                </div>
               </div>
 
               <div class="fp-card">
                 <h3>Key Responsibilities</h3>
-                <div class="fp-content"><%= format_case_text(sections[:responsibilities] || '') %></div>
+                <div class="fp-content">
+                  <div id="fp-responsibilities" class="editable-content" contenteditable="false"><%= format_case_text(sections[:responsibilities] || '') %></div>
+                  <div class="edit-controls">
+                    <button type="button" class="edit-btn" data-target="fp-responsibilities">Enable Editing</button>
+                    <button type="button" class="save-btn" data-target="fp-responsibilities">Save Changes</button>
+                  </div>
+                </div>
               </div>
 
               <div class="fp-card">
                 <h3>Learning Outcomes</h3>
-                <div class="fp-content"><%= format_case_text(sections[:outcomes] || '') %></div>
+                <div class="fp-content">
+                  <div id="fp-outcomes" class="editable-content" contenteditable="false"><%= format_case_text(sections[:outcomes] || '') %></div>
+                  <div class="edit-controls">
+                    <button type="button" class="edit-btn" data-target="fp-outcomes">Enable Editing</button>
+                    <button type="button" class="save-btn" data-target="fp-outcomes">Save Changes</button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="edit-controls">
-              <button type="button" class="edit-btn" data-target="editable-scope">Enable Editing</button>
-              <button type="button" class="save-btn" data-target="editable-scope">Save Changes</button>
             </div>
 
             <script>

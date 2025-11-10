@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root "field_placement#index"
+  root to: 'field_placement#index'
 
-  # Define a route for generating field placements
-  post "/generate_field_placement", to: "field_placement#generate_field_placement"
+  post 'generate_field_placement', to: 'field_placement#generate_field_placement', as: :generate_field_placement
+  post 'generate_scope_from_idea', to: 'field_placement#generate_scope_from_idea', as: :generate_scope_from_idea
 end
