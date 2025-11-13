@@ -1,0 +1,727 @@
+<% if @processing %>
+<!-- Processing State - Show Loading -->
+<div class="max-w-4xl mx-auto p-6">
+  <div class="mb-6">
+    <%= link_to "← Back to Home", root_path, class: "text-capsource-orange hover:text-orange-600 font-medium inline-flex items-center" %>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+    <!-- Spinner Animation -->
+    <div class="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-capsource-orange mb-6"></div>
+
+    <h2 class="text-2xl font-semibold text-capsource-dark mb-4">
+      Generating Organization Profile...
+    </h2>
+
+    <p class="text-capsource-mauve mb-6 max-w-2xl mx-auto">
+      Our AI is analyzing the organization's website and generating a comprehensive profile.
+      This may take 30-60 seconds.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded mb-6 text-left max-w-2xl mx-auto">
+      <div class="flex items-start">
+        <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <p class="font-medium mb-2">Processing Steps:</p>
+          <ul class="text-sm space-y-1 list-disc list-inside">
+            <li>Scraping organization website</li>
+            <li>Extracting key information</li>
+            <li>Enhancing data with AI</li>
+            <li>Creating comprehensive profile</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-sm text-gray-500">
+      This page will automatically refresh when processing is complete.
+    </p>
+  </div>
+</div>
+
+<script>
+  // Auto-refresh every 3 seconds while processing
+  setTimeout(function() {
+    window.location.reload();
+  }, 3000);
+</script>
+
+<% else %>
+<!-- Profile Ready - Show Content -->
+<%= form_with url: organizations_update_profile_path, method: :patch, local: true, multipart: true, class: "space-y-6", id: "profile-form" do |form| %>
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Back to Home Link -->
+  <div class="mb-6">
+    <%= link_to "← Back to Home", root_path, class: "text-capsource-orange hover:text-orange-600 font-medium inline-flex items-center" %>
+  </div>
+  <!-- Editable Notice -->
+  <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 px-4 py-3 rounded mb-6" role="alert">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span class="font-medium">This profile is fully editable. Review the information and make any corrections before saving.</span>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if notice %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
+      <span class="block sm:inline"><%= notice %></span>
+    </div>
+  <% end %>
+
+  <% if alert %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+      <span class="block sm:inline"><%= alert %></span>
+    </div>
+  <% end %>
+
+  <!-- Breadcrumb Navigation -->
+  <div class="flex items-center space-x-2 text-sm text-gray-600 mb-8">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+    <span class="text-capsource-orange">Organizations</span>
+    <span>></span>
+    <span><%= @organization_type == 'company' ? 'Company' : 'University' %> Profile</span>
+  </div>
+
+  <!-- Banner Section -->
+  <div class="bg-white rounded-xl shadow border border-gray-100 mb-8 overflow-hidden">
+    <div class="h-48 bg-gradient-to-r from-red-800 to-red-600 flex items-center justify-center relative">
+      <% if @profile_data["bannerUrl"].present? %>
+        <img src="<%= @profile_data["bannerUrl"] %>" alt="<%= @profile_data["name"] %> Banner" class="w-full h-full object-cover" loading="lazy">
+      <% end %>
+
+      <!-- Banner Upload (hidden in display mode) -->
+      <div class="edit-field hidden absolute top-4 right-4 bg-white rounded-lg p-2">
+        <%= form.file_field "banner_image", accept: "image/png", class: "text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div class="flex items-start justify-between mb-6">
+        <div class="flex items-start space-x-6">
+          <!-- Logo -->
+          <div class="flex-shrink-0 relative -mt-20">
+            <div class="w-32 h-32 bg-white border-4 border-white rounded-lg flex items-center justify-center overflow-hidden shadow-lg">
+              <% if @profile_data["logoUrl"].present? %>
+                <img src="<%= @profile_data["logoUrl"] %>" alt="<%= @profile_data["name"] %> Logo" class="w-full h-full object-contain p-2" loading="lazy">
+              <% else %>
+                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+              <% end %>
+            </div>
+
+            <!-- Logo Upload (hidden in display mode) -->
+            <div class="edit-field hidden mt-3">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Logo</label>
+              <%= form.file_field "logo_image", accept: "image/png", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+            </div>
+          </div>
+
+          <!-- Name and Basic Info -->
+          <div class="flex-grow pt-12">
+            <!-- Display Mode -->
+            <div class="display-field">
+              <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @profile_data["name"] %></h1>
+              <% if @profile_data["tagline"].present? %>
+                <p class="text-lg text-capsource-mauve italic mb-2"><%= @profile_data["tagline"] %></p>
+              <% end %>
+            </div>
+
+            <!-- Edit Mode -->
+            <div class="edit-field hidden mb-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <%= form.text_field "name", value: @profile_data["name"], class: "text-3xl font-bold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 focus:border-capsource-orange focus:ring-0 p-1 w-full mb-2" %>
+
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+              <%= form.text_field "tagline", value: @profile_data["tagline"], class: "text-lg text-capsource-mauve bg-transparent border-0 border-b-2 border-gray-300 focus:border-capsource-orange focus:ring-0 p-1 w-full" %>
+            </div>
+
+            <div class="flex items-center space-x-3 mt-4">
+              <% if @profile_data["website"].present? %>
+                <a href="<%= @profile_data["website"] %>" target="_blank" class="text-capsource-orange hover:underline flex items-center">
+                  <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                  </svg>
+                  Website
+                </a>
+              <% end %>
+            </div>
+
+            <!-- Edit Controls -->
+            <div class="flex space-x-3 mt-4">
+              <button type="button" id="edit-btn" class="bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-2 text-sm">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                Edit Profile
+              </button>
+              <button type="button" id="save-btn" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 text-sm">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Save Changes
+              </button>
+              <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-4 py-2 text-sm">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Row -->
+  <div class="bg-white rounded-xl shadow border border-gray-100 p-6 mb-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Website</label>
+        <div class="display-field text-sm text-gray-900 truncate"><%= @profile_data["website"] %></div>
+        <div class="edit-field hidden">
+          <%= form.text_field "website", value: @profile_data["website"], class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Year Founded</label>
+        <div class="display-field text-sm text-gray-900"><%= @profile_data["yearFounded"] %></div>
+        <div class="edit-field hidden">
+          <%= form.number_field "yearFounded", value: @profile_data["yearFounded"], class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">HQ Location</label>
+        <div class="display-field text-sm text-gray-900"><%= @profile_data["hqLocation"] %></div>
+        <div class="edit-field hidden">
+          <%= form.text_field "hqLocation", value: @profile_data["hqLocation"], class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Employees</label>
+        <div class="display-field text-sm text-gray-900"><%= @profile_data["numberOfEmployees"] %></div>
+        <div class="edit-field hidden">
+          <%= form.text_field "numberOfEmployees", value: @profile_data["numberOfEmployees"], class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Category</label>
+        <div class="display-field text-sm text-gray-900"><%= @profile_data["category"] %></div>
+        <div class="edit-field hidden">
+          <%= form.text_field "organizationType", value: @profile_data["organizationType"] || @profile_data["category"], class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Two-column layout: main + sidebar -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2">
+
+  <!-- About Section -->
+  <div class="bg-white rounded-xl shadow border border-gray-100 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">About</h2>
+    <div class="display-field">
+      <p class="text-gray-700 leading-relaxed"><%= @profile_data["description"] %></p>
+      <!-- Video card preview style -->
+      <% if @profile_data["promoVideoUrl"].present? %>
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="rounded-lg border p-3 flex items-center gap-3">
+            <video controls class="w-28 h-16 object-cover rounded bg-black" src="<%= @profile_data["promoVideoUrl"] %>"></video>
+            <div>
+              <div class="font-medium">Company Video</div>
+              <div class="text-sm text-gray-500">Promotional</div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="edit-field hidden">
+      <%= form.text_area "description", value: @profile_data["description"], rows: 4, class: "w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange focus:border-transparent mb-4" %>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Upload video</label>
+      <%= form.file_field "promo_video", accept: "video/*", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+    </div>
+  </div>
+
+  <!-- Removed sections to match design: Development Interests, Expertise, Skills -->
+
+  <!-- Active Programs -->
+  <div class="bg-white rounded-xl shadow border border-gray-100 p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-900">Active Programs (<%= @profile_data["programs"]&.length || 0 %>)</h2>
+      <button type="button" class="bg-capsource-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+        + Add Program
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-900 text-white">
+          <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Title</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Type</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Managers</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">End Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% if @profile_data["programs"]&.any? %>
+            <% @profile_data["programs"].each_with_index do |program, index| %>
+              <tr class="<%= index.even? ? 'bg-white' : 'bg-gray-50' %> hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">
+                  <div class="display-field"><%= program["title"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "programs[#{index}][title]", value: program["title"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= program["type"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "programs[#{index}][type]", value: program["type"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= program["managers"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "programs[#{index}][managers]", value: program["managers"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= program["endDate"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "programs[#{index}][endDate]", value: program["endDate"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                No programs yet. Click "Add Program" to get started.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Project Archive -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-900">Project Archive (<%= @profile_data["projectArchive"]&.length || 0 %>)</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-900 text-white">
+          <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Title</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Type</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Managers</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">End Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% if @profile_data["projectArchive"]&.any? %>
+            <% @profile_data["projectArchive"].each_with_index do |project, index| %>
+              <tr class="<%= index.even? ? 'bg-white' : 'bg-gray-50' %> hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">
+                  <div class="display-field"><%= project["title"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "projectArchive[#{index}][title]", value: project["title"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= project["type"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "projectArchive[#{index}][type]", value: project["type"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= project["managers"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "projectArchive[#{index}][managers]", value: project["managers"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= project["endDate"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "projectArchive[#{index}][endDate]", value: project["endDate"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                No archived projects.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Collaboration Requests -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-900">Collaboration Requests (<%= @profile_data["collaborationRequests"]&.length || 0 %>)</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-capsource-dark text-white">
+          <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Title</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Type</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Managers</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold">Start Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @profile_data["collaborationRequests"]&.any? %>
+            <% @profile_data["collaborationRequests"].each_with_index do |req, index| %>
+              <tr class="<%= index.even? ? 'bg-white' : 'bg-gray-50' %> border-b border-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-900">
+                  <div class="display-field"><%= req["title"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "collaborationRequests[#{index}][title]", value: req["title"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= req["type"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "collaborationRequests[#{index}][type]", value: req["type"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= req["managers"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "collaborationRequests[#{index}][managers]", value: req["managers"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <div class="display-field"><%= req["startDate"] %></div>
+                  <div class="edit-field hidden"><%= form.text_field "collaborationRequests[#{index}][startDate]", value: req["startDate"], class: "w-full p-2 border border-gray-300 rounded" %></div>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500">No collaboration requests.</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div> <!-- end main column -->
+
+  <div>
+  <!-- Social Media -->
+  <% if @profile_data["socialMedia"].present? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Social Media</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% @profile_data["socialMedia"].each do |platform, url| %>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1 capitalize"><%= platform %></label>
+            <div class="display-field">
+              <% if url.present? %>
+                <a href="<%= url %>" target="_blank" class="text-blue-600 hover:underline break-all"><%= url %></a>
+              <% else %>
+                <p class="text-gray-500">Not provided</p>
+              <% end %>
+            </div>
+            <div class="edit-field hidden">
+              <%= form.text_field "socialMedia[#{platform}]", value: url, class: "w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-capsource-orange" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Associated Members -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Associated Members (<%= @profile_data["associatedMembers"]&.length || 0 %>)</h2>
+    <div class="space-y-3">
+      <% (@profile_data["associatedMembers"] || []).each_with_index do |m, index| %>
+        <div>
+          <div class="display-field text-sm text-gray-900"><%= m["name"] %> <span class="text-gray-500">— <%= m["title"] %></span></div>
+          <div class="edit-field hidden grid grid-cols-2 gap-2">
+            <%= form.text_field "associatedMembers[#{index}][name]", value: m["name"], class: "p-2 border border-gray-300 rounded" %>
+            <%= form.text_field "associatedMembers[#{index}][title]", value: m["title"], class: "p-2 border border-gray-300 rounded" %>
+          </div>
+        </div>
+      <% end %>
+      <% if (@profile_data["associatedMembers"] || []).empty? %>
+        <p class="text-gray-500 text-sm">No members listed.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Collaborators -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Collaborators (<%= @profile_data["collaborators"]&.length || 0 %>)</h2>
+    <div class="space-y-3">
+      <% (@profile_data["collaborators"] || []).each_with_index do |c, index| %>
+        <div>
+          <div class="display-field text-sm text-gray-900"><%= c["name"] %> <span class="text-gray-500">— <%= c["title"] %></span></div>
+          <div class="edit-field hidden grid grid-cols-2 gap-2">
+            <%= form.text_field "collaborators[#{index}][name]", value: c["name"], class: "p-2 border border-gray-300 rounded" %>
+            <%= form.text_field "collaborators[#{index}][title]", value: c["title"], class: "p-2 border border-gray-300 rounded" %>
+          </div>
+        </div>
+      <% end %>
+      <% if (@profile_data["collaborators"] || []).empty? %>
+        <p class="text-gray-500 text-sm">No collaborators listed.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Departments -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Departments (<%= @profile_data["departments"]&.length || 0 %>)</h2>
+    <div class="space-y-2">
+      <% (@profile_data["departments"] || []).each_with_index do |d, index| %>
+        <div class="display-field text-sm text-gray-900"><%= d %></div>
+        <div class="edit-field hidden">
+          <%= form.text_field "departments[#{index}]", value: d, class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      <% end %>
+      <% if (@profile_data["departments"] || []).empty? %>
+        <p class="text-gray-500 text-sm">No departments listed.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Similar Organizations -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Similar Organizations</h2>
+    <div class="space-y-2">
+      <% (@profile_data["similarOrganizations"] || []).each_with_index do |org, index| %>
+        <div class="display-field text-sm">
+          <%= link_to organizations_path(name: org, auto_generate: true),
+              class: "text-capsource-purple hover:underline hover:text-capsource-orange transition-colors inline-flex items-center gap-1",
+              title: "Generate profile for #{org}",
+              target: "_blank" do %>
+            <%= org %>
+            <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          <% end %>
+        </div>
+        <div class="edit-field hidden">
+          <%= form.text_field "similarOrganizations[#{index}]", value: org, class: "w-full p-2 border border-gray-300 rounded" %>
+        </div>
+      <% end %>
+      <% if (@profile_data["similarOrganizations"] || []).empty? %>
+        <p class="text-gray-500 text-sm">No similar organizations.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Products/Services or Programs/Offerings -->
+  <% if @profile_data["productsServices"].present? && !@profile_data["productsServices"].to_s.strip.match?(/^\[Not found\]$/i) && !@profile_data["productsServices"].to_s.strip.empty? %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">
+      <%= @organization_type == 'company' ? 'Products & Services' : 'Programs & Offerings' %>
+    </h2>
+    <div class="prose max-w-none text-gray-700">
+      <%= sanitize(@profile_data["productsServices"], tags: %w[ul ol li p strong em], attributes: %w[]) %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Key Partnerships -->
+  <% valid_partnerships = (@profile_data["keyPartnerships"] || []).reject { |p| p.to_s.strip.match?(/^\[Not found\]$/i) || p.to_s.strip.empty? } %>
+  <% if valid_partnerships.any? %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Key Partnerships</h2>
+    <div class="space-y-2">
+      <% valid_partnerships.each do |partnership| %>
+        <div class="text-sm text-gray-700">
+          <span class="inline-flex items-center">
+            <svg class="w-4 h-4 mr-2 text-capsource-orange" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <%= partnership %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Market Position -->
+  <% if @profile_data["marketPosition"].present? && !@profile_data["marketPosition"].to_s.strip.match?(/^\[Not found\]$/i) && !@profile_data["marketPosition"].to_s.strip.empty? %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Market Position</h2>
+    <div class="prose max-w-none text-gray-700">
+      <%= sanitize(@profile_data["marketPosition"], tags: %w[p strong em], attributes: %w[]) %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Funding Info (Companies only) -->
+  <% if @organization_type == 'company' && @profile_data["fundingInfo"].present? && !@profile_data["fundingInfo"].to_s.strip.match?(/^\[Not found\]$/i) && !@profile_data["fundingInfo"].to_s.strip.empty? %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Funding Information</h2>
+    <div class="prose max-w-none text-gray-700">
+      <%= sanitize(@profile_data["fundingInfo"], tags: %w[p strong em], attributes: %w[]) %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Certifications or Accreditations -->
+  <% valid_certifications = (@profile_data["certifications"] || []).reject { |c| c.to_s.strip.match?(/^\[Not found\]$/i) || c.to_s.strip.empty? } %>
+  <% if valid_certifications.any? %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">
+      <%= @organization_type == 'company' ? 'Certifications & Awards' : 'Accreditations & Rankings' %>
+    </h2>
+    <div class="space-y-2">
+      <% valid_certifications.each do |cert| %>
+        <div class="text-sm text-gray-700">
+          <span class="inline-flex items-center">
+            <svg class="w-4 h-4 mr-2 text-capsource-purple" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <%= cert %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Student Info (Universities only) -->
+  <% if @organization_type == 'school' && @profile_data["studentInfo"].present? && !@profile_data["studentInfo"].to_s.strip.match?(/^\[Not found\]$/i) && !@profile_data["studentInfo"].to_s.strip.empty? %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Student Information</h2>
+    <div class="prose max-w-none text-gray-700">
+      <%= sanitize(@profile_data["studentInfo"], tags: %w[p strong em], attributes: %w[]) %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Resources -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Resources</h2>
+    <div class="space-y-2">
+      <% (@profile_data["resources"] || []).each_with_index do |r, index| %>
+        <div class="display-field text-sm text-blue-700 break-all"><%= r["title"] %> - <%= r["url"] %></div>
+        <div class="edit-field hidden grid grid-cols-2 gap-2">
+          <%= form.text_field "resources[#{index}][title]", value: r["title"], class: "p-2 border border-gray-300 rounded" %>
+          <%= form.text_field "resources[#{index}][url]", value: r["url"], class: "p-2 border border-gray-300 rounded" %>
+        </div>
+      <% end %>
+      <% if (@profile_data["resources"] || []).empty? %>
+        <p class="text-gray-500 text-sm">No resources added.</p>
+      <% end %>
+    </div>
+  </div>
+
+  </div> <!-- end sidebar column -->
+  </div> <!-- end grid wrapper -->
+
+  <!-- Actions -->
+  <div class="text-center pt-8">
+    <%= link_to "← Generate Another Profile", organizations_path, class: "bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium inline-block" %>
+  </div>
+</div>
+<% end %>
+
+<script>
+(function() {
+  'use strict';
+
+  function initializeEditFunctionality() {
+    const editBtn = document.getElementById('edit-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const profileForm = document.getElementById('profile-form');
+
+    if (!editBtn) return;
+
+    let originalValues = {};
+
+    function storeOriginalValues() {
+      const inputs = document.querySelectorAll('.edit-field input, .edit-field textarea');
+      inputs.forEach(input => {
+        originalValues[input.name] = input.value;
+      });
+    }
+
+    function enterEditMode() {
+      storeOriginalValues();
+
+      document.querySelectorAll('.display-field').forEach(field => {
+        field.style.display = 'none';
+      });
+
+      document.querySelectorAll('.edit-field').forEach(field => {
+        field.style.display = 'block';
+        field.classList.remove('hidden');
+      });
+
+      editBtn.style.display = 'none';
+      if (saveBtn) {
+        saveBtn.style.display = 'inline-flex';
+        saveBtn.classList.remove('hidden');
+      }
+      if (cancelBtn) {
+        cancelBtn.style.display = 'inline-flex';
+        cancelBtn.classList.remove('hidden');
+      }
+    }
+
+    function exitEditMode() {
+      document.querySelectorAll('.display-field').forEach(field => {
+        field.style.display = 'block';
+      });
+
+      document.querySelectorAll('.edit-field').forEach(field => {
+        field.style.display = 'none';
+        field.classList.add('hidden');
+      });
+
+      editBtn.style.display = 'inline-flex';
+      if (saveBtn) {
+        saveBtn.style.display = 'none';
+        saveBtn.classList.add('hidden');
+      }
+      if (cancelBtn) {
+        cancelBtn.style.display = 'none';
+        cancelBtn.classList.add('hidden');
+      }
+    }
+
+    function restoreOriginalValues() {
+      const inputs = document.querySelectorAll('.edit-field input, .edit-field textarea');
+      inputs.forEach(input => {
+        if (originalValues[input.name] !== undefined) {
+          input.value = originalValues[input.name];
+        }
+      });
+    }
+
+    editBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      enterEditMode();
+    });
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        restoreOriginalValues();
+        exitEditMode();
+      });
+    }
+
+    if (saveBtn && profileForm) {
+      saveBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        profileForm.submit();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeEditFunctionality();
+    });
+  } else {
+    setTimeout(function() {
+      initializeEditFunctionality();
+    }, 100);
+  }
+})();
+</script>
+<% end %>

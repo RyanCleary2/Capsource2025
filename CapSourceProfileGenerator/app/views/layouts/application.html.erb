@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "CapSource Profile Generator" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'capsource-orange': '#F7931D',
+              'capsource-dark': '#301C2A',
+              'capsource-mauve': '#66525f',
+              'capsource-purple': '#921245',
+              'capsource-red': '#CC3131',
+              'capsource-blue': '#3353ea'
+            },
+            fontFamily: {
+              'avenir': ['Avenir-Book', 'Open Sans', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Open Sans', 'Avenir-Book', sans-serif;
+        line-height: 1.75;
+        background-color: #f9fafb;
+      }
+
+      .capsource-button {
+        background-color: #F7931D;
+        color: white;
+        padding: 15px 30px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        min-height: 45px;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .capsource-button:hover {
+        background-color: #e8851a;
+      }
+
+      .capsource-card {
+        background: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+      }
+
+      .skill-tag {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .technical-skill {
+        background-color: #3353ea;
+        color: white;
+      }
+
+      .soft-skill {
+        background-color: #921245;
+        color: white;
+      }
+
+      .language-skill {
+        background-color: #F7931D;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 min-h-screen">
+    <main class="py-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>

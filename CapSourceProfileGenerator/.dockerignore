@@ -1,0 +1,51 @@
+# Git
+.git
+.gitignore
+
+# Environment files
+.env*
+!.env.example
+
+# Logs
+log/*
+tmp/*
+*.log
+
+# Documentation
+README.md
+doc/
+*.md
+
+# Test files
+test/
+spec/
+.rspec
+
+# Development files
+.editorconfig
+.rubocop.yml
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Storage
+storage/*
+public/uploads/*
+
+# Assets (will be precompiled)
+app/assets/builds/*
+
+# Local scripts
+restart.sh
+start.sh

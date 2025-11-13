@@ -1,0 +1,407 @@
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Back to Home Link -->
+  <div class="mb-6">
+    <%= link_to "← Back to Home", root_path, class: "text-capsource-orange hover:text-orange-600 font-medium transition-colors" %>
+  </div>
+
+  <!-- Header Section with CapSource styling -->
+  <div class="text-center mb-12">
+    <h1 class="text-5xl font-bold text-capsource-dark mb-4">
+      AI Resume to Profile Converter
+    </h1>
+    <p class="text-xl text-capsource-mauve max-w-3xl mx-auto">
+      Transform your resume into structured profile data using advanced AI technology.
+      Upload your PDF and let our system extract and organize your professional information.
+    </p>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="capsource-card rounded-lg p-6 mb-8">
+    <h2 class="text-2xl font-semibold mb-4 text-capsource-dark flex items-center">
+      <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+      </svg>
+      Upload Your Resume
+    </h2>
+
+    <%= form_with url: profiles_process_path, method: :post, multipart: true, local: true, class: "space-y-4", id: "resume-form", style: "display: block !important; visibility: visible !important;" do |form| %>
+      <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-capsource-orange transition-colors">
+        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        </svg>
+        <%= form.file_field :file, accept: "application/pdf", class: "hidden", id: "resume-upload" %>
+        <label for="resume-upload" class="cursor-pointer">
+          <span class="text-lg font-medium text-capsource-dark">Click to upload your resume</span>
+          <p class="text-sm text-gray-500 mt-2">PDF format only • Maximum file size: 10MB</p>
+        </label>
+      </div>
+
+      <div class="text-center">
+        <%= form.submit "Extract Profile Data", class: "capsource-button rounded-lg px-8 py-4 text-lg", id: "submit-btn" %>
+      </div>
+    <% end %>
+
+    <!-- Loading Animation -->
+    <div id="loading-container" class="hidden capsource-card rounded-lg p-6 text-center">
+      <div class="mb-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-capsource-orange rounded-full mb-4">
+          <svg class="animate-spin w-8 h-8 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-capsource-dark mb-2">AI-Powered Resume Processing</h3>
+        <p class="text-capsource-mauve mb-4">GPT-4o-mini is analyzing your resume and creating an enhanced professional profile...</p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="max-w-md mx-auto">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm text-capsource-dark font-medium">Progress</span>
+          <span class="text-sm text-capsource-dark font-medium" id="progress-percent">0%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div id="progress-bar" class="bg-gradient-to-r from-capsource-orange to-capsource-purple h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+        <p class="text-sm text-capsource-mauve mt-2" id="progress-text">Initializing...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+    <div class="text-center">
+      <div class="w-16 h-16 bg-capsource-orange rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-capsource-dark mb-2">AI-Powered Extraction</h3>
+      <p class="text-capsource-mauve">Advanced machine learning algorithms parse and structure your resume data with high accuracy.</p>
+    </div>
+
+    <div class="text-center">
+      <div class="w-16 h-16 bg-capsource-purple rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-capsource-dark mb-2">Structured Output</h3>
+      <p class="text-capsource-mauve">Get your information organized in a clean, structured format ready for any application.</p>
+    </div>
+
+    <div class="text-center">
+      <div class="w-16 h-16 bg-capsource-blue rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-capsource-dark mb-2">Secure & Private</h3>
+      <p class="text-capsource-mauve">Your data is processed securely and never stored permanently on our servers.</p>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="capsource-card rounded-lg p-8 text-center mb-16">
+    <h3 class="text-2xl font-semibold text-capsource-dark mb-4">How It Works</h3>
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-capsource-orange text-white rounded-full flex items-center justify-center font-bold">1</div>
+          <span class="ml-3 text-capsource-dark">Upload PDF</span>
+        </div>
+        <div class="text-capsource-mauve">→</div>
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-capsource-orange text-white rounded-full flex items-center justify-center font-bold">2</div>
+          <span class="ml-3 text-capsource-dark">AI Processing</span>
+        </div>
+        <div class="text-capsource-mauve">→</div>
+        <div class="flex items-center">
+          <div class="w-8 h-8 bg-capsource-orange text-white rounded-full flex items-center justify-center font-bold">3</div>
+          <span class="ml-3 text-capsource-dark">Structured Data</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Footer Section -->
+<footer class="bg-capsource-dark text-white">
+  <div class="max-w-6xl mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Logo and Connect Section -->
+      <div class="md:col-span-1">
+        <div class="flex items-center mb-6">
+          <svg class="w-8 h-8 mr-3 text-capsource-orange" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <span class="text-xl font-bold">CapSource</span>
+        </div>
+        <div class="mb-6">
+          <div class="flex items-center mb-4">
+            <div class="w-16 h-16 bg-capsource-orange rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <div>
+              <span class="text-xl font-semibold">CapSource</span>
+              <div class="text-lg">connect</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex space-x-4">
+          <a href="#" class="w-10 h-10 bg-gray-600 rounded flex items-center justify-center hover:bg-gray-500 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            </svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-gray-600 rounded flex items-center justify-center hover:bg-gray-500 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-gray-600 rounded flex items-center justify-center hover:bg-gray-500 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Contact Column -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-capsource-orange">Contact</h3>
+        <div class="space-y-3">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-3 text-capsource-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span>(631) 729-0745</span>
+          </div>
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-3 text-capsource-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span>support@capsource.io</span>
+          </div>
+          <div class="mt-4">
+            <button class="bg-capsource-orange hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition-colors">
+              Book a Meeting
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Our Users Column -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-capsource-orange">Our Users</h3>
+        <div class="space-y-2">
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Educators</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Companies</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Students</a>
+        </div>
+      </div>
+
+      <!-- Resources Column -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-capsource-orange">Resources</h3>
+        <div class="space-y-2">
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">About Us</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Webinars</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Experiential Learning</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Blog</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Careers</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="block text-gray-300 hover:text-white transition-colors">Rules of Engagement</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter Signup -->
+    <div class="mt-12 bg-red-600 rounded-lg p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h3 class="text-2xl font-bold mb-2">Discover experiential learning opportunities in our monthly newsletter!</h3>
+        </div>
+        <div>
+          <form class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Email</label>
+              <input type="email" class="w-full px-4 py-2 rounded border-0 text-gray-900" placeholder="Enter your email">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">First name</label>
+              <input type="text" class="w-full px-4 py-2 rounded border-0 text-gray-900" placeholder="Enter your first name">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Last name</label>
+              <input type="text" class="w-full px-4 py-2 rounded border-0 text-gray-900" placeholder="Enter your last name">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">What describes you best?</label>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input type="checkbox" class="mr-2">
+                  <span>Industry Contact</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" class="mr-2">
+                  <span>Educator</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" class="mr-2">
+                  <span>Students & Grads</span>
+                </label>
+              </div>
+            </div>
+            <button type="submit" class="bg-white text-red-600 px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="mt-8 pt-8 border-t border-gray-600 text-center">
+      <p class="text-gray-400">© 2017-2025 CapSource Technologies, Inc.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('resume-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const loadingContainer = document.getElementById('loading-container');
+  const progressBar = document.getElementById('progress-bar');
+  const progressPercent = document.getElementById('progress-percent');
+  const progressText = document.getElementById('progress-text');
+
+  // Debugging function to check element states
+  function logElementStates() {
+    console.log('Form element:', form);
+    console.log('Form style display:', form ? form.style.display : 'null');
+    console.log('Form computed display:', form ? window.getComputedStyle(form).display : 'null');
+    console.log('Loading container:', loadingContainer);
+    console.log('Loading container classes:', loadingContainer ? loadingContainer.className : 'null');
+  }
+
+  // Reset to initial state function
+  function resetToInitialState() {
+    console.log('Resetting to initial state');
+
+    // Show form with important override
+    if (form) {
+      form.style.display = 'block !important';
+      form.style.visibility = 'visible';
+      form.style.opacity = '1';
+      form.classList.remove('hidden');
+    }
+
+    // Hide loading container completely
+    if (loadingContainer) {
+      loadingContainer.classList.add('hidden');
+      loadingContainer.style.display = 'none !important';
+      loadingContainer.style.visibility = 'hidden';
+    }
+
+    // Reset progress
+    if (progressBar) {
+      progressBar.style.width = '0%';
+    }
+    if (progressPercent) {
+      progressPercent.textContent = '0%';
+    }
+    if (progressText) {
+      progressText.textContent = 'Initializing...';
+    }
+
+    // Clear file input
+    const fileInput = document.getElementById('resume-upload');
+    if (fileInput) {
+      fileInput.value = '';
+    }
+
+    // Log states for debugging
+    setTimeout(logElementStates, 100);
+  }
+
+  // Initialize page state immediately
+  resetToInitialState();
+
+  // Reset on page show (handles back button)
+  window.addEventListener('pageshow', function(event) {
+    console.log('Page show event, persisted:', event.persisted);
+    setTimeout(resetToInitialState, 50);
+  });
+
+  // Additional reset for any cached states
+  setTimeout(function() {
+    console.log('Delayed reset');
+    resetToInitialState();
+  }, 200);
+
+  const progressSteps = [
+    { percent: 10, text: 'Reading PDF document...' },
+    { percent: 25, text: 'Extracting text content...' },
+    { percent: 40, text: 'AI analyzing personal information...' },
+    { percent: 55, text: 'AI enhancing work experience...' },
+    { percent: 70, text: 'AI categorizing skills and education...' },
+    { percent: 85, text: 'AI generating professional summary...' },
+    { percent: 95, text: 'Finalizing enhanced profile...' },
+    { percent: 100, text: 'Complete! Redirecting...' }
+  ];
+
+  function updateProgress(step) {
+    const { percent, text } = progressSteps[step];
+    progressBar.style.width = percent + '%';
+    progressPercent.textContent = percent + '%';
+    progressText.textContent = text;
+  }
+
+  function simulateProgress() {
+    let currentStep = 0;
+    updateProgress(currentStep);
+
+    const interval = setInterval(() => {
+      currentStep++;
+      if (currentStep < progressSteps.length) {
+        updateProgress(currentStep);
+      } else {
+        clearInterval(interval);
+      }
+    }, 3875); // Update every 3.875 seconds for extended AI processing feel (31 seconds total)
+  }
+
+  form.addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('resume-upload');
+    if (!fileInput.files.length) {
+      alert('Please select a file to upload.');
+      e.preventDefault();
+      return;
+    }
+
+    console.log('Form submitted, starting animation');
+
+    // Hide form completely and show loading animation
+    form.style.display = 'none';
+    form.style.visibility = 'hidden';
+    form.style.height = '0';
+    form.style.overflow = 'hidden';
+
+    if (loadingContainer) {
+      loadingContainer.classList.remove('hidden');
+      loadingContainer.style.display = 'block !important';
+      loadingContainer.style.visibility = 'visible';
+    }
+
+    // Start progress simulation
+    simulateProgress();
+
+    console.log('Animation started');
+  });
+});
+</script>

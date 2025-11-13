@@ -1,0 +1,40 @@
+# Git files
+.git/
+.gitignore
+
+# Ruby temporary files
+*.gem
+*.rbc
+tmp/
+coverage/
+.bundle/
+# Gemfile.lock - KEEP THIS FOR PRODUCTION BUILDS
+
+# Environment files
+.env
+.env.*
+
+# Rails specific
+log/
+log/*
+tmp/
+tmp/*
+storage/
+storage/*
+node_modules/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+doc/
+rdoc/
+
+# Test files
+test/
+spec/
