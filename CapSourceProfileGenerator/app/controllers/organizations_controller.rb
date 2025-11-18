@@ -150,20 +150,26 @@ class OrganizationsController < ApplicationController
     partner_id = params[:id]
 
     unless partner_id
-      redirect_to organizations_path, alert: 'Partner ID is required.'
+      redirect_to organizations_result_path, alert: 'Partner ID is required.'
       return
     end
 
     @partner = Partner.find_by(id: partner_id)
 
     unless @partner
-      redirect_to organizations_path, alert: 'Partner not found.'
+      redirect_to organizations_result_path, alert: 'Partner not found.'
       return
     end
 
     begin
+      # Log params for debugging
+      Rails.logger.info "UPDATE PROFILE - Partner params: #{partner_params.inspect}"
+      Rails.logger.info "UPDATE PROFILE - Before update: #{@partner.attributes.slice('name', 'website', 'address', 'employees_count', 'organization_type')}"
+
       # Update partner with nested attributes
       if @partner.update(partner_params)
+        Rails.logger.info "UPDATE PROFILE - After update: #{@partner.reload.attributes.slice('name', 'website', 'address', 'employees_count', 'organization_type')}"
+
         # Handle logo upload via ActiveStorage
         if params[:partner][:logo_image].present?
           @partner.logo.purge if @partner.logo.attached?
@@ -184,6 +190,26 @@ class OrganizationsController < ApplicationController
 
         # Handle tag associations
         update_tag_associations(@partner)
+
+        # Reload partner to get fresh data including associations
+        @partner.reload
+
+        # Update cache with fresh partner data
+        cache_key = session[:profile_cache_key]
+        if cache_key
+          # Set cache status to 'completed' so the result page doesn't show loading screen
+          Rails.cache.write("#{cache_key}_status", 'completed', expires_in: 1.hour)
+
+          # Update cached partner ID to ensure we load the right record
+          Rails.cache.write("#{cache_key}_partner_id", @partner.id, expires_in: 1.hour)
+
+          # Preserve existing comprehensive details (like similar organizations) from cache
+          existing_cached_data = Rails.cache.read("#{cache_key}_data") || {}
+          existing_comprehensive_details = existing_cached_data[:comprehensive_details] || {}
+
+          # Keep the cached comprehensive details instead of wiping them out
+          Rails.cache.write("#{cache_key}_data", { comprehensive_details: existing_comprehensive_details }, expires_in: 1.hour)
+        end
 
         redirect_to organizations_result_path, notice: 'Profile updated successfully!'
       else
@@ -227,8 +253,39 @@ class OrganizationsController < ApplicationController
   def generate_potential_urls(name)
     urls = []
 
+    # Detect if this is likely a university/school
+    is_university = name.match?(/university|college|school|institute|academy/i)
+
     # Get the base slug using our smart generation
     base_slug = generate_website_url_from_name(name).gsub('https://www.', '').gsub('.com', '')
+
+    # For universities, prioritize .edu domains
+    if is_university
+      urls << "https://www.#{base_slug}.edu"
+      urls << "https://#{base_slug}.edu"
+
+      # For universities, try common patterns like "lehigh.edu" instead of "lehigh-university.edu"
+      # Remove common university suffixes to get the core name
+      core_name = name.downcase
+                      .gsub(/\b(university|college|school|institute|academy)\b/i, '')
+                      .strip
+                      .gsub(/[^a-z0-9\s]/, '')
+                      .split(/\s+/)
+                      .first
+
+      if core_name && core_name != base_slug
+        urls << "https://www.#{core_name}.edu"
+        urls << "https://#{core_name}.edu"
+      end
+
+      # Also try with acronym for universities
+      words = name.split(/\s+/).reject { |w| w.length < 2 || w.match?(/university|college|school/i) }
+      if words.length >= 2
+        acronym = words.map { |w| w[0] }.join('').downcase
+        urls << "https://www.#{acronym}.edu"
+        urls << "https://#{acronym}.edu"
+      end
+    end
 
     # Try common TLD variations
     urls << "https://www.#{base_slug}.com"
@@ -328,10 +385,12 @@ class OrganizationsController < ApplicationController
       "tagline" => partner.tagline.to_s.presence || "",
       "yearFounded" => partner.year_founded,
       "address" => partner.address || "",
+      "hqLocation" => partner.address || "",
       "country" => partner.country || "",
       "category" => partner.category || "company",
       "organizationType" => partner.organization_type || "",
       "employeesCount" => partner.employees_count || "",
+      "numberOfEmployees" => partner.employees_count || "",
       "studentsCount" => partner.students_count,
       "socialMedia" => {
         "facebook" => partner.facebook,

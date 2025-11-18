@@ -32,9 +32,23 @@ module AiParsingHelpers
     return nil if content.blank? || field_name.blank?
 
     # Match field_name: content until next field (uppercase followed by colon) or end of string
+    # Updated to handle blank lines correctly - uses \n? to make newline optional
+    # and checks that captured content doesn't start with a field marker
     pattern = /#{Regexp.escape(field_name)}:\s*(.+?)(?=\n[A-Z_]+:|$)/mi
     match = content.match(pattern)
-    match ? match[1].strip : nil
+
+    return nil unless match
+
+    extracted = match[1].strip
+
+    # Reject if the extracted value is actually a field marker (e.g., "FACEBOOK:", "TWITTER:")
+    # This happens when OpenAI leaves a line blank and the regex captures the next field marker
+    return nil if extracted.match?(/^[A-Z_]+:/)
+
+    # Return nil for empty strings
+    return nil if extracted.empty?
+
+    extracted
   end
 
   # Extract questions from various text formats

@@ -294,30 +294,15 @@ class OpenaiOrganizationEnhancer
 
       BUSINESS_MODEL: [Detailed description of business model - e.g., "B2B SaaS subscription", "E-commerce retail", "Consulting services"]
 
-      LINKEDIN:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://linkedin.com/company/example)
-      (DO NOT write "LINKEDIN:", "FACEBOOK:", "Not found", or any other text)
+      LINKEDIN: [If LinkedIn URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://linkedin.com/company/example]
 
-      FACEBOOK:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://facebook.com/companyname)
-      (DO NOT write "FACEBOOK:", "TWITTER:", "Not found", or any other text)
+      FACEBOOK: [If Facebook URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://facebook.com/companyname]
 
-      TWITTER:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://twitter.com/handle OR https://x.com/handle)
-      (DO NOT write "TWITTER:", "INSTAGRAM:", "Not found", or any other text)
+      TWITTER: [If Twitter/X URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://twitter.com/handle OR https://x.com/handle]
 
-      INSTAGRAM:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://instagram.com/username)
-      (DO NOT write "INSTAGRAM:", "YOUTUBE:", "Not found", or any other text)
+      INSTAGRAM: [If Instagram URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://instagram.com/username]
 
-      YOUTUBE:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://youtube.com/@channel)
-      (DO NOT write "YOUTUBE:", "DEVELOPMENT_INTERESTS:", "Not found", or any other text)
+      YOUTUBE: [If YouTube URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://youtube.com/@channel]
 
       DEVELOPMENT_INTERESTS: [Generate 5 specific development interests based on services, mission, industry focus - format as: Interest 1 | Interest 2 | Interest 3 | Interest 4 | Interest 5]
 
@@ -379,30 +364,15 @@ class OpenaiOrganizationEnhancer
 
       ADMINISTRATORS: [Names of key administrators - President, Chancellor, Dean, Provost. Search leadership sections. Format as: Title: Name | Title: Name]
 
-      LINKEDIN:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://linkedin.com/company/example)
-      (DO NOT write "LINKEDIN:", "FACEBOOK:", "Not found", or any other text)
+      LINKEDIN: [If LinkedIn URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://linkedin.com/company/example]
 
-      FACEBOOK:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://facebook.com/companyname)
-      (DO NOT write "FACEBOOK:", "TWITTER:", "Not found", or any other text)
+      FACEBOOK: [If Facebook URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://facebook.com/companyname]
 
-      TWITTER:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://twitter.com/handle OR https://x.com/handle)
-      (DO NOT write "TWITTER:", "INSTAGRAM:", "Not found", or any other text)
+      TWITTER: [If Twitter/X URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://twitter.com/handle OR https://x.com/handle]
 
-      INSTAGRAM:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://instagram.com/username)
-      (DO NOT write "INSTAGRAM:", "YOUTUBE:", "Not found", or any other text)
+      INSTAGRAM: [If Instagram URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://instagram.com/username]
 
-      YOUTUBE:
-      (Provide ONLY the complete URL or leave this line blank)
-      (Example: https://youtube.com/@channel)
-      (DO NOT write "YOUTUBE:", "DEVELOPMENT_INTERESTS:", "Not found", or any other text)
+      YOUTUBE: [If YouTube URL is available, provide ONLY the complete URL starting with https://. If not available, write "N/A". Example: https://youtube.com/@channel]
 
       DEVELOPMENT_INTERESTS: [Generate 5 specific development interests based on academic programs, research areas, strategic goals - format as: Interest 1 | Interest 2 | Interest 3 | Interest 4 | Interest 5]
 

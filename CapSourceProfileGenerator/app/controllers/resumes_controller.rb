@@ -134,6 +134,12 @@ class ResumesController < ApplicationController
         end
       end
 
+      # Set cache status to 'completed' so the result page doesn't show loading screen
+      cache_key = session[:profile_cache_key]
+      if cache_key
+        Rails.cache.write("#{cache_key}_status", 'completed', expires_in: 1.hour)
+      end
+
       redirect_to profiles_result_path, notice: 'Profile updated successfully!'
     rescue => e
       Rails.logger.error "Error updating profile: #{e.message}"
